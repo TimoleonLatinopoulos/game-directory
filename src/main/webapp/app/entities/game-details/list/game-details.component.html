@@ -1,0 +1,199 @@
+<div>
+  <h2 id="page-heading" data-cy="GameDetailsHeading">
+    <span jhiTranslate="gameDirectoryApp.gameDetails.home.title">Game Details</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="gameDirectoryApp.gameDetails.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-game-details"
+        [routerLink]="['/game-details/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="gameDirectoryApp.gameDetails.home.createLabel"> Create a new Game Details </span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="gameDetails?.length === 0">
+    <span jhiTranslate="gameDirectoryApp.gameDetails.home.notFound">No Game Details found</span>
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="gameDetails && gameDetails.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" jhiSortBy="id">
+            <div class="d-flex">
+              <span jhiTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="requiredAge">
+            <div class="d-flex">
+              <span jhiTranslate="gameDirectoryApp.gameDetails.requiredAge">Required Age</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="releaseDate">
+            <div class="d-flex">
+              <span jhiTranslate="gameDirectoryApp.gameDetails.releaseDate">Release Date</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="pegiRating">
+            <div class="d-flex">
+              <span jhiTranslate="gameDirectoryApp.gameDetails.pegiRating">Pegi Rating</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="metacriticScore">
+            <div class="d-flex">
+              <span jhiTranslate="gameDirectoryApp.gameDetails.metacriticScore">Metacritic Score</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="imageUrl">
+            <div class="d-flex">
+              <span jhiTranslate="gameDirectoryApp.gameDetails.imageUrl">Image Url</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="thumbnailUrl">
+            <div class="d-flex">
+              <span jhiTranslate="gameDirectoryApp.gameDetails.thumbnailUrl">Thumbnail Url</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="price">
+            <div class="d-flex">
+              <span jhiTranslate="gameDirectoryApp.gameDetails.price">Price</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="description">
+            <div class="d-flex">
+              <span jhiTranslate="gameDirectoryApp.gameDetails.description">Description</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="notes">
+            <div class="d-flex">
+              <span jhiTranslate="gameDirectoryApp.gameDetails.notes">Notes</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="steamAppid">
+            <div class="d-flex">
+              <span jhiTranslate="gameDirectoryApp.gameDetails.steamAppid">Steam Appid</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="platform.id">
+            <div class="d-flex">
+              <span jhiTranslate="gameDirectoryApp.gameDetails.platform">Platform</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="developers.id">
+            <div class="d-flex">
+              <span jhiTranslate="gameDirectoryApp.gameDetails.developers">Developers</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="publishers.id">
+            <div class="d-flex">
+              <span jhiTranslate="gameDirectoryApp.gameDetails.publishers">Publishers</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" jhiSortBy="categories.id">
+            <div class="d-flex">
+              <span jhiTranslate="gameDirectoryApp.gameDetails.categories">Categories</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let gameDetails of gameDetails; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/game-details', gameDetails.id, 'view']">{{ gameDetails.id }}</a>
+          </td>
+          <td>{{ gameDetails.requiredAge }}</td>
+          <td>{{ gameDetails.releaseDate | formatMediumDate }}</td>
+          <td>{{ gameDetails.pegiRating }}</td>
+          <td>{{ gameDetails.metacriticScore }}</td>
+          <td>{{ gameDetails.imageUrl }}</td>
+          <td>{{ gameDetails.thumbnailUrl }}</td>
+          <td>{{ gameDetails.price }}</td>
+          <td>{{ gameDetails.description }}</td>
+          <td>{{ gameDetails.notes }}</td>
+          <td>{{ gameDetails.steamAppid }}</td>
+          <td>
+            <span *ngFor="let platform of gameDetails.platforms; let last = last">
+              <a class="form-control-static" [routerLink]="['/platform', platform.id, 'view']">{{ platform.id }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td>
+            <span *ngFor="let developers of gameDetails.developers; let last = last">
+              <a class="form-control-static" [routerLink]="['/developer', developers.id, 'view']">{{ developers.id }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td>
+            <span *ngFor="let publishers of gameDetails.publishers; let last = last">
+              <a class="form-control-static" [routerLink]="['/publisher', publishers.id, 'view']">{{ publishers.id }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td>
+            <span *ngFor="let categories of gameDetails.categories; let last = last">
+              <a class="form-control-static" [routerLink]="['/category', categories.id, 'view']">{{ categories.id }}</a
+              >{{ last ? '' : ', ' }}
+            </span>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/game-details', gameDetails.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/game-details', gameDetails.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(gameDetails)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,18 @@
+{
+  "changelogDate": "20230705233336",
+  "dto": "no",
+  "entityTableName": "publisher",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": false,
+  "name": "Publisher",
+  "pagination": "no",
+  "readOnly": true,
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

@@ -1,0 +1,96 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="gameDetails">
+      <h2 data-cy="gameDetailsDetailsHeading"><span jhiTranslate="gameDirectoryApp.gameDetails.detail.title">Game Details</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ gameDetails.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.gameDetails.requiredAge">Required Age</span></dt>
+        <dd>
+          <span>{{ gameDetails.requiredAge }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.gameDetails.releaseDate">Release Date</span></dt>
+        <dd>
+          <span>{{ gameDetails.releaseDate | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.gameDetails.pegiRating">Pegi Rating</span></dt>
+        <dd>
+          <span>{{ gameDetails.pegiRating }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.gameDetails.metacriticScore">Metacritic Score</span></dt>
+        <dd>
+          <span>{{ gameDetails.metacriticScore }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.gameDetails.imageUrl">Image Url</span></dt>
+        <dd>
+          <span>{{ gameDetails.imageUrl }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.gameDetails.thumbnailUrl">Thumbnail Url</span></dt>
+        <dd>
+          <span>{{ gameDetails.thumbnailUrl }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.gameDetails.price">Price</span></dt>
+        <dd>
+          <span>{{ gameDetails.price }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.gameDetails.description">Description</span></dt>
+        <dd>
+          <span>{{ gameDetails.description }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.gameDetails.notes">Notes</span></dt>
+        <dd>
+          <span>{{ gameDetails.notes }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.gameDetails.steamAppid">Steam Appid</span></dt>
+        <dd>
+          <span>{{ gameDetails.steamAppid }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.gameDetails.platform">Platform</span></dt>
+        <dd>
+          <span *ngFor="let platform of gameDetails.platforms; let last = last">
+            <a [routerLink]="['/platform', platform.id, 'view']">{{ platform.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.gameDetails.developers">Developers</span></dt>
+        <dd>
+          <span *ngFor="let developers of gameDetails.developers; let last = last">
+            <a [routerLink]="['/developer', developers.id, 'view']">{{ developers.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.gameDetails.publishers">Publishers</span></dt>
+        <dd>
+          <span *ngFor="let publishers of gameDetails.publishers; let last = last">
+            <a [routerLink]="['/publisher', publishers.id, 'view']">{{ publishers.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.gameDetails.categories">Categories</span></dt>
+        <dd>
+          <span *ngFor="let categories of gameDetails.categories; let last = last">
+            <a [routerLink]="['/category', categories.id, 'view']">{{ categories.id }}</a
+            >{{ last ? '' : ', ' }}
+          </span>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/game-details', gameDetails.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

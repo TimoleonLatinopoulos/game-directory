@@ -1,0 +1,18 @@
+{
+  "changelogDate": "20230705233235",
+  "dto": "no",
+  "entityTableName": "developer",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": false,
+  "name": "Developer",
+  "pagination": "no",
+  "readOnly": true,
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

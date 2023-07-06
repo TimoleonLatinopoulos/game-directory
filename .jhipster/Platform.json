@@ -1,0 +1,18 @@
+{
+  "changelogDate": "20230705211804",
+  "dto": "no",
+  "entityTableName": "platform",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": false,
+  "name": "Platform",
+  "pagination": "no",
+  "readOnly": true,
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

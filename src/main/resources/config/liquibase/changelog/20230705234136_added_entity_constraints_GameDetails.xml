@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity GameDetails.
+    -->
+    <changeSet id="20230705234136-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="game_details_id"
+                                 baseTableName="game_details_platform"
+                                 constraintName="fk_game_details_platform__game_details_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="game_details"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="platform_id"
+                                 baseTableName="game_details_platform"
+                                 constraintName="fk_game_details_platform__platform_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="platform"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="game_details_id"
+                                 baseTableName="game_details_developers"
+                                 constraintName="fk_game_details_developers__game_details_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="game_details"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="developers_id"
+                                 baseTableName="game_details_developers"
+                                 constraintName="fk_game_details_developers__developers_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="developer"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="game_details_id"
+                                 baseTableName="game_details_publishers"
+                                 constraintName="fk_game_details_publishers__game_details_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="game_details"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="publishers_id"
+                                 baseTableName="game_details_publishers"
+                                 constraintName="fk_game_details_publishers__publishers_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="publisher"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="game_details_id"
+                                 baseTableName="game_details_categories"
+                                 constraintName="fk_game_details_categories__game_details_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="game_details"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="categories_id"
+                                 baseTableName="game_details_categories"
+                                 constraintName="fk_game_details_categories__categories_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="category"
+                                 />
+    </changeSet>
+</databaseChangeLog>

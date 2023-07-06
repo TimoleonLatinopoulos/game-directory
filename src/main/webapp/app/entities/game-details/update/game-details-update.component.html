@@ -1,0 +1,206 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-game-details-heading"
+        data-cy="GameDetailsCreateUpdateHeading"
+        jhiTranslate="gameDirectoryApp.gameDetails.home.createOrEditLabel"
+      >
+        Create or edit a Game Details
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        <div class="mb-3" *ngIf="editForm.controls.id.value !== null">
+          <label class="form-label" jhiTranslate="global.field.id" for="field_id">ID</label>
+          <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="gameDirectoryApp.gameDetails.requiredAge" for="field_requiredAge">Required Age</label>
+          <input
+            type="number"
+            class="form-control"
+            name="requiredAge"
+            id="field_requiredAge"
+            data-cy="requiredAge"
+            formControlName="requiredAge"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="gameDirectoryApp.gameDetails.releaseDate" for="field_releaseDate">Release Date</label>
+          <div class="input-group">
+            <input
+              id="field_releaseDate"
+              data-cy="releaseDate"
+              type="text"
+              class="form-control"
+              name="releaseDate"
+              ngbDatepicker
+              #releaseDateDp="ngbDatepicker"
+              formControlName="releaseDate"
+            />
+            <button type="button" class="btn btn-secondary" (click)="releaseDateDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="gameDirectoryApp.gameDetails.pegiRating" for="field_pegiRating">Pegi Rating</label>
+          <input
+            type="text"
+            class="form-control"
+            name="pegiRating"
+            id="field_pegiRating"
+            data-cy="pegiRating"
+            formControlName="pegiRating"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="gameDirectoryApp.gameDetails.metacriticScore" for="field_metacriticScore"
+            >Metacritic Score</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="metacriticScore"
+            id="field_metacriticScore"
+            data-cy="metacriticScore"
+            formControlName="metacriticScore"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="gameDirectoryApp.gameDetails.imageUrl" for="field_imageUrl">Image Url</label>
+          <input type="text" class="form-control" name="imageUrl" id="field_imageUrl" data-cy="imageUrl" formControlName="imageUrl" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="gameDirectoryApp.gameDetails.thumbnailUrl" for="field_thumbnailUrl">Thumbnail Url</label>
+          <input
+            type="text"
+            class="form-control"
+            name="thumbnailUrl"
+            id="field_thumbnailUrl"
+            data-cy="thumbnailUrl"
+            formControlName="thumbnailUrl"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="gameDirectoryApp.gameDetails.price" for="field_price">Price</label>
+          <input type="number" class="form-control" name="price" id="field_price" data-cy="price" formControlName="price" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="gameDirectoryApp.gameDetails.description" for="field_description">Description</label>
+          <input
+            type="text"
+            class="form-control"
+            name="description"
+            id="field_description"
+            data-cy="description"
+            formControlName="description"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="gameDirectoryApp.gameDetails.notes" for="field_notes">Notes</label>
+          <input type="text" class="form-control" name="notes" id="field_notes" data-cy="notes" formControlName="notes" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="gameDirectoryApp.gameDetails.steamAppid" for="field_steamAppid">Steam Appid</label>
+          <input
+            type="number"
+            class="form-control"
+            name="steamAppid"
+            id="field_steamAppid"
+            data-cy="steamAppid"
+            formControlName="steamAppid"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label jhiTranslate="gameDirectoryApp.gameDetails.platform" for="field_platforms">Platform</label>
+          <select
+            class="form-control"
+            id="field_platforms"
+            data-cy="platform"
+            multiple
+            name="platforms"
+            formControlName="platforms"
+            [compareWith]="comparePlatform"
+          >
+            <option [ngValue]="platformOption" *ngFor="let platformOption of platformsSharedCollection">{{ platformOption.id }}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label jhiTranslate="gameDirectoryApp.gameDetails.developers" for="field_developers">Developers</label>
+          <select
+            class="form-control"
+            id="field_developers"
+            data-cy="developers"
+            multiple
+            name="developers"
+            formControlName="developers"
+            [compareWith]="compareDeveloper"
+          >
+            <option [ngValue]="developerOption" *ngFor="let developerOption of developersSharedCollection">{{ developerOption.id }}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label jhiTranslate="gameDirectoryApp.gameDetails.publishers" for="field_publishers">Publishers</label>
+          <select
+            class="form-control"
+            id="field_publishers"
+            data-cy="publishers"
+            multiple
+            name="publishers"
+            formControlName="publishers"
+            [compareWith]="comparePublisher"
+          >
+            <option [ngValue]="publisherOption" *ngFor="let publisherOption of publishersSharedCollection">{{ publisherOption.id }}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label jhiTranslate="gameDirectoryApp.gameDetails.categories" for="field_categories">Categories</label>
+          <select
+            class="form-control"
+            id="field_categories"
+            data-cy="categories"
+            multiple
+            name="categories"
+            formControlName="categories"
+            [compareWith]="compareCategory"
+          >
+            <option [ngValue]="categoryOption" *ngFor="let categoryOption of categoriesSharedCollection">{{ categoryOption.id }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

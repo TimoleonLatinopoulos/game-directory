@@ -1,0 +1,91 @@
+{
+  "changelogDate": "20230705234136",
+  "dto": "no",
+  "entityTableName": "game_details",
+  "fields": [
+    {
+      "fieldName": "requiredAge",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "releaseDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "pegiRating",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "metacriticScore",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "imageUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "thumbnailUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "price",
+      "fieldType": "Float"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "notes",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "steamAppid",
+      "fieldType": "Long"
+    }
+  ],
+  "jpaMetamodelFiltering": false,
+  "name": "GameDetails",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "platform",
+      "otherEntityRelationshipName": "gameDetails",
+      "ownerSide": true,
+      "relationshipName": "platform",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "developer",
+      "otherEntityRelationshipName": "gameDetails",
+      "ownerSide": true,
+      "relationshipName": "developers",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "publisher",
+      "otherEntityRelationshipName": "gameDetails",
+      "ownerSide": true,
+      "relationshipName": "publishers",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    },
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "category",
+      "otherEntityRelationshipName": "gameDetails",
+      "ownerSide": true,
+      "relationshipName": "categories",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}
