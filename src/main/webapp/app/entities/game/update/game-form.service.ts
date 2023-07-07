@@ -19,6 +19,7 @@ type GameFormDefaults = Pick<NewGame, 'id'>;
 type GameFormGroupContent = {
   id: FormControl<IGame['id'] | NewGame['id']>;
   title: FormControl<IGame['title']>;
+  gameDetails: FormControl<IGame['gameDetails']>;
 };
 
 export type GameFormGroup = FormGroup<GameFormGroupContent>;
@@ -39,6 +40,7 @@ export class GameFormService {
         }
       ),
       title: new FormControl(gameRawValue.title),
+      gameDetails: new FormControl(gameRawValue.gameDetails),
     });
   }
 

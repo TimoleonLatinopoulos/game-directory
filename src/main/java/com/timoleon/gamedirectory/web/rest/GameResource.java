@@ -3,6 +3,7 @@ package com.timoleon.gamedirectory.web.rest;
 import com.timoleon.gamedirectory.domain.Game;
 import com.timoleon.gamedirectory.repository.GameRepository;
 import com.timoleon.gamedirectory.service.GameService;
+import com.timoleon.gamedirectory.service.dto.GameDTO;
 import com.timoleon.gamedirectory.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -48,12 +49,12 @@ public class GameResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/games")
-    public ResponseEntity<Game> createGame(@RequestBody Game game) throws URISyntaxException {
+    public ResponseEntity<GameDTO> createGame(@RequestBody GameDTO game) throws URISyntaxException {
         log.debug("REST request to save Game : {}", game);
         if (game.getId() != null) {
             throw new BadRequestAlertException("A new game cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Game result = gameService.save(game);
+        GameDTO result = gameService.save(game);
         return ResponseEntity
             .created(new URI("/api/games/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))

@@ -1,6 +1,7 @@
 package com.timoleon.gamedirectory.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.timoleon.gamedirectory.domain.enumerations.PegiRating;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -16,20 +17,19 @@ import java.util.Set;
 public class GameDetails implements Serializable {
 
     private static final long serialVersionUID = 1L;
+    private static final String STEAM_URL_PREFIX = "https://store.steampowered.com/app/";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "required_age")
-    private Integer requiredAge;
-
     @Column(name = "release_date")
     private LocalDate releaseDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "pegi_rating")
-    private String pegiRating;
+    private PegiRating pegiRating;
 
     @Column(name = "metacritic_score")
     private Integer metacriticScore;
@@ -46,13 +46,19 @@ public class GameDetails implements Serializable {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "snippet")
+    private String snippet;
+
     @Column(name = "notes")
     private String notes;
 
     @Column(name = "steam_appid")
     private Long steamAppid;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @Transient
+    private String steamUrl;
+
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_game_details__platform",
         joinColumns = @JoinColumn(name = "game_details_id"),
@@ -61,7 +67,7 @@ public class GameDetails implements Serializable {
     @JsonIgnoreProperties(value = { "gameDetails" }, allowSetters = true)
     private Set<Platform> platforms = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_game_details__developers",
         joinColumns = @JoinColumn(name = "game_details_id"),
@@ -70,7 +76,7 @@ public class GameDetails implements Serializable {
     @JsonIgnoreProperties(value = { "gameDetails" }, allowSetters = true)
     private Set<Developer> developers = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_game_details__publishers",
         joinColumns = @JoinColumn(name = "game_details_id"),
@@ -79,7 +85,7 @@ public class GameDetails implements Serializable {
     @JsonIgnoreProperties(value = { "gameDetails" }, allowSetters = true)
     private Set<Publisher> publishers = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(
         name = "rel_game_details__categories",
         joinColumns = @JoinColumn(name = "game_details_id"),
@@ -87,6 +93,10 @@ public class GameDetails implements Serializable {
     )
     @JsonIgnoreProperties(value = { "gameDetails" }, allowSetters = true)
     private Set<Category> categories = new HashSet<>();
+
+    @JsonIgnoreProperties(value = { "gameDetails" }, allowSetters = true)
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "gameDetails")
+    private Game game;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -103,19 +113,6 @@ public class GameDetails implements Serializable {
         this.id = id;
     }
 
-    public Integer getRequiredAge() {
-        return this.requiredAge;
-    }
-
-    public GameDetails requiredAge(Integer requiredAge) {
-        this.setRequiredAge(requiredAge);
-        return this;
-    }
-
-    public void setRequiredAge(Integer requiredAge) {
-        this.requiredAge = requiredAge;
-    }
-
     public LocalDate getReleaseDate() {
         return this.releaseDate;
     }
@@ -129,16 +126,16 @@ public class GameDetails implements Serializable {
         this.releaseDate = releaseDate;
     }
 
-    public String getPegiRating() {
+    public PegiRating getPegiRating() {
         return this.pegiRating;
     }
 
-    public GameDetails pegiRating(String pegiRating) {
+    public GameDetails pegiRating(PegiRating pegiRating) {
         this.setPegiRating(pegiRating);
         return this;
     }
 
-    public void setPegiRating(String pegiRating) {
+    public void setPegiRating(PegiRating pegiRating) {
         this.pegiRating = pegiRating;
     }
 
@@ -207,6 +204,19 @@ public class GameDetails implements Serializable {
         this.description = description;
     }
 
+    public String getSnippet() {
+        return snippet;
+    }
+
+    public GameDetails snippet(String snippet) {
+        this.setSnippet(snippet);
+        return this;
+    }
+
+    public void setSnippet(String snippet) {
+        this.snippet = snippet;
+    }
+
     public String getNotes() {
         return this.notes;
     }
@@ -231,6 +241,14 @@ public class GameDetails implements Serializable {
 
     public void setSteamAppid(Long steamAppid) {
         this.steamAppid = steamAppid;
+    }
+
+    public String getSteamUrl() {
+        return STEAM_URL_PREFIX + this.getSteamAppid();
+    }
+
+    public void setSteamUrl(String steamUrl) {
+        this.steamUrl = steamUrl;
     }
 
     public Set<Platform> getPlatforms() {
@@ -333,7 +351,27 @@ public class GameDetails implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    public Game getGame() {
+        return this.game;
+    }
+
+    public void setGame(Game game) {
+        if (this.game != null) {
+            this.game.setGameDetails(null);
+        }
+        if (game != null) {
+            game.setGameDetails(this);
+        }
+        this.game = game;
+    }
+
+    public GameDetails game(Game game) {
+        this.setGame(game);
+        return this;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -348,7 +386,8 @@ public class GameDetails implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -356,17 +395,16 @@ public class GameDetails implements Serializable {
     @Override
     public String toString() {
         return "GameDetails{" +
-            "id=" + getId() +
-            ", requiredAge=" + getRequiredAge() +
-            ", releaseDate='" + getReleaseDate() + "'" +
-            ", pegiRating='" + getPegiRating() + "'" +
-            ", metacriticScore=" + getMetacriticScore() +
-            ", imageUrl='" + getImageUrl() + "'" +
-            ", thumbnailUrl='" + getThumbnailUrl() + "'" +
-            ", price=" + getPrice() +
-            ", description='" + getDescription() + "'" +
-            ", notes='" + getNotes() + "'" +
-            ", steamAppid=" + getSteamAppid() +
-            "}";
+                "id=" + getId() +
+                ", releaseDate='" + getReleaseDate() + "'" +
+                ", pegiRating='" + getPegiRating().toString() + "'" +
+                ", metacriticScore=" + getMetacriticScore() +
+                ", imageUrl='" + getImageUrl() + "'" +
+                ", thumbnailUrl='" + getThumbnailUrl() + "'" +
+                ", price=" + getPrice() +
+                ", description='" + getDescription() + "'" +
+                ", notes='" + getNotes() + "'" +
+                ", steamAppid=" + getSteamAppid() +
+                "}";
     }
 }

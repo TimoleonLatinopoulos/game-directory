@@ -9,6 +9,8 @@ import { of, Subject, from } from 'rxjs';
 import { GameFormService } from './game-form.service';
 import { GameService } from '../service/game.service';
 import { IGame } from '../game.model';
+import { IGameDetails } from 'app/entities/game-details/game-details.model';
+import { GameDetailsService } from 'app/entities/game-details/service/game-details.service';
 
 import { GameUpdateComponent } from './game-update.component';
 
@@ -18,6 +20,7 @@ describe('Game Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let gameFormService: GameFormService;
   let gameService: GameService;
+  let gameDetailsService: GameDetailsService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -39,17 +42,39 @@ describe('Game Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     gameFormService = TestBed.inject(GameFormService);
     gameService = TestBed.inject(GameService);
+    gameDetailsService = TestBed.inject(GameDetailsService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('Should update editForm', () => {
+    it('Should call gameDetails query and add missing value', () => {
       const game: IGame = { id: 456 };
+      const gameDetails: IGameDetails = { id: 29431 };
+      game.gameDetails = gameDetails;
+
+      const gameDetailsCollection: IGameDetails[] = [{ id: 2478 }];
+      jest.spyOn(gameDetailsService, 'query').mockReturnValue(of(new HttpResponse({ body: gameDetailsCollection })));
+      const expectedCollection: IGameDetails[] = [gameDetails, ...gameDetailsCollection];
+      jest.spyOn(gameDetailsService, 'addGameDetailsToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ game });
       comp.ngOnInit();
 
+      expect(gameDetailsService.query).toHaveBeenCalled();
+      expect(gameDetailsService.addGameDetailsToCollectionIfMissing).toHaveBeenCalledWith(gameDetailsCollection, gameDetails);
+      expect(comp.gameDetailsCollection).toEqual(expectedCollection);
+    });
+
+    it('Should update editForm', () => {
+      const game: IGame = { id: 456 };
+      const gameDetails: IGameDetails = { id: 39476 };
+      game.gameDetails = gameDetails;
+
+      activatedRoute.data = of({ game });
+      comp.ngOnInit();
+
+      expect(comp.gameDetailsCollection).toContain(gameDetails);
       expect(comp.game).toEqual(game);
     });
   });
@@ -119,6 +144,18 @@ describe('Game Management Update Component', () => {
       expect(gameService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Compare relationships', () => {
+    describe('compareGameDetails', () => {
+      it('Should forward to gameDetailsService', () => {
+        const entity = { id: 123 };
+        const entity2 = { id: 456 };
+        jest.spyOn(gameDetailsService, 'compareGameDetails');
+        comp.compareGameDetails(entity, entity2);
+        expect(gameDetailsService.compareGameDetails).toHaveBeenCalledWith(entity, entity2);
+      });
     });
   });
 });

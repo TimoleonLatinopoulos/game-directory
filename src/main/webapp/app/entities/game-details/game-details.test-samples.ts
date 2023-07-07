@@ -3,30 +3,28 @@ import dayjs from 'dayjs/esm';
 import { IGameDetails, NewGameDetails } from './game-details.model';
 
 export const sampleWithRequiredData: IGameDetails = {
-  id: 29431,
+  id: 22574,
 };
 
 export const sampleWithPartialData: IGameDetails = {
-  id: 39238,
-  metacriticScore: 12338,
-  price: 18487,
-  description: 'programming Genderflux Solutions',
-  notes: 'Clinton',
-  steamAppid: 5535,
+  id: 91234,
+  metacriticScore: 90983,
+  imageUrl: 'Credit orchestrate',
+  thumbnailUrl: 'Books Movies',
+  price: 43967,
 };
 
 export const sampleWithFullData: IGameDetails = {
-  id: 43967,
-  requiredAge: 99663,
+  id: 99663,
   releaseDate: dayjs('2023-07-05'),
-  pegiRating: 'District luxurious',
-  metacriticScore: 96438,
-  imageUrl: 'rich',
-  thumbnailUrl: 'till',
-  price: 66483,
-  description: 'Gasoline Gasoline',
-  notes: 'maroon',
-  steamAppid: 25827,
+  pegiRating: 'Dong parsing',
+  metacriticScore: 13034,
+  imageUrl: 'caption',
+  thumbnailUrl: 'Tasty Benz',
+  price: 80676,
+  description: 'Gasoline Rustic',
+  notes: 'Soft Distributed',
+  steamAppid: 66920,
 };
 
 export const sampleWithNewData: NewGameDetails = {

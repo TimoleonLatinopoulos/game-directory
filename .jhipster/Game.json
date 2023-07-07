@@ -12,7 +12,18 @@
   "name": "Game",
   "pagination": "no",
   "readOnly": false,
-  "relationships": [],
+  "relationships": [
+    {
+      "id": false,
+      "otherEntityField": "id",
+      "otherEntityName": "gameDetails",
+      "otherEntityRelationshipName": "game",
+      "ownerSide": true,
+      "relationshipName": "gameDetails",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one"
+    }
+  ],
   "searchEngine": "no",
   "service": "serviceClass"
 }

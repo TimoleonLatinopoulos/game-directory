@@ -23,6 +23,16 @@
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 
+    <changeSet id="20230705175035-2" author="jhipster">
+        <loadData
+                  file="config/liquibase/data/category.csv"
+                  separator=";"
+                  tableName="category"
+                  usePreparedStatements="true">
+            <column name="user_id" type="numeric"/>
+        </loadData>
+    </changeSet>
+    
     <!--
         Load sample data generated with Faker.js
         - This data can be easily edited using a CSV editor (or even MS Excel) and

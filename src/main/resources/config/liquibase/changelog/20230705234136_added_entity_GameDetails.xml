@@ -14,9 +14,6 @@
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="required_age" type="integer">
-                <constraints nullable="true" />
-            </column>
             <column name="release_date" type="date">
                 <constraints nullable="true" />
             </column>
@@ -35,10 +32,13 @@
             <column name="price" type="${floatType}">
                 <constraints nullable="true" />
             </column>
-            <column name="description" type="varchar(255)">
+            <column name="description" type="varchar(3000)">
                 <constraints nullable="true" />
             </column>
-            <column name="notes" type="varchar(255)">
+            <column name="snippet" type="varchar(1000)">
+                <constraints nullable="true" />
+            </column>
+            <column name="notes" type="varchar(1000)">
                 <constraints nullable="true" />
             </column>
             <column name="steam_appid" type="bigint">
@@ -50,7 +50,7 @@
 
     <changeSet id="20230705234136-1-relations" author="jhipster">
 
-        <createTable tableName="game_details_platform">
+        <createTable tableName="rel_game_details__platform">
             <column name="platform_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -59,9 +59,9 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="game_details_id, platform_id" tableName="game_details_platform"/>
+        <addPrimaryKey columnNames="game_details_id, platform_id" tableName="rel_game_details__platform"/>
 
-        <createTable tableName="game_details_developers">
+        <createTable tableName="rel_game_details__developers">
             <column name="developers_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -70,9 +70,9 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="game_details_id, developers_id" tableName="game_details_developers"/>
+        <addPrimaryKey columnNames="game_details_id, developers_id" tableName="rel_game_details__developers"/>
 
-        <createTable tableName="game_details_publishers">
+        <createTable tableName="rel_game_details__publishers">
             <column name="publishers_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -81,9 +81,9 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="game_details_id, publishers_id" tableName="game_details_publishers"/>
+        <addPrimaryKey columnNames="game_details_id, publishers_id" tableName="rel_game_details__publishers"/>
 
-        <createTable tableName="game_details_categories">
+        <createTable tableName="rel_game_details__categories">
             <column name="categories_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
@@ -92,7 +92,7 @@
             </column>
         </createTable>
 
-        <addPrimaryKey columnNames="game_details_id, categories_id" tableName="game_details_categories"/>
+        <addPrimaryKey columnNames="game_details_id, categories_id" tableName="rel_game_details__categories"/>
     </changeSet>
 
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
@@ -112,7 +112,6 @@
                   tableName="game_details"
                   usePreparedStatements="true">
             <column name="id" type="numeric"/>
-            <column name="required_age" type="numeric"/>
             <column name="release_date" type="date"/>
             <column name="pegi_rating" type="string"/>
             <column name="metacritic_score" type="numeric"/>

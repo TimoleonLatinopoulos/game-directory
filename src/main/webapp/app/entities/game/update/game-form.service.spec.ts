@@ -21,6 +21,7 @@ describe('Game Form Service', () => {
           expect.objectContaining({
             id: expect.any(Object),
             title: expect.any(Object),
+            gameDetails: expect.any(Object),
           })
         );
       });
@@ -32,6 +33,7 @@ describe('Game Form Service', () => {
           expect.objectContaining({
             id: expect.any(Object),
             title: expect.any(Object),
+            gameDetails: expect.any(Object),
           })
         );
       });

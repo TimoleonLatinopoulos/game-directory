@@ -2,9 +2,11 @@ package com.timoleon.gamedirectory.service;
 
 import com.timoleon.gamedirectory.domain.GameDetails;
 import com.timoleon.gamedirectory.repository.GameDetailsRepository;
+import com.timoleon.gamedirectory.service.dto.GameDetailsDTO;
+import com.timoleon.gamedirectory.service.mapper.GameDetailsMapper;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -23,19 +25,24 @@ public class GameDetailsService {
 
     private final GameDetailsRepository gameDetailsRepository;
 
-    public GameDetailsService(GameDetailsRepository gameDetailsRepository) {
+    private final GameDetailsMapper gameDetailsMapper;
+
+    public GameDetailsService(GameDetailsRepository gameDetailsRepository, GameDetailsMapper gameDetailsMapper) {
         this.gameDetailsRepository = gameDetailsRepository;
+        this.gameDetailsMapper = gameDetailsMapper;
     }
 
     /**
      * Save a gameDetails.
      *
-     * @param gameDetails the entity to save.
+     * @param gameDetailsDTO the entity to save.
      * @return the persisted entity.
      */
-    public GameDetails save(GameDetails gameDetails) {
-        log.debug("Request to save GameDetails : {}", gameDetails);
-        return gameDetailsRepository.save(gameDetails);
+    public GameDetailsDTO save(GameDetailsDTO gameDetailsDTO) {
+        log.debug("Request to save GameDetails : {}", gameDetailsDTO);
+        GameDetails result = gameDetailsRepository.save(gameDetailsMapper.toEntity(gameDetailsDTO));
+
+        return gameDetailsMapper.toDto(result);
     }
 
     /**
@@ -61,9 +68,6 @@ public class GameDetailsService {
         return gameDetailsRepository
             .findById(gameDetails.getId())
             .map(existingGameDetails -> {
-                if (gameDetails.getRequiredAge() != null) {
-                    existingGameDetails.setRequiredAge(gameDetails.getRequiredAge());
-                }
                 if (gameDetails.getReleaseDate() != null) {
                     existingGameDetails.setReleaseDate(gameDetails.getReleaseDate());
                 }
@@ -115,6 +119,20 @@ public class GameDetailsService {
      */
     public Page<GameDetails> findAllWithEagerRelationships(Pageable pageable) {
         return gameDetailsRepository.findAllWithEagerRelationships(pageable);
+    }
+
+    /**
+     * Get all the gameDetails where Game is {@code null}.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<GameDetails> findAllWhereGameIsNull() {
+        log.debug("Request to get all gameDetails where Game is null");
+        return StreamSupport
+            .stream(gameDetailsRepository.findAll().spliterator(), false)
+            .filter(gameDetails -> gameDetails.getGame() == null)
+            .toList();
     }
 
     /**

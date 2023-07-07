@@ -4,10 +4,6 @@
   "entityTableName": "game_details",
   "fields": [
     {
-      "fieldName": "requiredAge",
-      "fieldType": "Integer"
-    },
-    {
       "fieldName": "releaseDate",
       "fieldType": "LocalDate"
     },

@@ -18,6 +18,12 @@
         <dd>
           <span>{{ game.title }}</span>
         </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.game.gameDetails">Game Details</span></dt>
+        <dd>
+          <div *ngIf="game.gameDetails">
+            <a [routerLink]="['/game-details', game.gameDetails.id, 'view']">{{ game.gameDetails.id }}</a>
+          </div>
+        </dd>
       </dl>
 
       <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

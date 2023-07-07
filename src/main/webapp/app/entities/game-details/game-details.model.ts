@@ -6,7 +6,6 @@ import { ICategory } from 'app/entities/category/category.model';
 
 export interface IGameDetails {
   id: number;
-  requiredAge?: number | null;
   releaseDate?: dayjs.Dayjs | null;
   pegiRating?: string | null;
   metacriticScore?: number | null;

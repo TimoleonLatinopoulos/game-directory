@@ -20,7 +20,6 @@ describe('GameDetails Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            requiredAge: expect.any(Object),
             releaseDate: expect.any(Object),
             pegiRating: expect.any(Object),
             metacriticScore: expect.any(Object),
@@ -44,7 +43,6 @@ describe('GameDetails Form Service', () => {
         expect(formGroup.controls).toEqual(
           expect.objectContaining({
             id: expect.any(Object),
-            requiredAge: expect.any(Object),
             releaseDate: expect.any(Object),
             pegiRating: expect.any(Object),
             metacriticScore: expect.any(Object),

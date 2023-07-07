@@ -1,10 +1,12 @@
 package com.timoleon.gamedirectory.service;
 
 import com.timoleon.gamedirectory.domain.Game;
+import com.timoleon.gamedirectory.domain.GameDetails;
 import com.timoleon.gamedirectory.repository.GameRepository;
+import com.timoleon.gamedirectory.service.dto.GameDTO;
+import com.timoleon.gamedirectory.service.mapper.GameMapper;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -21,19 +23,26 @@ public class GameService {
 
     private final GameRepository gameRepository;
 
-    public GameService(GameRepository gameRepository) {
+    private final GameMapper gameMapper;
+
+    public GameService(GameRepository gameRepository, GameMapper gameMapper) {
         this.gameRepository = gameRepository;
+        this.gameMapper = gameMapper;
     }
 
     /**
      * Save a game.
      *
-     * @param game the entity to save.
+     * @param gameDTO the entity to save.
      * @return the persisted entity.
      */
-    public Game save(Game game) {
-        log.debug("Request to save Game : {}", game);
-        return gameRepository.save(game);
+    public GameDTO save(GameDTO gameDTO) {
+        log.debug("Request to save Game : {}", gameDTO);
+
+        Game game = gameMapper.toEntity(gameDTO);
+        Game result = gameRepository.save(game);
+
+        return gameMapper.toDto(result);
     }
 
     /**

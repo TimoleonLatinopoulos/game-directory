@@ -1,5 +1,6 @@
 package com.timoleon.gamedirectory.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
@@ -20,6 +21,11 @@ public class Game implements Serializable {
 
     @Column(name = "title")
     private String title;
+
+    @JsonIgnoreProperties(value = { "platforms", "developers", "publishers", "categories", "game" }, allowSetters = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JoinColumn(unique = true)
+    private GameDetails gameDetails;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -49,7 +55,21 @@ public class Game implements Serializable {
         this.title = title;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    public GameDetails getGameDetails() {
+        return this.gameDetails;
+    }
+
+    public void setGameDetails(GameDetails gameDetails) {
+        this.gameDetails = gameDetails;
+    }
+
+    public Game gameDetails(GameDetails gameDetails) {
+        this.setGameDetails(gameDetails);
+        return this;
+    }
+
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -64,7 +84,8 @@ public class Game implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -72,8 +93,8 @@ public class Game implements Serializable {
     @Override
     public String toString() {
         return "Game{" +
-            "id=" + getId() +
-            ", title='" + getTitle() + "'" +
-            "}";
+                "id=" + getId() +
+                ", title='" + getTitle() + "'" +
+                "}";
     }
 }

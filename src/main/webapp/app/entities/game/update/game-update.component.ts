@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -10,6 +10,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { GameFormService, GameFormGroup } from './game-form.service';
 import { IGame } from '../game.model';
 import { GameService } from '../service/game.service';
+import { IGameDetails } from 'app/entities/game-details/game-details.model';
+import { GameDetailsService } from 'app/entities/game-details/service/game-details.service';
 
 @Component({
   standalone: true,
@@ -21,9 +23,18 @@ export class GameUpdateComponent implements OnInit {
   isSaving = false;
   game: IGame | null = null;
 
+  gameDetailsCollection: IGameDetails[] = [];
+
   editForm: GameFormGroup = this.gameFormService.createGameFormGroup();
 
-  constructor(protected gameService: GameService, protected gameFormService: GameFormService, protected activatedRoute: ActivatedRoute) {}
+  constructor(
+    protected gameService: GameService,
+    protected gameFormService: GameFormService,
+    protected gameDetailsService: GameDetailsService,
+    protected activatedRoute: ActivatedRoute
+  ) {}
+
+  compareGameDetails = (o1: IGameDetails | null, o2: IGameDetails | null): boolean => this.gameDetailsService.compareGameDetails(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ game }) => {
@@ -31,6 +42,8 @@ export class GameUpdateComponent implements OnInit {
       if (game) {
         this.updateForm(game);
       }
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -70,5 +83,22 @@ export class GameUpdateComponent implements OnInit {
   protected updateForm(game: IGame): void {
     this.game = game;
     this.gameFormService.resetForm(this.editForm, game);
+
+    this.gameDetailsCollection = this.gameDetailsService.addGameDetailsToCollectionIfMissing<IGameDetails>(
+      this.gameDetailsCollection,
+      game.gameDetails
+    );
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.gameDetailsService
+      .query({ filter: 'game-is-null' })
+      .pipe(map((res: HttpResponse<IGameDetails[]>) => res.body ?? []))
+      .pipe(
+        map((gameDetails: IGameDetails[]) =>
+          this.gameDetailsService.addGameDetailsToCollectionIfMissing<IGameDetails>(gameDetails, this.game?.gameDetails)
+        )
+      )
+      .subscribe((gameDetails: IGameDetails[]) => (this.gameDetailsCollection = gameDetails));
   }
 }

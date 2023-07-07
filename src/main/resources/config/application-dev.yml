@@ -18,6 +18,8 @@ logging:
     ROOT: DEBUG
     tech.jhipster: DEBUG
     org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.hibernate.stat: TRACE
     com.timoleon.gamedirectory: DEBUG
 
 spring:

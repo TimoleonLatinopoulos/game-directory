@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.timoleon.gamedirectory.IntegrationTest;
 import com.timoleon.gamedirectory.domain.GameDetails;
+import com.timoleon.gamedirectory.domain.enumerations.PegiRating;
 import com.timoleon.gamedirectory.repository.GameDetailsRepository;
 import com.timoleon.gamedirectory.service.GameDetailsService;
 import jakarta.persistence.EntityManager;
@@ -41,14 +42,11 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 class GameDetailsResourceIT {
 
-    private static final Integer DEFAULT_REQUIRED_AGE = 1;
-    private static final Integer UPDATED_REQUIRED_AGE = 2;
-
     private static final LocalDate DEFAULT_RELEASE_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_RELEASE_DATE = LocalDate.now(ZoneId.systemDefault());
 
-    private static final String DEFAULT_PEGI_RATING = "AAAAAAAAAA";
-    private static final String UPDATED_PEGI_RATING = "BBBBBBBBBB";
+    private static final PegiRating DEFAULT_PEGI_RATING = PegiRating.Seven;
+    private static final PegiRating UPDATED_PEGI_RATING = PegiRating.Eighteen;
 
     private static final Integer DEFAULT_METACRITIC_SCORE = 1;
     private static final Integer UPDATED_METACRITIC_SCORE = 2;
@@ -102,7 +100,6 @@ class GameDetailsResourceIT {
      */
     public static GameDetails createEntity(EntityManager em) {
         GameDetails gameDetails = new GameDetails()
-            .requiredAge(DEFAULT_REQUIRED_AGE)
             .releaseDate(DEFAULT_RELEASE_DATE)
             .pegiRating(DEFAULT_PEGI_RATING)
             .metacriticScore(DEFAULT_METACRITIC_SCORE)
@@ -123,7 +120,6 @@ class GameDetailsResourceIT {
      */
     public static GameDetails createUpdatedEntity(EntityManager em) {
         GameDetails gameDetails = new GameDetails()
-            .requiredAge(UPDATED_REQUIRED_AGE)
             .releaseDate(UPDATED_RELEASE_DATE)
             .pegiRating(UPDATED_PEGI_RATING)
             .metacriticScore(UPDATED_METACRITIC_SCORE)
@@ -154,7 +150,6 @@ class GameDetailsResourceIT {
         List<GameDetails> gameDetailsList = gameDetailsRepository.findAll();
         assertThat(gameDetailsList).hasSize(databaseSizeBeforeCreate + 1);
         GameDetails testGameDetails = gameDetailsList.get(gameDetailsList.size() - 1);
-        assertThat(testGameDetails.getRequiredAge()).isEqualTo(DEFAULT_REQUIRED_AGE);
         assertThat(testGameDetails.getReleaseDate()).isEqualTo(DEFAULT_RELEASE_DATE);
         assertThat(testGameDetails.getPegiRating()).isEqualTo(DEFAULT_PEGI_RATING);
         assertThat(testGameDetails.getMetacriticScore()).isEqualTo(DEFAULT_METACRITIC_SCORE);
@@ -196,7 +191,6 @@ class GameDetailsResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(gameDetails.getId().intValue())))
-            .andExpect(jsonPath("$.[*].requiredAge").value(hasItem(DEFAULT_REQUIRED_AGE)))
             .andExpect(jsonPath("$.[*].releaseDate").value(hasItem(DEFAULT_RELEASE_DATE.toString())))
             .andExpect(jsonPath("$.[*].pegiRating").value(hasItem(DEFAULT_PEGI_RATING)))
             .andExpect(jsonPath("$.[*].metacriticScore").value(hasItem(DEFAULT_METACRITIC_SCORE)))
@@ -237,7 +231,6 @@ class GameDetailsResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(gameDetails.getId().intValue()))
-            .andExpect(jsonPath("$.requiredAge").value(DEFAULT_REQUIRED_AGE))
             .andExpect(jsonPath("$.releaseDate").value(DEFAULT_RELEASE_DATE.toString()))
             .andExpect(jsonPath("$.pegiRating").value(DEFAULT_PEGI_RATING))
             .andExpect(jsonPath("$.metacriticScore").value(DEFAULT_METACRITIC_SCORE))
@@ -266,10 +259,10 @@ class GameDetailsResourceIT {
 
         // Update the gameDetails
         GameDetails updatedGameDetails = gameDetailsRepository.findById(gameDetails.getId()).get();
-        // Disconnect from session so that the updates on updatedGameDetails are not directly saved in db
+        // Disconnect from session so that the updates on updatedGameDetails are not
+        // directly saved in db
         em.detach(updatedGameDetails);
         updatedGameDetails
-            .requiredAge(UPDATED_REQUIRED_AGE)
             .releaseDate(UPDATED_RELEASE_DATE)
             .pegiRating(UPDATED_PEGI_RATING)
             .metacriticScore(UPDATED_METACRITIC_SCORE)
@@ -292,7 +285,6 @@ class GameDetailsResourceIT {
         List<GameDetails> gameDetailsList = gameDetailsRepository.findAll();
         assertThat(gameDetailsList).hasSize(databaseSizeBeforeUpdate);
         GameDetails testGameDetails = gameDetailsList.get(gameDetailsList.size() - 1);
-        assertThat(testGameDetails.getRequiredAge()).isEqualTo(UPDATED_REQUIRED_AGE);
         assertThat(testGameDetails.getReleaseDate()).isEqualTo(UPDATED_RELEASE_DATE);
         assertThat(testGameDetails.getPegiRating()).isEqualTo(UPDATED_PEGI_RATING);
         assertThat(testGameDetails.getMetacriticScore()).isEqualTo(UPDATED_METACRITIC_SCORE);
@@ -386,7 +378,6 @@ class GameDetailsResourceIT {
         List<GameDetails> gameDetailsList = gameDetailsRepository.findAll();
         assertThat(gameDetailsList).hasSize(databaseSizeBeforeUpdate);
         GameDetails testGameDetails = gameDetailsList.get(gameDetailsList.size() - 1);
-        assertThat(testGameDetails.getRequiredAge()).isEqualTo(DEFAULT_REQUIRED_AGE);
         assertThat(testGameDetails.getReleaseDate()).isEqualTo(DEFAULT_RELEASE_DATE);
         assertThat(testGameDetails.getPegiRating()).isEqualTo(DEFAULT_PEGI_RATING);
         assertThat(testGameDetails.getMetacriticScore()).isEqualTo(DEFAULT_METACRITIC_SCORE);
@@ -411,7 +402,6 @@ class GameDetailsResourceIT {
         partialUpdatedGameDetails.setId(gameDetails.getId());
 
         partialUpdatedGameDetails
-            .requiredAge(UPDATED_REQUIRED_AGE)
             .releaseDate(UPDATED_RELEASE_DATE)
             .pegiRating(UPDATED_PEGI_RATING)
             .metacriticScore(UPDATED_METACRITIC_SCORE)
@@ -434,7 +424,6 @@ class GameDetailsResourceIT {
         List<GameDetails> gameDetailsList = gameDetailsRepository.findAll();
         assertThat(gameDetailsList).hasSize(databaseSizeBeforeUpdate);
         GameDetails testGameDetails = gameDetailsList.get(gameDetailsList.size() - 1);
-        assertThat(testGameDetails.getRequiredAge()).isEqualTo(UPDATED_REQUIRED_AGE);
         assertThat(testGameDetails.getReleaseDate()).isEqualTo(UPDATED_RELEASE_DATE);
         assertThat(testGameDetails.getPegiRating()).isEqualTo(UPDATED_PEGI_RATING);
         assertThat(testGameDetails.getMetacriticScore()).isEqualTo(UPDATED_METACRITIC_SCORE);

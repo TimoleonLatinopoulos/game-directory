@@ -18,7 +18,6 @@ type GameDetailsFormDefaults = Pick<NewGameDetails, 'id' | 'platforms' | 'develo
 
 type GameDetailsFormGroupContent = {
   id: FormControl<IGameDetails['id'] | NewGameDetails['id']>;
-  requiredAge: FormControl<IGameDetails['requiredAge']>;
   releaseDate: FormControl<IGameDetails['releaseDate']>;
   pegiRating: FormControl<IGameDetails['pegiRating']>;
   metacriticScore: FormControl<IGameDetails['metacriticScore']>;
@@ -51,7 +50,6 @@ export class GameDetailsFormService {
           validators: [Validators.required],
         }
       ),
-      requiredAge: new FormControl(gameDetailsRawValue.requiredAge),
       releaseDate: new FormControl(gameDetailsRawValue.releaseDate),
       pegiRating: new FormControl(gameDetailsRawValue.pegiRating),
       metacriticScore: new FormControl(gameDetailsRawValue.metacriticScore),

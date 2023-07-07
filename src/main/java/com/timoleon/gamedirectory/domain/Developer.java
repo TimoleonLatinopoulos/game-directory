@@ -25,7 +25,7 @@ public class Developer implements Serializable {
     private String description;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "developers")
-    @JsonIgnoreProperties(value = { "platforms", "developers", "publishers", "categories" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "platforms", "developers", "publishers", "categories", "game" }, allowSetters = true)
     private Set<GameDetails> gameDetails = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -87,7 +87,8 @@ public class Developer implements Serializable {
         return this;
     }
 
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and
+    // setters here
 
     @Override
     public boolean equals(Object o) {
@@ -102,7 +103,8 @@ public class Developer implements Serializable {
 
     @Override
     public int hashCode() {
-        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        // see
+        // https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
         return getClass().hashCode();
     }
 
@@ -110,8 +112,8 @@ public class Developer implements Serializable {
     @Override
     public String toString() {
         return "Developer{" +
-            "id=" + getId() +
-            ", description='" + getDescription() + "'" +
-            "}";
+                "id=" + getId() +
+                ", description='" + getDescription() + "'" +
+                "}";
     }
 }

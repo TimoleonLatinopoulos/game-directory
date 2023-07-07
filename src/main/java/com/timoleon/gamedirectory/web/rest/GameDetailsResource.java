@@ -3,6 +3,7 @@ package com.timoleon.gamedirectory.web.rest;
 import com.timoleon.gamedirectory.domain.GameDetails;
 import com.timoleon.gamedirectory.repository.GameDetailsRepository;
 import com.timoleon.gamedirectory.service.GameDetailsService;
+import com.timoleon.gamedirectory.service.dto.GameDetailsDTO;
 import com.timoleon.gamedirectory.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -18,7 +19,8 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link com.timoleon.gamedirectory.domain.GameDetails}.
+ * REST controller for managing
+ * {@link com.timoleon.gamedirectory.domain.GameDetails}.
  */
 @RestController
 @RequestMapping("/api")
@@ -44,16 +46,18 @@ public class GameDetailsResource {
      * {@code POST  /game-details} : Create a new gameDetails.
      *
      * @param gameDetails the gameDetails to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new gameDetails, or with status {@code 400 (Bad Request)} if the gameDetails has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new gameDetails, or with status {@code 400 (Bad Request)} if
+     *         the gameDetails has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/game-details")
-    public ResponseEntity<GameDetails> createGameDetails(@RequestBody GameDetails gameDetails) throws URISyntaxException {
+    public ResponseEntity<GameDetailsDTO> createGameDetails(@RequestBody GameDetailsDTO gameDetails) throws URISyntaxException {
         log.debug("REST request to save GameDetails : {}", gameDetails);
         if (gameDetails.getId() != null) {
             throw new BadRequestAlertException("A new gameDetails cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        GameDetails result = gameDetailsService.save(gameDetails);
+        GameDetailsDTO result = gameDetailsService.save(gameDetails);
         return ResponseEntity
             .created(new URI("/api/game-details/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -63,11 +67,14 @@ public class GameDetailsResource {
     /**
      * {@code PUT  /game-details/:id} : Updates an existing gameDetails.
      *
-     * @param id the id of the gameDetails to save.
+     * @param id          the id of the gameDetails to save.
      * @param gameDetails the gameDetails to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated gameDetails,
-     * or with status {@code 400 (Bad Request)} if the gameDetails is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the gameDetails couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated gameDetails,
+     *         or with status {@code 400 (Bad Request)} if the gameDetails is not
+     *         valid,
+     *         or with status {@code 500 (Internal Server Error)} if the gameDetails
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/game-details/{id}")
@@ -95,14 +102,19 @@ public class GameDetailsResource {
     }
 
     /**
-     * {@code PATCH  /game-details/:id} : Partial updates given fields of an existing gameDetails, field will ignore if it is null
+     * {@code PATCH  /game-details/:id} : Partial updates given fields of an
+     * existing gameDetails, field will ignore if it is null
      *
-     * @param id the id of the gameDetails to save.
+     * @param id          the id of the gameDetails to save.
      * @param gameDetails the gameDetails to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated gameDetails,
-     * or with status {@code 400 (Bad Request)} if the gameDetails is not valid,
-     * or with status {@code 404 (Not Found)} if the gameDetails is not found,
-     * or with status {@code 500 (Internal Server Error)} if the gameDetails couldn't be updated.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the updated gameDetails,
+     *         or with status {@code 400 (Bad Request)} if the gameDetails is not
+     *         valid,
+     *         or with status {@code 404 (Not Found)} if the gameDetails is not
+     *         found,
+     *         or with status {@code 500 (Internal Server Error)} if the gameDetails
+     *         couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/game-details/{id}", consumes = { "application/json", "application/merge-patch+json" })
@@ -133,11 +145,21 @@ public class GameDetailsResource {
     /**
      * {@code GET  /game-details} : get all the gameDetails.
      *
-     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of gameDetails in body.
+     * @param eagerload flag to eager load entities from relationships (This is
+     *                  applicable for many-to-many).
+     * @param filter    the filter of the request.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list
+     *         of gameDetails in body.
      */
     @GetMapping("/game-details")
-    public List<GameDetails> getAllGameDetails(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
+    public List<GameDetails> getAllGameDetails(
+        @RequestParam(required = false) String filter,
+        @RequestParam(required = false, defaultValue = "false") boolean eagerload
+    ) {
+        if ("game-is-null".equals(filter)) {
+            log.debug("REST request to get all GameDetailss where game is null");
+            return gameDetailsService.findAllWhereGameIsNull();
+        }
         log.debug("REST request to get all GameDetails");
         return gameDetailsService.findAll();
     }
@@ -146,7 +168,8 @@ public class GameDetailsResource {
      * {@code GET  /game-details/:id} : get the "id" gameDetails.
      *
      * @param id the id of the gameDetails to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the gameDetails, or with status {@code 404 (Not Found)}.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body
+     *         the gameDetails, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/game-details/{id}")
     public ResponseEntity<GameDetails> getGameDetails(@PathVariable Long id) {

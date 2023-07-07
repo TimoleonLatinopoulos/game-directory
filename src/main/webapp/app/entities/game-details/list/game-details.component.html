@@ -38,12 +38,6 @@
               <fa-icon class="p-1" icon="sort"></fa-icon>
             </div>
           </th>
-          <th scope="col" jhiSortBy="requiredAge">
-            <div class="d-flex">
-              <span jhiTranslate="gameDirectoryApp.gameDetails.requiredAge">Required Age</span>
-              <fa-icon class="p-1" icon="sort"></fa-icon>
-            </div>
-          </th>
           <th scope="col" jhiSortBy="releaseDate">
             <div class="d-flex">
               <span jhiTranslate="gameDirectoryApp.gameDetails.releaseDate">Release Date</span>
@@ -130,7 +124,6 @@
           <td>
             <a [routerLink]="['/game-details', gameDetails.id, 'view']">{{ gameDetails.id }}</a>
           </td>
-          <td>{{ gameDetails.requiredAge }}</td>
           <td>{{ gameDetails.releaseDate | formatMediumDate }}</td>
           <td>{{ gameDetails.pegiRating }}</td>
           <td>{{ gameDetails.metacriticScore }}</td>
