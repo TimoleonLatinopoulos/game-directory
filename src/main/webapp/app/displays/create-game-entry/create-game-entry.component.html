@@ -1,0 +1,63 @@
+<div class="row d-flex justify-content-center">
+  <div class="col-8">
+    <form class="row" [formGroup]="gameDetailsForm" (ngSubmit)="save()">
+      <h2>Create a new Game Entry</h2>
+
+      <div class="col-lg-8">
+        <br />
+        <br />
+
+        <div class="mb-3">
+          <label class="form-label" for="field_title">Game Title</label>
+          <input id="field_title" name="title" formControlName="title" class="form-control" type="text" />
+        </div>
+
+        <div formGroupName="gameDetails">
+          <div class="mb-3">
+            <label class="form-label" for="field_releaseDate">Release Date</label>
+            <div class="input-group">
+              <input
+                id="field_releaseDate"
+                name="releaseDate"
+                formControlName="releaseDate"
+                class="form-control"
+                type="text"
+                ngbDatepicker
+                #releaseDateDp="ngbDatepicker"
+              />
+
+              <button type="button" class="btn btn-secondary" (click)="releaseDateDp.toggle()">
+                <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="field_pegiRating">Pegi Rating</label>
+            <select id="field_pegiRating" name="pegiRating" formControlName="pegiRating" class="form-control" multiple>
+              <option [ngValue]="pegiRatingOption" *ngFor="let pegiRatingOption of pegiRatingList">{{ pegiRatingOption }}</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label" for="field_metacriticScore">Metacritic Score</label>
+            <input
+              id="field_metacriticScore"
+              name="metacriticScore"
+              formControlName="metacriticScore"
+              class="form-control"
+              type="number"
+              min="1"
+              max="100"
+            />
+            <jhi-validation-error
+              [abstractControl]="this.gameDetailsForm.get('gameDetails')?.get('metacriticScore')"
+              [absolutePosition]="true"
+            >
+            </jhi-validation-error>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>

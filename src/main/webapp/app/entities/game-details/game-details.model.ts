@@ -13,6 +13,7 @@ export interface IGameDetails {
   thumbnailUrl?: string | null;
   price?: number | null;
   description?: string | null;
+  snippet?: string | null;
   notes?: string | null;
   steamAppid?: number | null;
   platforms?: Pick<IPlatform, 'id'>[] | null;

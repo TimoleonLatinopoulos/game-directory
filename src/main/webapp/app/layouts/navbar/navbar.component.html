@@ -27,7 +27,15 @@
             </span>
           </a>
         </li>
-        <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
+        <li *jhiHasAnyAuthority="'ROLE_ADMIN'" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a class="nav-link" routerLink="/new-entry" (click)="collapseNavbar()">
+            <span>
+              <fa-icon icon="gamepad"></fa-icon>
+              <span>Create Game Entry</span>
+            </span>
+          </a>
+        </li>
+
         <li
           *ngSwitchCase="true"
           ngbDropdown
