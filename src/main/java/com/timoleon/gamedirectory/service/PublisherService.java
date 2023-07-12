@@ -92,6 +92,18 @@ public class PublisherService {
     }
 
     /**
+     * Get one publisher by description.
+     *
+     * @param description the description of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<Publisher> findOneByDescription(String description) {
+        log.debug("Request to get Publisher : {}", description);
+        return publisherRepository.findByDescription(description);
+    }
+
+    /**
      * Delete the publisher by id.
      *
      * @param id the id of the entity.

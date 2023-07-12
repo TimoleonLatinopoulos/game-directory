@@ -1,0 +1,26 @@
+<form class="form-control-class">
+  <mat-form-field class="multi-select-container">
+    <mat-chip-grid #chipGrid aria-label="Category selection">
+      <mat-chip-row *ngFor="let category of categories" (removed)="remove(category)">
+        {{ category.description }}
+        <button matChipRemove [attr.aria-label]="'remove ' + category">
+          <fa-icon icon="xmark"></fa-icon>
+        </button>
+      </mat-chip-row>
+    </mat-chip-grid>
+    <input
+      [placeholder]="placeholder"
+      #categoryInput
+      [formControl]="categoryForm"
+      [matChipInputFor]="chipGrid"
+      [matAutocomplete]="auto"
+      [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+      (matChipInputTokenEnd)="add($event)"
+    />
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+      <mat-option *ngFor="let category of filteredCategoryList | async" [value]="category">
+        {{ category.description }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+</form>

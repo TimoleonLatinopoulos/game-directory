@@ -6,11 +6,12 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IPlatform, NewPlatform } from '../platform.model';
+import { ICategory } from 'app/entities/category/category.model';
 
-export type PartialUpdatePlatform = Partial<IPlatform> & Pick<IPlatform, 'id'>;
+export type PartialUpdatePlatform = Partial<ICategory> & Pick<ICategory, 'id'>;
 
 export type EntityResponseType = HttpResponse<IPlatform>;
-export type EntityArrayResponseType = HttpResponse<IPlatform[]>;
+export type EntityArrayResponseType = HttpResponse<ICategory[]>;
 
 @Injectable({ providedIn: 'root' })
 export class PlatformService {
@@ -23,7 +24,7 @@ export class PlatformService {
   }
 
   getAll(): Observable<EntityArrayResponseType> {
-    return this.http.get<IPlatform[]>(this.resourceUrl, { observe: 'response' });
+    return this.http.get<ICategory[]>(this.resourceUrl, { observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

@@ -2,23 +2,16 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { EntityArrayResponseType, PlatformService } from 'app/entities/platform/service/platform.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { Validators, FormGroup, FormBuilder, FormControl } from '@angular/forms';
+import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { DeveloperService } from 'app/entities/developer/service/developer.service';
 import { PublisherService } from 'app/entities/publisher/service/publisher.service';
 import { CategoryService } from 'app/entities/category/service/category.service';
-import { IPlatform } from 'app/entities/platform/platform.model';
-import { IDeveloper } from 'app/entities/developer/developer.model';
-import { ICategory } from 'app/entities/category/category.model';
-import { IPublisher } from 'app/entities/publisher/publisher.model';
+import { Category, ICategory } from 'app/entities/category/category.model';
 import { SteamApiService } from 'app/entities/game-details/service/steam-api.service';
 import { ISteamGame } from 'app/entities/game-details/steam-game-details.model';
 import { greekDateToEng, getDateWithTimeOffset } from 'app/shared/util/date-utils';
-import { NgbDateAdapter, NgbDatepicker } from '@ng-bootstrap/ng-bootstrap';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatAutocomplete } from '@angular/material/autocomplete';
+import { GameService } from 'app/entities/game/service/game.service';
 
 @Component({
   selector: 'jhi-create-game-entry',
@@ -26,21 +19,27 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
   styleUrls: ['./create-game-entry.component.scss'],
 })
 export class CreateGameEntryComponent implements OnInit {
-  separatorKeysCodes: number[] = [ENTER, COMMA];
+  platformPlaceholder = 'New Platform...';
+  developerPlaceholder = 'New Developer...';
+  publisherPlaceholder = 'New Publisher...';
+  categoryPlaceholder = 'New Category...';
 
   gameDetailsForm: FormGroup;
-  pegiRatingList: string[] = ['Three', 'Seven', 'Twelve', 'Sixteen', 'Eighteen'];
+  pegiRatingList: string[] = ['Zero', 'Three', 'Seven', 'Twelve', 'Sixteen', 'Eighteen'];
 
-  public platformList: IPlatform[] | null = [];
-  public filteredPlatformList: Observable<IPlatform[] | undefined> | undefined;
-  public platforms: IPlatform[] | null = [];
-
-  public developerList: IDeveloper[] | null = [];
-  public publisherList: IPublisher[] | null = [];
-  public categoryList: ICategory[] | null = [];
+  public platformList: ICategory[] = [];
+  public developerList: ICategory[] = [];
+  public publisherList: ICategory[] = [];
+  public categoryList: ICategory[] = [];
   public steamGame: ISteamGame | null = null;
 
+  public steamPlatformList: ICategory[] = [];
+  public steamPublisherList: ICategory[] = [];
+  public steamDeveloperList: ICategory[] = [];
+  public steamCategoryList: ICategory[] = [];
+
   public appid: number | undefined;
+  public showSpinner = false;
 
   @ViewChild('platformInput', { static: false }) platformInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto', { static: false }) matAutocomplete: MatAutocomplete;
@@ -51,7 +50,8 @@ export class CreateGameEntryComponent implements OnInit {
     private developerService: DeveloperService,
     private publisherService: PublisherService,
     private categoryService: CategoryService,
-    private steamApiService: SteamApiService
+    private steamApiService: SteamApiService,
+    private gameService: GameService
   ) {
     this.gameDetailsForm = this.fb.group({
       id: [null],
@@ -59,7 +59,7 @@ export class CreateGameEntryComponent implements OnInit {
       gameDetails: this.fb.group({
         id: [null],
         releaseDate: [{ day: 20, month: 4, year: 1969 }, [Validators.required]], // Validators.pattern(DATE_FORMAT)
-        pegiRating: [null],
+        pegiRating: [null, Validators.required],
         metacriticScore: [null, [Validators.min(0), Validators.max(100)]],
         imageUrl: ['', Validators.required],
         thumbnailUrl: ['', Validators.required],
@@ -67,21 +67,13 @@ export class CreateGameEntryComponent implements OnInit {
         description: ['', Validators.required],
         snippet: ['', Validators.required],
         notes: [''],
-        steamApiid: [null, Validators.required],
+        steamAppid: [null, Validators.required],
         platforms: [[]],
         developers: [[]],
         publishers: [[]],
         categories: [[]],
       }),
     });
-
-    this.filteredPlatformList = this.gameDetailsForm
-      .get('gameDetails')
-      ?.get('platforms')
-      ?.valueChanges.pipe(
-        startWith(null),
-        map((platform: IPlatform | null) => (platform ? this._filter(platform) : this.platformList?.slice()))
-      );
   }
 
   ngOnInit(): void {
@@ -90,127 +82,148 @@ export class CreateGameEntryComponent implements OnInit {
 
   public fetchData(): void {
     this.platformService.getAll().subscribe((result: EntityArrayResponseType) => {
-      this.platformList = result.body;
+      if (result.body != null) {
+        this.platformList = result.body;
+      }
     });
     this.developerService.getAll().subscribe((result: EntityArrayResponseType) => {
-      this.developerList = result.body;
+      if (result.body != null) {
+        this.developerList = result.body;
+      }
     });
     this.publisherService.getAll().subscribe((result: EntityArrayResponseType) => {
-      this.publisherList = result.body;
+      if (result.body != null) {
+        this.publisherList = result.body;
+      }
     });
     this.categoryService.getAll().subscribe((result: EntityArrayResponseType) => {
-      this.categoryList = result.body;
+      if (result.body != null) {
+        this.categoryList = result.body;
+      }
     });
   }
 
   public save(): void {
-    return;
+    this.gameService.create(this.gameDetailsForm.value).subscribe((response: any) => {
+      this.gameDetailsForm.reset();
+    });
   }
 
   public fillFormFromSteam(): void {
-    const apiid = this.gameDetailsForm.get('gameDetails')?.get('steamApiid')?.value;
+    const apiid = this.gameDetailsForm.get('gameDetails')?.get('steamAppid')?.value;
 
     if (apiid != null) {
-      this.steamApiService.find(apiid).subscribe((result: any) => {
-        this.steamGame = result.body[Object.keys(result.body)[0]];
-        if (this.steamGame?.success) {
-          this.gameDetailsForm.get('title')?.setValue(this.steamGame?.data.name);
+      this.showSpinner = true;
+      this.steamApiService.find(apiid).subscribe(
+        (result: any) => {
+          this.steamGame = result.body[Object.keys(result.body)[0]];
+          if (this.steamGame?.success) {
+            this.gameDetailsForm.get('title')?.setValue(this.steamGame?.data.name);
 
-          const dateString = greekDateToEng(this.steamGame?.data.release_date.date);
-          if (dateString !== undefined) {
-            this.gameDetailsForm
-              .get('gameDetails')
-              ?.get('releaseDate')
-              ?.setValue(getDateWithTimeOffset(dateString).toISOString().substring(0, 10));
+            const dateString = greekDateToEng(this.steamGame?.data.release_date.date);
+            if (dateString !== undefined) {
+              this.gameDetailsForm
+                .get('gameDetails')
+                ?.get('releaseDate')
+                ?.setValue(getDateWithTimeOffset(dateString).toISOString().substring(0, 10));
+            }
+
+            const pegiRating = this.getPegiRating(this.steamGame?.data.required_age);
+            this.gameDetailsForm.get('gameDetails')?.get('pegiRating')?.patchValue(pegiRating);
+
+            this.gameDetailsForm.get('gameDetails')?.get('metacriticScore')?.setValue(this.steamGame?.data.metacritic?.score);
+            this.gameDetailsForm.get('gameDetails')?.get('imageUrl')?.setValue(this.steamGame?.data.header_image);
+            this.gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')?.setValue(this.steamGame?.data.capsule_image);
+
+            const price = this.steamGame?.data.price_overview.final;
+            if (price != null) {
+              this.gameDetailsForm
+                .get('gameDetails')
+                ?.get('price')
+                ?.setValue(price / 100);
+            }
+            this.gameDetailsForm.get('gameDetails')?.get('description')?.setValue(this.steamGame?.data.about_the_game);
+            this.gameDetailsForm.get('gameDetails')?.get('snippet')?.setValue(this.steamGame?.data.short_description);
+            this.gameDetailsForm.get('gameDetails')?.get('notes')?.setValue(this.steamGame?.data.content_descriptors?.notes);
+            this.gameDetailsForm.get('gameDetails')?.get('steamAppid')?.setValue(this.steamGame?.data.steam_appid);
+
+            this.steamPlatformList = this.filterCategory(this.platformList, ['PC']);
+            this.gameDetailsForm.get('gameDetails')?.get('platforms')?.setValue(this.steamPlatformList);
+
+            this.steamPublisherList = this.filterCategoryNew(this.publisherList, this.steamGame?.data.publishers);
+            this.gameDetailsForm.get('gameDetails')?.get('publishers')?.setValue(this.steamPublisherList);
+
+            this.steamDeveloperList = this.filterCategoryNew(this.developerList, this.steamGame?.data.developers);
+            this.gameDetailsForm.get('gameDetails')?.get('developers')?.setValue(this.steamDeveloperList);
+
+            const stringCategories = this.steamGame?.data.genres.map(a => a.description);
+            this.steamCategoryList = this.filterCategory(this.categoryList, stringCategories);
+            this.gameDetailsForm.get('gameDetails')?.get('categories')?.setValue(this.steamCategoryList);
           }
-
-          const pegiRating = this.getPegiRating(this.steamGame?.data.required_age);
-          this.gameDetailsForm.get('gameDetails')?.get('pegiRating')?.patchValue(pegiRating);
-
-          this.gameDetailsForm.get('gameDetails')?.get('metacriticScore')?.setValue(this.steamGame?.data.metacritic?.score);
-          this.gameDetailsForm.get('gameDetails')?.get('imageUrl')?.setValue(this.steamGame?.data.header_image);
-          this.gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')?.setValue(this.steamGame?.data.capsule_image);
-
-          const price = this.steamGame?.data.price_overview.final;
-          if (price != null) {
-            this.gameDetailsForm
-              .get('gameDetails')
-              ?.get('price')
-              ?.setValue(price / 100);
-          }
-          this.gameDetailsForm.get('gameDetails')?.get('description')?.setValue(this.steamGame?.data.about_the_game);
-          this.gameDetailsForm.get('gameDetails')?.get('snippet')?.setValue(this.steamGame?.data.short_description);
-          this.gameDetailsForm.get('gameDetails')?.get('notes')?.setValue(this.steamGame?.data.content_descriptors?.notes);
-          this.gameDetailsForm.get('gameDetails')?.get('steamApiid')?.setValue(this.steamGame?.data.steam_appid);
+          this.showSpinner = false;
+        },
+        () => {
+          this.showSpinner = false;
         }
-      });
+      );
     }
   }
 
   public getPegiRating(requiredAge: any): string {
     const age = Number(requiredAge);
     switch (age) {
-      case 3:
+      case 0:
         return this.pegiRatingList[0];
-      case 7:
+      case 3:
         return this.pegiRatingList[1];
-      case 12:
+      case 7:
         return this.pegiRatingList[2];
-      case 16:
+      case 12:
         return this.pegiRatingList[3];
-      case 18:
+      case 16:
         return this.pegiRatingList[4];
+      case 18:
+        return this.pegiRatingList[5];
       default:
-        return 'Zero';
+        return this.pegiRatingList[0];
     }
   }
 
-  add(event: MatChipInputEvent): void {
-    const value = (event.value || '').trim();
+  public filterCategory(list: ICategory[], values: any[]): ICategory[] {
+    const lowerCaseValues = values.map(item => item.toLowerCase());
+    const result = list.filter(item =>
+      lowerCaseValues.includes(item.description != null && item.description !== undefined ? item.description.toLowerCase() : '')
+    );
+    return result;
+  }
 
-    // Add our platform
-    if (value) {
-      const platformResult = this.platformList?.filter(obj => obj.description === value);
-      if (platformResult !== undefined) {
-        this.platforms?.push(platformResult[0]);
+  public filterCategoryNew(list: ICategory[], values: any[]): ICategory[] {
+    const result = this.filterCategory(list, values);
 
-        // Clear the input value
-        event.chipInput.clear();
-        this.gameDetailsForm.get('gameDetails')?.get('platforms')?.setValue(null);
+    if (result.length < values.length) {
+      const stringValues = list.map(a => a.description);
+      const restOfValues = values.filter(item => !stringValues.includes(item != null && item !== undefined ? item.toLowerCase() : ''));
+
+      for (let i = 0; i < restOfValues.length; i++) {
+        result.push(new Category(0, restOfValues[i], null));
       }
     }
+    return result;
   }
 
-  remove(platform: IPlatform): void {
-    const index = this.platforms?.indexOf(platform);
-
-    if (index !== undefined && index >= 0) {
-      this.platforms?.splice(index, 1);
-    }
+  handlePlatformValue(value: ICategory[]): void {
+    this.gameDetailsForm.get('gameDetails')?.get('platforms')?.setValue(value);
   }
 
-  selected(event: MatAutocompleteSelectedEvent): void {
-    const platformResult = this.platformList?.filter(obj => obj.description === event.option.viewValue);
-    if (platformResult !== undefined) {
-      this.platforms?.push(platformResult[0]);
-      this.platformInput.nativeElement.value = '';
-      this.gameDetailsForm.get('gameDetails')?.get('platforms')?.setValue(null);
-    }
+  handleDeveloperValue(value: ICategory[]): void {
+    this.gameDetailsForm.get('gameDetails')?.get('developers')?.setValue(value);
   }
 
-  private _filter(value: any): IPlatform[] | undefined {
-    if (value !== undefined) {
-      let filterValue = '';
-      if (typeof value === 'string') {
-        filterValue = value.toLowerCase();
-      } else {
-        filterValue = value.description?.toLowerCase();
-      }
+  handlePublisherValue(value: ICategory[]): void {
+    this.gameDetailsForm.get('gameDetails')?.get('publishers')?.setValue(value);
+  }
 
-      if (filterValue != null) {
-        return this.platformList?.filter(platform => platform.description?.toLowerCase().includes(filterValue));
-      }
-    }
-    return undefined;
+  handleCategoryValue(value: ICategory[]): void {
+    this.gameDetailsForm.get('gameDetails')?.get('categories')?.setValue(value);
   }
 }

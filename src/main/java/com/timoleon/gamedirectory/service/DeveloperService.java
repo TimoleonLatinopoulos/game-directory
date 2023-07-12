@@ -4,7 +4,6 @@ import com.timoleon.gamedirectory.domain.Developer;
 import com.timoleon.gamedirectory.repository.DeveloperRepository;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -89,6 +88,18 @@ public class DeveloperService {
     public Optional<Developer> findOne(Long id) {
         log.debug("Request to get Developer : {}", id);
         return developerRepository.findById(id);
+    }
+
+    /**
+     * Get one developer by description.
+     *
+     * @param description the description of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<Developer> findOneByDescription(String description) {
+        log.debug("Request to get Developer : {}", description);
+        return developerRepository.findByDescription(description);
     }
 
     /**

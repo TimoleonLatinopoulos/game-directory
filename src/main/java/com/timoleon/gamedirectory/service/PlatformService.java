@@ -92,6 +92,18 @@ public class PlatformService {
     }
 
     /**
+     * Get one platform by description.
+     *
+     * @param description the description of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<Platform> findOneByDescription(String description) {
+        log.debug("Request to get Platform : {}", description);
+        return platformRepository.findByDescription(description);
+    }
+
+    /**
      * Delete the platform by id.
      *
      * @param id the id of the entity.

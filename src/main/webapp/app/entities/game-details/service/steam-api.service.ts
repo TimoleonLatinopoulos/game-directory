@@ -34,7 +34,7 @@ export class SteamApiService {
       .set('Accept', 'application/json, text/plain, */*')
       .set('Accept-Language', 'el-GR,el;q=0.8,en-US;q=0.5,en;q=0.3');
 
-    return this.http.get<RestSteamGame>(`${this.proxyUrl}?appids=${steam_appid}`, {
+    return this.http.get<RestSteamGame>(`${this.proxyUrl}?appids=${steam_appid}&l=english`, {
       headers: headers,
       observe: 'response',
     });

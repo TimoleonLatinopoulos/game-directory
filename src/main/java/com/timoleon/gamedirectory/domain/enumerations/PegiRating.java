@@ -1,6 +1,7 @@
 package com.timoleon.gamedirectory.domain.enumerations;
 
 public enum PegiRating {
+    Zero(0),
     Three(3),
     Seven(7),
     Twelve(12),
@@ -21,14 +22,16 @@ public enum PegiRating {
     public String toString() {
         switch (this.ordinal()) {
             case 0:
-                return "Three";
+                return "Zero";
             case 1:
-                return "Seven";
+                return "Three";
             case 2:
-                return "Twelve";
+                return "Seven";
             case 3:
-                return "Sixteen";
+                return "Twelve";
             case 4:
+                return "Sixteen";
+            case 5:
                 return "Eighteen";
             default:
                 return null;

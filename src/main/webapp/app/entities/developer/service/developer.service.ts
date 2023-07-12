@@ -6,11 +6,12 @@ import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
 import { IDeveloper, NewDeveloper } from '../developer.model';
+import { ICategory } from 'app/entities/category/category.model';
 
 export type PartialUpdateDeveloper = Partial<IDeveloper> & Pick<IDeveloper, 'id'>;
 
 export type EntityResponseType = HttpResponse<IDeveloper>;
-export type EntityArrayResponseType = HttpResponse<IDeveloper[]>;
+export type EntityArrayResponseType = HttpResponse<ICategory[]>;
 
 @Injectable({ providedIn: 'root' })
 export class DeveloperService {
@@ -23,7 +24,7 @@ export class DeveloperService {
   }
 
   getAll(): Observable<EntityArrayResponseType> {
-    return this.http.get<IDeveloper[]>(this.resourceUrl, { observe: 'response' });
+    return this.http.get<ICategory[]>(this.resourceUrl, { observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

@@ -27,6 +27,8 @@ export interface ISteamGameDetails {
   website: string;
   developers: string[];
   publishers: string[];
+  categories: ICategory[];
+  genres: ICategory[];
   metacritic: IMetacritic;
   release_date: IReleaseDate;
   price_overview: IPrice;

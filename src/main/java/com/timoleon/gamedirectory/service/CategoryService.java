@@ -1,6 +1,7 @@
 package com.timoleon.gamedirectory.service;
 
 import com.timoleon.gamedirectory.domain.Category;
+import com.timoleon.gamedirectory.domain.Developer;
 import com.timoleon.gamedirectory.repository.CategoryRepository;
 import java.util.List;
 import java.util.Optional;
@@ -89,6 +90,18 @@ public class CategoryService {
     public Optional<Category> findOne(Long id) {
         log.debug("Request to get Category : {}", id);
         return categoryRepository.findById(id);
+    }
+
+    /**
+     * Get one category by description.
+     *
+     * @param description the description of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<Category> findOneByDescription(String description) {
+        log.debug("Request to get Category : {}", description);
+        return categoryRepository.findByDescription(description);
     }
 
     /**

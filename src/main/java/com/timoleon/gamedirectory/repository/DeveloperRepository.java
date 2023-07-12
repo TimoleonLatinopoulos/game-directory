@@ -1,6 +1,7 @@
 package com.timoleon.gamedirectory.repository;
 
 import com.timoleon.gamedirectory.domain.Developer;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +10,6 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface DeveloperRepository extends JpaRepository<Developer, Long> {}
+public interface DeveloperRepository extends JpaRepository<Developer, Long> {
+    Optional<Developer> findByDescription(String description);
+}

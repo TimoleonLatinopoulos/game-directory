@@ -11,7 +11,6 @@ import LoginComponent from './login/login.component';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { DisplaysModule } from './displays/displays.module';
-import { SharedLibsModule } from './shared/shared-libs.module';
 
 @NgModule({
   imports: [

@@ -1,166 +1,233 @@
 <div class="row d-flex justify-content-center">
   <div class="col-10">
-    <form class="row" [formGroup]="gameDetailsForm" (ngSubmit)="save()">
-      <h2>Create a new Game Entry</h2>
+    <form [formGroup]="gameDetailsForm" (ngSubmit)="save()">
+      <div class="row">
+        <div class="col-lg-8">
+          <h2>Create a new Game Entry</h2>
+          <br />
+          <br />
 
-      <div class="col-lg-8">
-        <br />
-        <br />
+          <div class="mb-4 mt-3">
+            <label class="form-label" for="field_title">Game Title</label>
+            <input id="field_title" name="title" formControlName="title" class="form-control" type="text" />
+            <jhi-validation-error [abstractControl]="gameDetailsForm.get('title')" [absolutePosition]="true"> </jhi-validation-error>
+          </div>
 
-        <div class="mb-4 mt-3">
-          <label class="form-label" for="field_title">Game Title</label>
-          <input id="field_title" name="title" formControlName="title" class="form-control" type="text" />
-          <jhi-validation-error [abstractControl]="gameDetailsForm.get('title')" [absolutePosition]="true"> </jhi-validation-error>
+          <div formGroupName="gameDetails">
+            <div class="mb-4 mt-3">
+              <label class="form-label" for="field_releaseDate">Release Date</label>
+              <div class="input-group">
+                <input id="field_releaseDate" name="releaseDate" formControlName="releaseDate" class="form-control" type="date" />
+              </div>
+              <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('releaseDate')" [absolutePosition]="true">
+              </jhi-validation-error>
+            </div>
+
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-4 mt-3">
+                  <label class="form-label" for="field_imageUrl">Image URL</label>
+                  <input id="field_imageUrl" name="imageUrl" formControlName="imageUrl" class="form-control" type="text" />
+                  <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('imageUrl')" [absolutePosition]="true">
+                  </jhi-validation-error>
+                </div>
+              </div>
+              <div class="col-6">
+                <div *ngIf="gameDetailsForm.get('gameDetails')?.get('imageUrl')?.value != ''">
+                  <label class="form-label" for="image_imageUrl">Image Preview</label>
+                  <div class="mb-4 mt-3">
+                    <img
+                      id="image_imageUrl"
+                      name="image_imageUrl"
+                      class="text-error"
+                      [src]="gameDetailsForm.get('gameDetails')?.get('imageUrl')?.value"
+                      alt="Not Found!"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-6">
+                <div class="mb-4 mt-3">
+                  <label class="form-label" for="field_thumbnailUrl">Thumbnail URL</label>
+                  <input id="field_thumbnailUrl" name="thumbnailUrl" formControlName="thumbnailUrl" class="form-control" type="text" />
+                  <jhi-validation-error
+                    [abstractControl]="gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')"
+                    [absolutePosition]="true"
+                  >
+                  </jhi-validation-error>
+                </div>
+              </div>
+              <div class="col-6">
+                <div *ngIf="gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')?.value != ''">
+                  <label class="form-label" for="image_thumbnailUrl">Thumbnail Preview</label>
+                  <div class="mb-4 mt-3">
+                    <img
+                      id="image_thumbnailUrl"
+                      name="image_thumbnailUrl"
+                      class="text-error"
+                      [src]="gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')?.value"
+                      alt="Not Found!"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-4 mt-3">
+              <label class="form-label" for="field_pegiRating">Pegi Rating</label>
+              <select id="field_pegiRating" name="pegiRating" formControlName="pegiRating" class="form-control">
+                <option [ngValue]="pegiRatingOption" *ngFor="let pegiRatingOption of pegiRatingList">{{ pegiRatingOption }}</option>
+              </select>
+              <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('pegiRating')" [absolutePosition]="true">
+              </jhi-validation-error>
+            </div>
+
+            <div class="mb-4 mt-3">
+              <label class="form-label" for="field_metacriticScore">Metacritic Score</label>
+              <input
+                id="field_metacriticScore"
+                name="metacriticScore"
+                formControlName="metacriticScore"
+                class="form-control"
+                type="number"
+              />
+              <jhi-validation-error
+                [abstractControl]="gameDetailsForm.get('gameDetails')?.get('metacriticScore')"
+                [absolutePosition]="true"
+              >
+              </jhi-validation-error>
+            </div>
+
+            <div class="mb-4 mt-3">
+              <label class="form-label" for="field_price">Price</label>
+              <input id="field_price" name="price" formControlName="price" class="form-control" type="number" />
+              <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('price')" [absolutePosition]="true">
+              </jhi-validation-error>
+            </div>
+
+            <div class="mb-4 mt-3">
+              <label class="form-label" for="field_description">Description</label>
+              <textarea id="field_description" name="description" formControlName="description" class="form-control" type="text" rows="6">
+              </textarea>
+              <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('description')" [absolutePosition]="true">
+              </jhi-validation-error>
+            </div>
+
+            <div class="mb-4 mt-3">
+              <label class="form-label" for="field_snippet">Snippet</label>
+              <textarea id="field_snippet" name="snippet" formControlName="snippet" class="form-control" type="text" rows="3"> </textarea>
+              <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('snippet')" [absolutePosition]="true">
+              </jhi-validation-error>
+            </div>
+
+            <div class="mb-4 mt-3">
+              <label class="form-label" for="field_notes">Notes</label>
+              <textarea id="field_notes" name="notes" formControlName="notes" class="form-control" type="text" rows="3"> </textarea>
+              <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('notes')" [absolutePosition]="true">
+              </jhi-validation-error>
+            </div>
+
+            <div class="mb-4 mt-3">
+              <label class="form-label" for="field_steamAppid">Steam Apiid</label>
+              <input id="field_steamAppid" name="steamAppid" formControlName="steamAppid" class="form-control" type="text" />
+              <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('steamAppid')" [absolutePosition]="true">
+              </jhi-validation-error>
+            </div>
+
+            <div class="mb-4 mt-3">
+              <label class="form-label" for="field_developer">Developers</label>
+
+              <jhi-chip-grid-input
+                name="developers"
+                id="field_developer"
+                [categoryList]="developerList"
+                [placeholder]="developerPlaceholder"
+                [canAdd]="true"
+                [recievedCategoryList]="this.steamDeveloperList"
+                (valueEmitted)="handleDeveloperValue($event)"
+              >
+              </jhi-chip-grid-input>
+            </div>
+
+            <div class="mb-4 mt-3">
+              <label class="form-label" for="field_publisher">Publishers</label>
+
+              <jhi-chip-grid-input
+                name="publishers"
+                id="field_publisher"
+                [categoryList]="publisherList"
+                [placeholder]="publisherPlaceholder"
+                [canAdd]="true"
+                [recievedCategoryList]="this.steamPublisherList"
+                (valueEmitted)="handlePublisherValue($event)"
+              >
+              </jhi-chip-grid-input>
+            </div>
+
+            <div class="mb-4 mt-3">
+              <label class="form-label" for="field_platform">Platforms</label>
+
+              <jhi-chip-grid-input
+                name="platforms"
+                id="field_platform"
+                [categoryList]="platformList"
+                [placeholder]="platformPlaceholder"
+                [canAdd]="false"
+                [recievedCategoryList]="this.steamPlatformList"
+                (valueEmitted)="handlePlatformValue($event)"
+              >
+              </jhi-chip-grid-input>
+            </div>
+
+            <div class="mb-4 mt-3">
+              <label class="form-label" for="field_category">Categories</label>
+
+              <jhi-chip-grid-input
+                name="categories"
+                id="field_category"
+                [categoryList]="categoryList"
+                [placeholder]="categoryPlaceholder"
+                [canAdd]="false"
+                [recievedCategoryList]="this.steamCategoryList"
+                (valueEmitted)="handleCategoryValue($event)"
+              >
+              </jhi-chip-grid-input>
+            </div>
+          </div>
         </div>
 
-        <div formGroupName="gameDetails">
-          <div class="mb-4 mt-3">
-            <label class="form-label" for="field_releaseDate">Release Date</label>
-            <div class="input-group">
-              <input id="field_releaseDate" name="releaseDate" formControlName="releaseDate" class="form-control" type="date" />
+        <div class="col-lg-4">
+          <h2>Search through Steam</h2>
+          <br />
+          <br />
+
+          <div class="row">
+            <div class="mb-4 mt-3 col-lg-4" formGroupName="gameDetails">
+              <label class="form-label" for="steamAppid">Steam Apiid</label>
+              <input id="steamAppid" name="steamAppid" formControlName="steamAppid" class="form-control" type="text" />
             </div>
-            <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('releaseDate')" [absolutePosition]="true">
-            </jhi-validation-error>
-          </div>
 
-          <div class="mb-4 mt-3">
-            <label class="form-label" for="field_pegiRating">Pegi Rating</label>
-            <select id="field_pegiRating" name="pegiRating" formControlName="pegiRating" class="form-control">
-              <option [ngValue]="pegiRatingOption" *ngFor="let pegiRatingOption of pegiRatingList">{{ pegiRatingOption }}</option>
-            </select>
-            <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('pegiRating')" [absolutePosition]="true">
-            </jhi-validation-error>
-          </div>
+            <div class="mb-4 mt-3 col-lg-6" style="position: relative">
+              <button type="button" (click)="fillFormFromSteam()" class="btn btn-info" style="position: absolute; bottom: 0">
+                <fa-icon icon="download"></fa-icon>
+                Steam API Search
+              </button>
+            </div>
 
-          <div class="mb-4 mt-3">
-            <label class="form-label" for="field_metacriticScore">Metacritic Score</label>
-            <input id="field_metacriticScore" name="metacriticScore" formControlName="metacriticScore" class="form-control" type="number" />
-            <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('metacriticScore')" [absolutePosition]="true">
-            </jhi-validation-error>
-          </div>
-
-          <div class="mb-4 mt-3">
-            <label class="form-label" for="field_imageUrl">Image URL</label>
-            <input id="field_imageUrl" name="imageUrl" formControlName="imageUrl" class="form-control" type="text" />
-            <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('imageUrl')" [absolutePosition]="true">
-            </jhi-validation-error>
-          </div>
-
-          <div class="mb-4 mt-3">
-            <label class="form-label" for="field_thumbnailUrl">Thumbnail URL</label>
-            <input id="field_thumbnailUrl" name="thumbnailUrl" formControlName="thumbnailUrl" class="form-control" type="text" />
-            <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')" [absolutePosition]="true">
-            </jhi-validation-error>
-          </div>
-
-          <div class="mb-4 mt-3">
-            <label class="form-label" for="field_price">Price</label>
-            <input id="field_price" name="price" formControlName="price" class="form-control" type="number" />
-            <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('price')" [absolutePosition]="true">
-            </jhi-validation-error>
-          </div>
-
-          <div class="mb-4 mt-3">
-            <label class="form-label" for="field_description">Description</label>
-            <textarea id="field_description" name="description" formControlName="description" class="form-control" type="text" rows="6">
-            </textarea>
-            <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('description')" [absolutePosition]="true">
-            </jhi-validation-error>
-          </div>
-
-          <div class="mb-4 mt-3">
-            <label class="form-label" for="field_snippet">Snippet</label>
-            <textarea id="field_snippet" name="snippet" formControlName="snippet" class="form-control" type="text" rows="3"> </textarea>
-            <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('snippet')" [absolutePosition]="true">
-            </jhi-validation-error>
-          </div>
-
-          <div class="mb-4 mt-3">
-            <label class="form-label" for="field_notes">Notes</label>
-            <textarea id="field_notes" name="notes" formControlName="notes" class="form-control" type="text" rows="3"> </textarea>
-            <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('notes')" [absolutePosition]="true">
-            </jhi-validation-error>
-          </div>
-
-          <div class="mb-4 mt-3">
-            <label class="form-label" for="field_steamApiid">Steam Apiid</label>
-            <input id="field_steamApiid" name="steamApiid" formControlName="steamApiid" class="form-control" type="text" />
-            <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('steamApiid')" [absolutePosition]="true">
-            </jhi-validation-error>
-          </div>
-
-          <div class="mb-4 mt-3">
-            <label class="form-label" for="field_steamApiid">Platforms</label>
-
-            <mat-form-field class="example-chip-list">
-              <mat-chip-grid #chipGrid aria-label="Platform selection">
-                <mat-chip-row *ngFor="let platform of platforms" (removed)="remove(platform)">
-                  {{ platform.description }}
-                  <button matChipRemove [attr.aria-label]="'remove ' + platform">
-                    <fa-icon icon="cancel"></fa-icon>
-                  </button>
-                </mat-chip-row>
-              </mat-chip-grid>
-              <input
-                placeholder="New Platform..."
-                #platformInput
-                formControlName="platforms"
-                [matChipInputFor]="chipGrid"
-                [matAutocomplete]="auto"
-                [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                (matChipInputTokenEnd)="add($event)"
-              />
-              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                <mat-option *ngFor="let platform of filteredPlatformList | async" [value]="platform">
-                  {{ platform.description }}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
+            <div class="mb-4 mt-3 col-lg-3" style="position: relative">
+              <mat-progress-spinner *ngIf="showSpinner" mode="indeterminate" class="spinner" style="position: absolute; left: 0; bottom: 0">
+              </mat-progress-spinner>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="col-lg-4">
-        <br />
-        <br />
-
-        <div class="row">
-          <div class="mb-4 mt-3 col-lg-6" formGroupName="gameDetails">
-            <label class="form-label" for="steamApiid">Steam Apiid</label>
-            <input id="steamApiid" name="steamApiid" formControlName="steamApiid" class="form-control" type="text" />
-          </div>
-
-          <div class="mb-4 mt-3 col-lg-6" style="position: relative">
-            <button (click)="fillFormFromSteam()" class="btn btn-info" style="position: absolute; bottom: 0">
-              <fa-icon icon="download"></fa-icon>Steam API Search
-            </button>
-          </div>
-        </div>
-
-        <div *ngIf="gameDetailsForm.get('gameDetails')?.get('imageUrl')?.value != ''">
-          <label class="form-label" for="image_imageUrl">Image Preview</label>
-          <div class="mb-4 mt-3">
-            <img
-              id="image_imageUrl"
-              name="image_imageUrl"
-              class="text-error"
-              [src]="gameDetailsForm.get('gameDetails')?.get('imageUrl')?.value"
-              alt="Not Found!"
-            />
-          </div>
-        </div>
-
-        <div *ngIf="gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')?.value != ''">
-          <label class="form-label" for="image_thumbnailUrl">Thumbnail Preview</label>
-          <div class="mb-4 mt-3">
-            <img
-              id="image_thumbnailUrl"
-              name="image_thumbnailUrl"
-              class="text-error"
-              [src]="gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')?.value"
-              alt="Not Found!"
-            />
-          </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <button type="submit" [disabled]="gameDetailsForm.invalid" class="btn btn-primary">Submit</button>
         </div>
       </div>
     </form>

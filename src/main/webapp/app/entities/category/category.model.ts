@@ -7,3 +7,7 @@ export interface ICategory {
 }
 
 export type NewCategory = Omit<ICategory, 'id'> & { id: null };
+
+export class Category implements ICategory {
+  constructor(public id: number, public description?: string | null, public gameDetails?: Pick<IGameDetails, 'id'>[] | null) {}
+}

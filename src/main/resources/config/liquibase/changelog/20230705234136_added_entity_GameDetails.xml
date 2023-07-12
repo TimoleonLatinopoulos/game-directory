@@ -32,7 +32,7 @@
             <column name="price" type="${floatType}">
                 <constraints nullable="true" />
             </column>
-            <column name="description" type="varchar(3000)">
+            <column name="description" type="varchar(5000)">
                 <constraints nullable="true" />
             </column>
             <column name="snippet" type="varchar(1000)">

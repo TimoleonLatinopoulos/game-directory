@@ -5,15 +5,44 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { AlertComponent } from './alert/alert.component';
 import { AlertErrorComponent } from './alert/alert-error.component';
 import { ValidationErrorComponent } from './components/validation-error/validation-error.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultiInputComponent } from './components/multi-input/multi-input.component';
-
+import { MatChipsModule } from '@angular/material/chips';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { ChipGridInputComponent } from './components/chip-grid-input/chip-grid-input.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 /**
  * Application wide Module
  */
 @NgModule({
-  declarations: [ValidationErrorComponent, MultiInputComponent],
-  imports: [CommonModule, AlertComponent, AlertErrorComponent, FormsModule],
-  exports: [CommonModule, NgbModule, FontAwesomeModule, AlertComponent, AlertErrorComponent, ValidationErrorComponent, MultiInputComponent],
+  declarations: [ValidationErrorComponent, MultiInputComponent, ChipGridInputComponent],
+  imports: [
+    CommonModule,
+    AlertComponent,
+    AlertErrorComponent,
+    FormsModule,
+    FontAwesomeModule,
+    MatChipsModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatProgressSpinnerModule,
+  ],
+  exports: [
+    CommonModule,
+    NgbModule,
+    FontAwesomeModule,
+    AlertComponent,
+    AlertErrorComponent,
+    ValidationErrorComponent,
+    MultiInputComponent,
+    ChipGridInputComponent,
+    FormsModule,
+    ReactiveFormsModule,
+    InfiniteScrollModule,
+    MatProgressSpinnerModule,
+  ],
 })
 export default class SharedModule {}
