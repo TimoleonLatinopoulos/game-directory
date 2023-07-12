@@ -23,17 +23,16 @@ export class ValidationErrorComponent implements OnInit {
   public maxPriority = 0;
 
   public _validationMessages = {
-    required: { message: 'Το πεδίο είναι υποχρεωτικό', priority: 0 },
-    pattern: { message: 'Το πεδίο δεν είναι έγκυρο', priority: 2 },
-    min: { message: 'Η τιμή που δώσατε είναι πολύ μικρή', priority: 1 },
-    max: { message: 'Η τιμή που δώσατε είναι πολύ μεγάλη', priority: 1 },
-    minlength: { message: 'Το πλήθος των χαρακτήρων είναι πολυ μικρό', priority: 1 },
-    maxlength: { message: 'Το πλήθος των χαρακτήρων είναι πολύ μεγάλο', priority: 1 },
-    futureDate: { message: 'Η ημερομηνία δεν μπορεί να είναι μεταγενέστερη της σημερινής', priority: 1 },
-    pastDate: { message: 'Η ημερομηνία δεν μπορεί να είναι σημερινή ή προγενέστερη.', priority: 1 },
-    pastExpiryDate: { message: 'Η ημερομηνία λήξης δεν μπορεί να είναι σημερινή ή προγενέστερη.', priority: 1 },
-    minDate: { message: 'Μη έγκυρη ημερομηνία', priority: 1 },
-    maxDate: { message: 'Μη έγκυρη ημερομηνία', priority: 1 },
+    required: { message: 'The field is required', priority: 0 },
+    pattern: { message: 'The field is not valid', priority: 2 },
+    min: { message: 'The value you gave is too small', priority: 1 },
+    max: { message: 'The value you gave is too big', priority: 1 },
+    minlength: { message: 'The number of characters is too small', priority: 1 },
+    maxlength: { message: 'The number of characters is too big', priority: 1 },
+    futureDate: { message: 'The date cannot be later than today', priority: 1 },
+    pastDate: { message: 'The date cannot be today or earlier', priority: 1 },
+    minDate: { message: 'Invalid date', priority: 1 },
+    maxDate: { message: 'Invalid date', priority: 1 },
   };
 
   constructor() {
@@ -50,7 +49,10 @@ export class ValidationErrorComponent implements OnInit {
       const keys = Object.keys(this.abstractControl.errors);
 
       keys.forEach(key => {
-        if (this._validationMessages[key as keyof typeof this._validationMessages].priority < this.maxPriority) {
+        if (
+          this._validationMessages[key as keyof typeof this._validationMessages] != undefined &&
+          this._validationMessages[key as keyof typeof this._validationMessages].priority < this.maxPriority
+        ) {
           this.maxPriority = this._validationMessages[key as keyof typeof this._validationMessages].priority;
         }
       });
@@ -60,10 +62,13 @@ export class ValidationErrorComponent implements OnInit {
   }
 
   public checkForError(key: any): boolean {
-    return (
-      this._validationMessages[key as keyof typeof this._validationMessages].priority === this.maxPriority ||
-      !this._validationMessages[key as keyof typeof this._validationMessages].priority
-    );
+    if (this._validationMessages[key as keyof typeof this._validationMessages] != undefined) {
+      return (
+        this._validationMessages[key as keyof typeof this._validationMessages].priority === this.maxPriority ||
+        !this._validationMessages[key as keyof typeof this._validationMessages].priority
+      );
+    }
+    return false;
     // this._validationMessages[key]?.alwaysShow === true
   }
 

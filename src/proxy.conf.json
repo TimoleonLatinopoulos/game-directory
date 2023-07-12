@@ -1,0 +1,8 @@
+{
+  "/api": {
+    "target": "https://cors-anywhere.herokuapp.com/",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

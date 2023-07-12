@@ -19,8 +19,7 @@ import { httpInterceptorProviders } from 'app/core/interceptor/index';
 import MainComponent from './layouts/main/main.component';
 import MainModule from './layouts/main/main.module';
 import { AppPageTitleStrategy } from './app-page-title-strategy';
-import { CreateGameEntryComponent } from './displays/create-game-entry/create-game-entry.component';
-import { DisplaysModule } from './displays/displays.module';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 @NgModule({
   imports: [
@@ -49,3 +48,5 @@ export class AppModule {
     dpConfig.minDate = { year: dayjs().subtract(100, 'year').year(), month: 1, day: 1 };
   }
 }
+
+platformBrowserDynamic().bootstrapModule(AppModule);

@@ -22,6 +22,10 @@ export class DeveloperService {
     return this.http.get<IDeveloper>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  getAll(): Observable<EntityArrayResponseType> {
+    return this.http.get<IDeveloper[]>(this.resourceUrl, { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<IDeveloper[]>(this.resourceUrl, { params: options, observe: 'response' });

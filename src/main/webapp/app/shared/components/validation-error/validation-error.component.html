@@ -8,7 +8,7 @@
     "
   >
     <ng-container *ngIf="checkForError(key) && (!showOnlyOnTouched || (showOnlyOnTouched && this.abstractControl?.touched))">
-      <span class="text-danger">
+      <span class="text-error">
         {{ getErrorMessage(key) }}
       </span>
     </ng-container>

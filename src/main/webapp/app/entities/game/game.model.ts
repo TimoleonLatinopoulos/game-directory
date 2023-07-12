@@ -7,3 +7,7 @@ export interface IGame {
 }
 
 export type NewGame = Omit<IGame, 'id'> & { id: null };
+
+export class Game implements IGame {
+  constructor(public id: number, public title?: string | null, public gameDetails?: Pick<IGameDetails, 'id'> | null) {}
+}

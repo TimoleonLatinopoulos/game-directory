@@ -38,8 +38,11 @@ import {
   faUsersCog,
   faWrench,
   faGamepad,
+  faDownload,
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
+
+import { faSteamSymbol, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
 
 export const fontAwesomeIcons = [
   faArrowLeft,
@@ -81,5 +84,9 @@ export const fontAwesomeIcons = [
   faUsersCog,
   faWrench,
   faGamepad,
+  faSteamSymbol,
+  faInstagram,
+  faTwitter,
+  faDownload,
   // jhipster-needle-add-icon-import
 ];

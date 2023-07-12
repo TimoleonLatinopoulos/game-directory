@@ -22,6 +22,10 @@ export class PlatformService {
     return this.http.get<IPlatform>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
+  getAll(): Observable<EntityArrayResponseType> {
+    return this.http.get<IPlatform[]>(this.resourceUrl, { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<IPlatform[]>(this.resourceUrl, { params: options, observe: 'response' });
