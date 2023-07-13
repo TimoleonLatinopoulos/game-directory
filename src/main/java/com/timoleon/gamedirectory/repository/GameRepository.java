@@ -15,4 +15,14 @@ import org.springframework.stereotype.Repository;
 public interface GameRepository extends JpaRepository<Game, Long> {
     @Query("select game from Game game where game.title = ?1")
     List<Game> findByTitle(@Param("title") String title);
+
+    @Query(
+        "select game from Game game " +
+        "inner join fetch game.gameDetails gameDetails " +
+        "left join fetch gameDetails.platforms " +
+        "left join fetch gameDetails.developers " +
+        "left join fetch gameDetails.publishers " +
+        "left join fetch gameDetails.categories where game.id =:id"
+    )
+    Optional<Game> findOneWithEagerRelationships(@Param("id") Long id);
 }

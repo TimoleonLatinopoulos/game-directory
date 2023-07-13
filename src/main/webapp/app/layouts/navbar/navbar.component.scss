@@ -1,5 +1,5 @@
 @import 'bootstrap/scss/functions';
-@import 'bootswatch/dist/simplex/variables';
+@import 'bootswatch/dist/flatly/variables';
 @import 'bootstrap/scss/variables';
 
 /* ==========================================================================
@@ -34,6 +34,23 @@ Navbar
     }
   }
 }
+
+// .bg-primary {
+//   background-color: #edadce !important;
+// }
+
+// .bg-primary .navbar-nav .show > .nav-link, .bg-primary .navbar-nav .nav-link.active, .bg-primary .navbar-nav .nav-link:hover, .bg-primary .navbar-nav .nav-link:focus {
+//   color: #1b1625 !important;
+// }
+
+// .navbar-dark {
+//   --bs-navbar-color: #66446d;
+//   --bs-navbar-brand-color: #1b1625;
+// }
+
+// .navbar-version[_ngcontent-ng-c494774537] {
+//   color: #66446d;
+// }
 
 /* ==========================================================================
 Logo styles

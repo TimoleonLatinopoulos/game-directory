@@ -4,6 +4,7 @@ import com.timoleon.gamedirectory.domain.Game;
 import com.timoleon.gamedirectory.repository.GameRepository;
 import com.timoleon.gamedirectory.service.GameService;
 import com.timoleon.gamedirectory.service.dto.GameDTO;
+import com.timoleon.gamedirectory.service.mapper.GameMapper;
 import com.timoleon.gamedirectory.web.rest.errors.BadRequestAlertException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,9 +37,12 @@ public class GameResource {
 
     private final GameRepository gameRepository;
 
-    public GameResource(GameService gameService, GameRepository gameRepository) {
+    private final GameMapper gameMapper;
+
+    public GameResource(GameService gameService, GameRepository gameRepository, GameMapper gameMapper) {
         this.gameService = gameService;
         this.gameRepository = gameRepository;
+        this.gameMapper = gameMapper;
     }
 
     /**
@@ -145,10 +149,11 @@ public class GameResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the game, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/games/{id}")
-    public ResponseEntity<Game> getGame(@PathVariable Long id) {
+    public ResponseEntity<GameDTO> getGame(@PathVariable Long id) {
         log.debug("REST request to get Game : {}", id);
         Optional<Game> game = gameService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(game);
+        GameDTO gameDTO = gameMapper.toDto(game.get());
+        return ResponseUtil.wrapOrNotFound(Optional.of(gameDTO));
     }
 
     /**

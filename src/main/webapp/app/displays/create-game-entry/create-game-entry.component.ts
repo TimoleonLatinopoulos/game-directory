@@ -12,6 +12,8 @@ import { ISteamGame } from 'app/entities/game-details/steam-game-details.model';
 import { greekDateToEng, getDateWithTimeOffset } from 'app/shared/util/date-utils';
 import { MatAutocomplete } from '@angular/material/autocomplete';
 import { GameService } from 'app/entities/game/service/game.service';
+import { getPegiRating, pegiRatingList } from 'app/entities/game-details/game-details.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-create-game-entry',
@@ -25,7 +27,7 @@ export class CreateGameEntryComponent implements OnInit {
   categoryPlaceholder = 'New Category...';
 
   gameDetailsForm: FormGroup;
-  pegiRatingList: string[] = ['Zero', 'Three', 'Seven', 'Twelve', 'Sixteen', 'Eighteen'];
+  public pegiRatingList = pegiRatingList;
 
   public platformList: ICategory[] = [];
   public developerList: ICategory[] = [];
@@ -51,7 +53,8 @@ export class CreateGameEntryComponent implements OnInit {
     private publisherService: PublisherService,
     private categoryService: CategoryService,
     private steamApiService: SteamApiService,
-    private gameService: GameService
+    private gameService: GameService,
+    private router: Router
   ) {
     this.gameDetailsForm = this.fb.group({
       id: [null],
@@ -106,6 +109,7 @@ export class CreateGameEntryComponent implements OnInit {
   public save(): void {
     this.gameService.create(this.gameDetailsForm.value).subscribe((response: any) => {
       this.gameDetailsForm.reset();
+      this.router.navigate(['/game-preview/' + (response.body.id as string)]);
     });
   }
 
@@ -128,20 +132,24 @@ export class CreateGameEntryComponent implements OnInit {
                 ?.setValue(getDateWithTimeOffset(dateString).toISOString().substring(0, 10));
             }
 
-            const pegiRating = this.getPegiRating(this.steamGame?.data.required_age);
+            const pegiRating = getPegiRating(this.steamGame?.data.required_age);
             this.gameDetailsForm.get('gameDetails')?.get('pegiRating')?.patchValue(pegiRating);
 
             this.gameDetailsForm.get('gameDetails')?.get('metacriticScore')?.setValue(this.steamGame?.data.metacritic?.score);
             this.gameDetailsForm.get('gameDetails')?.get('imageUrl')?.setValue(this.steamGame?.data.header_image);
             this.gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')?.setValue(this.steamGame?.data.capsule_image);
 
-            const price = this.steamGame?.data.price_overview.final;
-            if (price != null) {
-              this.gameDetailsForm
-                .get('gameDetails')
-                ?.get('price')
-                ?.setValue(price / 100);
+            let price: number;
+            if (!this.steamGame?.data.is_free) {
+              price = this.steamGame?.data.price_overview.final;
+              if (price != null) {
+                price = price / 100;
+              }
+            } else {
+              price = 0;
             }
+            this.gameDetailsForm.get('gameDetails')?.get('price')?.setValue(price);
+
             this.gameDetailsForm.get('gameDetails')?.get('description')?.setValue(this.steamGame?.data.about_the_game);
             this.gameDetailsForm.get('gameDetails')?.get('snippet')?.setValue(this.steamGame?.data.short_description);
             this.gameDetailsForm.get('gameDetails')?.get('notes')?.setValue(this.steamGame?.data.content_descriptors?.notes);
@@ -166,26 +174,6 @@ export class CreateGameEntryComponent implements OnInit {
           this.showSpinner = false;
         }
       );
-    }
-  }
-
-  public getPegiRating(requiredAge: any): string {
-    const age = Number(requiredAge);
-    switch (age) {
-      case 0:
-        return this.pegiRatingList[0];
-      case 3:
-        return this.pegiRatingList[1];
-      case 7:
-        return this.pegiRatingList[2];
-      case 12:
-        return this.pegiRatingList[3];
-      case 16:
-        return this.pegiRatingList[4];
-      case 18:
-        return this.pegiRatingList[5];
-      default:
-        return this.pegiRatingList[0];
     }
   }
 

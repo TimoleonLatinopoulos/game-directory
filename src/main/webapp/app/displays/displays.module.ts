@@ -8,9 +8,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import SharedModule from 'app/shared/shared.module';
+import { GamePreviewComponent } from './game-preview/game-preview.component';
+import { SeparateCategoriesPipe } from 'app/shared/pipes/separate-categories.pipe';
 
 @NgModule({
-  declarations: [CreateGameEntryComponent],
+  declarations: [CreateGameEntryComponent, GamePreviewComponent],
   imports: [
     RouterModule.forChild(displaysRoute),
     MatFormFieldModule,
@@ -20,5 +22,6 @@ import SharedModule from 'app/shared/shared.module';
     SharedModule,
     CommonModule,
   ],
+  providers: [SeparateCategoriesPipe],
 })
 export class DisplaysModule {}

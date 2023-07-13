@@ -1,0 +1,134 @@
+<div class="row d-flex justify-content-center">
+  <div class="col-10">
+    <div class="row">
+      <div class="col-lg-8">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>{{ game.title }}</mat-card-title>
+          </mat-card-header>
+          <hr />
+          <mat-card-content class="inner-html">
+            <div [innerHTML]="game.gameDetails?.description"></div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <div class="col-lg-4">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>Game Information</mat-card-title>
+          </mat-card-header>
+          <hr />
+          <mat-card-content>
+            <img style="object-fit: cover; width: 100%; height: 80%" [src]="game.gameDetails?.imageUrl" alt="Not Found!" />
+
+            <div class="row pt-4">
+              <br />
+              <div class="col-4 bold">
+                <div>Title</div>
+              </div>
+              <div class="col-8">
+                <div>{{ game.title }}</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4 bold">
+                <div>Platform (s)</div>
+              </div>
+              <div class="col-8">
+                {{ platforms }}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4 bold">
+                <div>Developer (s)</div>
+              </div>
+              <div class="col-8">
+                {{ developers }}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4 bold">
+                <div>Publisher (s)</div>
+              </div>
+              <div class="col-8">
+                {{ publishers }}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4 bold">
+                <div>Genre (s)</div>
+              </div>
+              <div class="col-8">
+                {{ categories }}
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4 bold">
+                <div>Release Date</div>
+              </div>
+              <div class="col-8">
+                <div>{{ releaseDate | date : 'dd/MM/yyyy' }}</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4 bold">
+                <div *ngIf="hasPegiRating">Pegi Rating</div>
+              </div>
+              <div class="col-8">
+                <div *ngIf="hasPegiRating">{{ pegiRatingValue }}</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4 bold">
+                <div *ngIf="hasMetacritic">Metacritic Score</div>
+              </div>
+              <div class="col-8">
+                <div *ngIf="hasMetacritic">{{ game.gameDetails?.metacriticScore }}</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4 bold">
+                <div>Price</div>
+              </div>
+              <div class="col-8">
+                <div>{{ game.gameDetails?.price }} €</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4 bold">
+                <div *ngIf="hasSteamAppid">Steam Appid</div>
+              </div>
+              <div class="col-8">
+                <div *ngIf="hasSteamAppid">{{ game.gameDetails?.steamAppid }}</div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-4 bold">
+                <div *ngIf="hasSteamAppid">Steam URL</div>
+              </div>
+              <div class="col-8">
+                <a *ngIf="hasSteamAppid" [attr.href]="game.gameDetails?.steamUrl"> {{ game.gameDetails?.steamUrl }}</a>
+              </div>
+            </div>
+
+            <div *ngIf="hasNotes">
+              <hr />
+              {{ game.gameDetails?.notes }}
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,6 +1,6 @@
 @import 'bootstrap-variables';
 @import 'bootstrap/scss/functions';
-@import 'bootswatch/dist/simplex/variables';
+@import 'bootswatch/dist/flatly/variables';
 @import 'bootstrap/scss/variables';
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 
@@ -23,6 +23,10 @@ a:hover {
 
 .dropdown-item:hover {
   color: $dropdown-link-hover-color;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 /* ==========================================================================

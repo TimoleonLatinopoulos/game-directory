@@ -13,11 +13,13 @@ import { ChipGridInputComponent } from './components/chip-grid-input/chip-grid-i
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCardModule } from '@angular/material/card';
+import { SeparateCategoriesPipe } from './pipes/separate-categories.pipe';
 /**
  * Application wide Module
  */
 @NgModule({
-  declarations: [ValidationErrorComponent, MultiInputComponent, ChipGridInputComponent],
+  declarations: [ValidationErrorComponent, MultiInputComponent, ChipGridInputComponent, SeparateCategoriesPipe],
   imports: [
     CommonModule,
     AlertComponent,
@@ -29,6 +31,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ReactiveFormsModule,
     MatAutocompleteModule,
     MatProgressSpinnerModule,
+    MatCardModule,
   ],
   exports: [
     CommonModule,
@@ -43,6 +46,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     ReactiveFormsModule,
     InfiniteScrollModule,
     MatProgressSpinnerModule,
+    MatCardModule,
   ],
 })
 export default class SharedModule {}

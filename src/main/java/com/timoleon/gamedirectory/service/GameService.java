@@ -180,7 +180,7 @@ public class GameService {
     @Transactional(readOnly = true)
     public Optional<Game> findOne(Long id) {
         log.debug("Request to get Game : {}", id);
-        return gameRepository.findById(id);
+        return gameRepository.findOneWithEagerRelationships(id);
     }
 
     /**
