@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { IGame } from 'app/entities/game/game.model';
 import { getPegiNumber } from 'app/entities/game-details/game-details.model';
-import { SeparateCategoriesPipe } from 'app/shared/pipes/separate-categories.pipe';
 
 @Component({
   selector: 'jhi-game-preview',
@@ -22,16 +21,7 @@ export class GamePreviewComponent implements OnInit {
   public releaseDate: string;
   public result: IGame;
 
-  public categories: string;
-  public platforms: string;
-  public developers: string;
-  public publishers: string;
-
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private gameService: GameService,
-    private separateCategories: SeparateCategoriesPipe
-  ) {}
+  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService) {}
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
@@ -65,11 +55,6 @@ export class GamePreviewComponent implements OnInit {
         if (this.game.gameDetails.steamAppid) {
           this.hasSteamAppid = true;
         }
-
-        this.categories = this.separateCategories.transform(this.game.gameDetails.categories);
-        this.publishers = this.separateCategories.transform(this.game.gameDetails.publishers);
-        this.developers = this.separateCategories.transform(this.game.gameDetails.developers);
-        this.platforms = this.separateCategories.transform(this.game.gameDetails.platforms);
       }
     });
   }

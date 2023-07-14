@@ -47,6 +47,7 @@ import { SeparateCategoriesPipe } from './pipes/separate-categories.pipe';
     InfiniteScrollModule,
     MatProgressSpinnerModule,
     MatCardModule,
+    SeparateCategoriesPipe,
   ],
 })
 export default class SharedModule {}

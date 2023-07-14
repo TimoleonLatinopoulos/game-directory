@@ -1,12 +1,18 @@
 package com.timoleon.gamedirectory.service;
 
 import com.timoleon.gamedirectory.domain.*;
+import com.timoleon.gamedirectory.domain.search.SearchCriteria;
+import com.timoleon.gamedirectory.domain.search.SearchSortItem;
 import com.timoleon.gamedirectory.repository.GameRepository;
 import com.timoleon.gamedirectory.service.dto.GameDTO;
 import com.timoleon.gamedirectory.service.mapper.GameMapper;
 import java.util.*;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -193,6 +199,28 @@ public class GameService {
     public List<Game> findByTitle(String title) {
         log.debug("Request to get Game : {}", title);
         return gameRepository.findByTitle(title);
+    }
+
+    /**
+     * Search page.
+     *
+     * @param criteria    the criteria
+     * @param pageRequest the page request
+     * @return the page
+     */
+    @Transactional(readOnly = true, timeout = 60)
+    public Page<GameDTO> search(SearchCriteria criteria, PageRequest pageRequest) {
+        // temp solution
+        if (criteria.getSort() == null) {
+            SearchSortItem sortItem = new SearchSortItem("title", "asc");
+            List<SearchSortItem> sortItems = new ArrayList<>();
+            sortItems.add(sortItem);
+            criteria.setSort(sortItems);
+        }
+
+        Page<Game> page = gameRepository.search(criteria, pageRequest);
+        List<GameDTO> list = new ArrayList<>(page.getContent()).stream().map(gameMapper::toDto).collect(Collectors.toList());
+        return new PageImpl<>(list, page.getPageable(), page.getTotalElements());
     }
 
     /**

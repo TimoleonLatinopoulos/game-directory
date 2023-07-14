@@ -1,0 +1,37 @@
+<div class="row d-flex justify-content-center">
+  <div class="col-10">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Game List</mat-card-title>
+      </mat-card-header>
+      <hr />
+      <mat-card-content *ngIf="gameListDataResult !== undefined">
+        <div *ngFor="let game of gameListDataResult.data">
+          <div class="pt-3 d-flex align-items-start flex-grow-1">
+            <div>
+              <img class="thumbnail" [src]="game.gameDetails?.thumbnailUrl" alt="Not Found!" />
+            </div>
+            <div class="d-flex flex-column">
+              <a class="reference-text" [attr.href]="'/game-preview/' + game.id">{{ game.title }}</a>
+              <mat-card-subtitle>
+                {{ game.gameDetails?.publishers | separateCategories }}, {{ game?.gameDetails?.developers | separateCategories }}
+              </mat-card-subtitle>
+              <div>{{ game?.gameDetails?.snippet }}</div>
+            </div>
+          </div>
+          <hr />
+        </div>
+      </mat-card-content>
+      <mat-paginator
+        #paginator
+        class="demo-paginator"
+        (page)="handlePageEvent($event)"
+        [pageSize]="state.take"
+        [pageIndex]="state.skip"
+        [length]="gameListDataResult !== undefined && gameListDataResult.total != null ? gameListDataResult.total : 0"
+        aria-label="Select page"
+      >
+      </mat-paginator>
+    </mat-card>
+  </div>
+</div>

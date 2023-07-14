@@ -10,9 +10,10 @@ import { MatTableModule } from '@angular/material/table';
 import SharedModule from 'app/shared/shared.module';
 import { GamePreviewComponent } from './game-preview/game-preview.component';
 import { SeparateCategoriesPipe } from 'app/shared/pipes/separate-categories.pipe';
+import { GameListComponent } from './game-list/game-list.component';
 
 @NgModule({
-  declarations: [CreateGameEntryComponent, GamePreviewComponent],
+  declarations: [CreateGameEntryComponent, GamePreviewComponent, GameListComponent],
   imports: [
     RouterModule.forChild(displaysRoute),
     MatFormFieldModule,

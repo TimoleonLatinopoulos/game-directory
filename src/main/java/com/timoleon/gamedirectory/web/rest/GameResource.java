@@ -1,11 +1,15 @@
 package com.timoleon.gamedirectory.web.rest;
 
 import com.timoleon.gamedirectory.domain.Game;
+import com.timoleon.gamedirectory.domain.search.SearchCriteria;
 import com.timoleon.gamedirectory.repository.GameRepository;
 import com.timoleon.gamedirectory.service.GameService;
 import com.timoleon.gamedirectory.service.dto.GameDTO;
 import com.timoleon.gamedirectory.service.mapper.GameMapper;
+import com.timoleon.gamedirectory.web.rest.entity.PageResponse;
 import com.timoleon.gamedirectory.web.rest.errors.BadRequestAlertException;
+import io.micrometer.core.annotation.Timed;
+import jakarta.servlet.http.HttpServletRequest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -14,7 +18,9 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -24,7 +30,7 @@ import tech.jhipster.web.util.ResponseUtil;
  */
 @RestController
 @RequestMapping("/api")
-public class GameResource {
+public class GameResource extends AbstractApiResource {
 
     private final Logger log = LoggerFactory.getLogger(GameResource.class);
 
@@ -154,6 +160,16 @@ public class GameResource {
         Optional<Game> game = gameService.findOne(id);
         GameDTO gameDTO = gameMapper.toDto(game.get());
         return ResponseUtil.wrapOrNotFound(Optional.of(gameDTO));
+    }
+
+    @GetMapping("/games/search")
+    @Timed
+    public PageResponse<GameDTO> search(HttpServletRequest request, Authentication authentication) {
+        log.debug("REST request to search a page of ApplicationNational");
+
+        PageRequest pageRequest = this.extractPageRequestFromRequest(request);
+        SearchCriteria searchCriteria = this.extractSearchCriteriaFromRequest(request);
+        return new PageResponse<>(gameService.search(searchCriteria, pageRequest));
     }
 
     /**

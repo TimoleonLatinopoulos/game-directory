@@ -37,7 +37,7 @@
                 <div>Platform (s)</div>
               </div>
               <div class="col-8">
-                {{ platforms }}
+                {{ this.game.gameDetails?.platforms | separateCategories }}
               </div>
             </div>
 
@@ -46,7 +46,7 @@
                 <div>Developer (s)</div>
               </div>
               <div class="col-8">
-                {{ developers }}
+                {{ this.game.gameDetails?.developers | separateCategories }}
               </div>
             </div>
 
@@ -55,7 +55,7 @@
                 <div>Publisher (s)</div>
               </div>
               <div class="col-8">
-                {{ publishers }}
+                {{ this.game.gameDetails?.publishers | separateCategories }}
               </div>
             </div>
 
@@ -64,7 +64,7 @@
                 <div>Genre (s)</div>
               </div>
               <div class="col-8">
-                {{ categories }}
+                {{ this.game.gameDetails?.categories | separateCategories }}
               </div>
             </div>
 
@@ -73,7 +73,8 @@
                 <div>Release Date</div>
               </div>
               <div class="col-8">
-                <div>{{ releaseDate | date : 'dd/MM/yyyy' }}</div>
+                <div *ngIf="releaseDate; else toBeAnnounced">{{ releaseDate | date : 'dd/MM/yyyy' }}</div>
+                <ng-template #toBeAnnounced>To be announced</ng-template>
               </div>
             </div>
 

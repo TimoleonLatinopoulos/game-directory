@@ -61,7 +61,7 @@ export class CreateGameEntryComponent implements OnInit {
       title: ['', Validators.required],
       gameDetails: this.fb.group({
         id: [null],
-        releaseDate: [{ day: 20, month: 4, year: 1969 }, [Validators.required]], // Validators.pattern(DATE_FORMAT)
+        releaseDate: [null, [Validators.required]], // Validators.pattern(DATE_FORMAT)
         pegiRating: [null, Validators.required],
         metacriticScore: [null, [Validators.min(0), Validators.max(100)]],
         imageUrl: ['', Validators.required],
@@ -125,11 +125,16 @@ export class CreateGameEntryComponent implements OnInit {
             this.gameDetailsForm.get('title')?.setValue(this.steamGame?.data.name);
 
             const dateString = greekDateToEng(this.steamGame?.data.release_date.date);
-            if (dateString !== undefined) {
+            if (dateString !== undefined && dateString !== 'To be announced') {
               this.gameDetailsForm
                 .get('gameDetails')
                 ?.get('releaseDate')
                 ?.setValue(getDateWithTimeOffset(dateString).toISOString().substring(0, 10));
+              this.gameDetailsForm.get('gameDetails')?.get('releaseDate')?.setValidators(Validators.required);
+            } else {
+              this.gameDetailsForm.get('gameDetails')?.get('releaseDate')?.clearValidators();
+              this.gameDetailsForm.get('gameDetails')?.get('releaseDate')?.setValidators(null);
+              this.gameDetailsForm.get('gameDetails')?.get('releaseDate')?.updateValueAndValidity();
             }
 
             const pegiRating = getPegiRating(this.steamGame?.data.required_age);
@@ -140,7 +145,7 @@ export class CreateGameEntryComponent implements OnInit {
             this.gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')?.setValue(this.steamGame?.data.capsule_image);
 
             let price: number;
-            if (!this.steamGame?.data.is_free) {
+            if (!this.steamGame?.data.is_free && this.steamGame?.data.price_overview != null) {
               price = this.steamGame?.data.price_overview.final;
               if (price != null) {
                 price = price / 100;
@@ -169,6 +174,7 @@ export class CreateGameEntryComponent implements OnInit {
             this.gameDetailsForm.get('gameDetails')?.get('categories')?.setValue(this.steamCategoryList);
           }
           this.showSpinner = false;
+          this.gameDetailsForm.updateValueAndValidity();
         },
         () => {
           this.showSpinner = false;

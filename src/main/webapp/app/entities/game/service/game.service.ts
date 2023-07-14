@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpResponse } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
@@ -37,6 +37,11 @@ export class GameService {
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<IGame[]>(this.resourceUrl, { params: options, observe: 'response' });
+  }
+
+  search(state: any): Observable<any> {
+    const options = createRequestOption(state);
+    return this.http.get(this.resourceUrl + '/search', { params: options }).pipe(map((data: any) => ({ data, total: data.totalEntries })));
   }
 
   delete(id: number): Observable<HttpResponse<{}>> {
