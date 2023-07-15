@@ -1,6 +1,7 @@
+import { SnackBarAlertComponent } from './../../shared/components/snack-bar-alert/snack-bar-alert.component';
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import { EntityArrayResponseType, PlatformService } from 'app/entities/platform/service/platform.service';
+import { EntityArrayResponseType, EntityResponseType, PlatformService } from 'app/entities/platform/service/platform.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { DeveloperService } from 'app/entities/developer/service/developer.service';
@@ -14,6 +15,7 @@ import { MatAutocomplete } from '@angular/material/autocomplete';
 import { GameService } from 'app/entities/game/service/game.service';
 import { getPegiRating, pegiRatingList } from 'app/entities/game-details/game-details.model';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'jhi-create-game-entry',
@@ -54,7 +56,8 @@ export class CreateGameEntryComponent implements OnInit {
     private categoryService: CategoryService,
     private steamApiService: SteamApiService,
     private gameService: GameService,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.gameDetailsForm = this.fb.group({
       id: [null],
@@ -70,7 +73,7 @@ export class CreateGameEntryComponent implements OnInit {
         description: ['', Validators.required],
         snippet: ['', Validators.required],
         notes: [''],
-        steamAppid: [null, Validators.required],
+        steamAppid: [null],
         platforms: [[]],
         developers: [[]],
         publishers: [[]],
@@ -107,10 +110,15 @@ export class CreateGameEntryComponent implements OnInit {
   }
 
   public save(): void {
-    this.gameService.create(this.gameDetailsForm.value).subscribe((response: any) => {
-      this.gameDetailsForm.reset();
-      this.router.navigate(['/game-preview/' + (response.body.id as string)]);
-    });
+    this.gameService.create(this.gameDetailsForm.value).subscribe(
+      (response: any) => {
+        this.gameDetailsForm.reset();
+        this.router.navigate(['/game-preview/' + (response.body.id as string)]);
+      },
+      (error: any) => {
+        this.openSnackBar(error.error.detail);
+      }
+    );
   }
 
   public fillFormFromSteam(): void {
@@ -172,11 +180,14 @@ export class CreateGameEntryComponent implements OnInit {
             const stringCategories = this.steamGame?.data.genres.map(a => a.description);
             this.steamCategoryList = this.filterCategory(this.categoryList, stringCategories);
             this.gameDetailsForm.get('gameDetails')?.get('categories')?.setValue(this.steamCategoryList);
+          } else {
+            this.openSnackBar('There is not a game with the given Steam appid!');
           }
           this.showSpinner = false;
           this.gameDetailsForm.updateValueAndValidity();
         },
         () => {
+          this.openSnackBar('The game was not found through Steam API!');
           this.showSpinner = false;
         }
       );
@@ -219,5 +230,13 @@ export class CreateGameEntryComponent implements OnInit {
 
   handleCategoryValue(value: ICategory[]): void {
     this.gameDetailsForm.get('gameDetails')?.get('categories')?.setValue(value);
+  }
+
+  openSnackBar(errorMessage: string): void {
+    this.snackBar.openFromComponent(SnackBarAlertComponent, {
+      duration: 5000,
+      data: errorMessage,
+      panelClass: 'error-snackbar',
+    });
   }
 }

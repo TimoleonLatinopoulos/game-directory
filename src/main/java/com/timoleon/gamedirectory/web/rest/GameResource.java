@@ -3,6 +3,7 @@ package com.timoleon.gamedirectory.web.rest;
 import com.timoleon.gamedirectory.domain.Game;
 import com.timoleon.gamedirectory.domain.search.SearchCriteria;
 import com.timoleon.gamedirectory.repository.GameRepository;
+import com.timoleon.gamedirectory.security.AuthoritiesConstants;
 import com.timoleon.gamedirectory.service.GameService;
 import com.timoleon.gamedirectory.service.dto.GameDTO;
 import com.timoleon.gamedirectory.service.mapper.GameMapper;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
@@ -59,6 +61,7 @@ public class GameResource extends AbstractApiResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/games")
+    @Secured({ AuthoritiesConstants.ADMIN })
     public ResponseEntity<GameDTO> createGame(@RequestBody GameDTO game) throws URISyntaxException {
         log.debug("REST request to save Game : {}", game);
         if (game.getId() != null) {

@@ -3,6 +3,14 @@
     <mat-card>
       <mat-card-header>
         <mat-card-title>Game List</mat-card-title>
+
+        <mat-form-field style="margin-left: auto; margin-right: 0; min-width: 300px">
+          <span matPrefix style="height: 0"> </span>
+          <input type="tel" matInput placeholder="Search" name="search" (input)="filter($event.target)" />
+          <button matSuffix mat-button style="border: none; background: transparent">
+            <fa-icon icon="search"></fa-icon>
+          </button>
+        </mat-form-field>
       </mat-card-header>
       <hr />
       <mat-card-content *ngIf="gameListDataResult !== undefined">

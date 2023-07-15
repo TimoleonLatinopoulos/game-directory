@@ -37,6 +37,19 @@ a:hover {
   font-weight: bold;
 }
 
+.error-snackbar {
+  background: #fff;
+  color: red !important;
+  min-width: 500px;
+}
+.error-snackbar button {
+  background: #fff;
+  color: red;
+  border: none;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
 /* ==========================================================================
 Browser Upgrade Prompt
 ========================================================================== */

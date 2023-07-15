@@ -21,3 +21,21 @@ export const createRequestOption = (req?: any): HttpParams => {
 
   return options;
 };
+
+export const createSearchRequestOption = (req?: any): HttpParams => {
+  let options: HttpParams = new HttpParams();
+  if (req) {
+    Object.keys(req).forEach(key => {
+      if (key !== 'sort' && key !== 'filter') {
+        options = options.set(key, req[key]);
+      }
+    });
+    if (req.sort) {
+      options = options.set('sort', JSON.stringify(req.sort));
+    }
+    if (req.filter) {
+      options = options.set('filter', JSON.stringify(req.filter));
+    }
+  }
+  return options;
+};

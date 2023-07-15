@@ -15,8 +15,8 @@ export class GameListComponent implements OnInit {
   public state = {
     skip: 0,
     take: 10,
-    filter: { logic: 'and', filters: [] },
-    sort: [{ field: 'title', dir: 'desc' }],
+    filter: { logic: 'and', filters: [] as any[] },
+    sort: [{ field: 'title', dir: 'asc' }],
   };
 
   constructor(public gameService: GameService) {}
@@ -29,6 +29,23 @@ export class GameListComponent implements OnInit {
     this.state.take = e.pageSize;
     this.state.skip = e.pageIndex;
     this.fetchGameData();
+  }
+
+  public filter(event: EventTarget | null): void {
+    const value = (event as HTMLInputElement).value;
+    if (value && value.length >= 3) {
+      const newFilter = { field: 'title', operator: 'like', value };
+      this.state.filter.filters = [];
+      this.state.filter.filters.push(newFilter);
+      this.state.skip = 0;
+      this.fetchGameData();
+    } else {
+      if (this.state.filter.filters.length !== 0) {
+        this.state.filter.filters = [];
+        this.state.skip = 0;
+        this.fetchGameData();
+      }
+    }
   }
 
   public fetchGameData(): void {

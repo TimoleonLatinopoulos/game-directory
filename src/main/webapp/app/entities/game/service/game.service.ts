@@ -4,7 +4,7 @@ import { Observable, map } from 'rxjs';
 
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
-import { createRequestOption } from 'app/core/request/request-util';
+import { createRequestOption, createSearchRequestOption } from 'app/core/request/request-util';
 import { IGame, NewGame } from '../game.model';
 
 export type PartialUpdateGame = Partial<IGame> & Pick<IGame, 'id'>;
@@ -40,7 +40,7 @@ export class GameService {
   }
 
   search(state: any): Observable<any> {
-    const options = createRequestOption(state);
+    const options = createSearchRequestOption(state);
     return this.http.get(this.resourceUrl + '/search', { params: options }).pipe(map((data: any) => ({ data, total: data.totalEntries })));
   }
 

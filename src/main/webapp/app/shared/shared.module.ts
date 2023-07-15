@@ -15,11 +15,14 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { SeparateCategoriesPipe } from './pipes/separate-categories.pipe';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { SnackBarAlertComponent } from './components/snack-bar-alert/snack-bar-alert.component';
+
 /**
  * Application wide Module
  */
 @NgModule({
-  declarations: [ValidationErrorComponent, MultiInputComponent, ChipGridInputComponent, SeparateCategoriesPipe],
+  declarations: [ValidationErrorComponent, MultiInputComponent, ChipGridInputComponent, SeparateCategoriesPipe, SnackBarAlertComponent],
   imports: [
     CommonModule,
     AlertComponent,
@@ -32,6 +35,7 @@ import { SeparateCategoriesPipe } from './pipes/separate-categories.pipe';
     MatAutocompleteModule,
     MatProgressSpinnerModule,
     MatCardModule,
+    MatSnackBarModule,
   ],
   exports: [
     CommonModule,
@@ -48,6 +52,8 @@ import { SeparateCategoriesPipe } from './pipes/separate-categories.pipe';
     MatProgressSpinnerModule,
     MatCardModule,
     SeparateCategoriesPipe,
+    MatSnackBarModule,
+    SnackBarAlertComponent,
   ],
 })
 export default class SharedModule {}
