@@ -11,9 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 
-/**
- * Created by Teo on 31/10/2018.
- */
 public abstract class AbstractApiResource {
 
     private final Logger log = LoggerFactory.getLogger(AbstractApiResource.class);

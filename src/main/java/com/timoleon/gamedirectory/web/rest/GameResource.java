@@ -6,6 +6,7 @@ import com.timoleon.gamedirectory.repository.GameRepository;
 import com.timoleon.gamedirectory.security.AuthoritiesConstants;
 import com.timoleon.gamedirectory.service.GameService;
 import com.timoleon.gamedirectory.service.dto.GameDTO;
+import com.timoleon.gamedirectory.service.dto.GameGridDTO;
 import com.timoleon.gamedirectory.service.mapper.GameMapper;
 import com.timoleon.gamedirectory.web.rest.entity.PageResponse;
 import com.timoleon.gamedirectory.web.rest.errors.BadRequestAlertException;
@@ -167,7 +168,7 @@ public class GameResource extends AbstractApiResource {
 
     @GetMapping("/games/search")
     @Timed
-    public PageResponse<GameDTO> search(HttpServletRequest request, Authentication authentication) {
+    public PageResponse<GameGridDTO> search(HttpServletRequest request, Authentication authentication) {
         log.debug("REST request to search a page of ApplicationNational");
 
         PageRequest pageRequest = this.extractPageRequestFromRequest(request);

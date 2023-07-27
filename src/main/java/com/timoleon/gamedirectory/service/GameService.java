@@ -5,6 +5,8 @@ import com.timoleon.gamedirectory.domain.search.SearchCriteria;
 import com.timoleon.gamedirectory.domain.search.SearchSortItem;
 import com.timoleon.gamedirectory.repository.GameRepository;
 import com.timoleon.gamedirectory.service.dto.GameDTO;
+import com.timoleon.gamedirectory.service.dto.GameGridDTO;
+import com.timoleon.gamedirectory.service.mapper.GameGridMapper;
 import com.timoleon.gamedirectory.service.mapper.GameMapper;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -34,13 +36,16 @@ public class GameService {
 
     private final GameMapper gameMapper;
 
+    private final GameGridMapper gameGridMapper;
+
     public GameService(
         GameRepository gameRepository,
         PlatformService platformService,
         DeveloperService developerService,
         PublisherService publisherService,
         CategoryService categoryService,
-        GameMapper gameMapper
+        GameMapper gameMapper,
+        GameGridMapper gameGridMapper
     ) {
         this.gameRepository = gameRepository;
         this.platformService = platformService;
@@ -48,6 +53,7 @@ public class GameService {
         this.publisherService = publisherService;
         this.categoryService = categoryService;
         this.gameMapper = gameMapper;
+        this.gameGridMapper = gameGridMapper;
     }
 
     /**
@@ -209,7 +215,7 @@ public class GameService {
      * @return the page
      */
     @Transactional(readOnly = true, timeout = 60)
-    public Page<GameDTO> search(SearchCriteria criteria, PageRequest pageRequest) {
+    public Page<GameGridDTO> search(SearchCriteria criteria, PageRequest pageRequest) {
         // temp solution
         if (criteria.getSort() == null) {
             SearchSortItem sortItem = new SearchSortItem("title", "asc");
@@ -219,7 +225,7 @@ public class GameService {
         }
 
         Page<Game> page = gameRepository.search(criteria, pageRequest);
-        List<GameDTO> list = new ArrayList<>(page.getContent()).stream().map(gameMapper::toDto).collect(Collectors.toList());
+        List<GameGridDTO> list = new ArrayList<>(page.getContent()).stream().map(gameGridMapper::toDto).collect(Collectors.toList());
         return new PageImpl<>(list, page.getPageable(), page.getTotalElements());
     }
 
