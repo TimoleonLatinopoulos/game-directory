@@ -42,7 +42,7 @@ import {
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
 
-import { faSteamSymbol, faInstagram, faTwitter } from '@fortawesome/free-brands-svg-icons';
+import { faSteamSymbol, faInstagram, faTwitter, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 
 export const fontAwesomeIcons = [
   faArrowLeft,
@@ -84,9 +84,11 @@ export const fontAwesomeIcons = [
   faUsersCog,
   faWrench,
   faGamepad,
+  faDownload,
   faSteamSymbol,
   faInstagram,
   faTwitter,
-  faDownload,
+  faLinkedin,
+  faGithub,
   // jhipster-needle-add-icon-import
 ];

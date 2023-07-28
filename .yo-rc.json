@@ -6,7 +6,7 @@
     "buildTool": "maven",
     "cacheProvider": "no",
     "clientFramework": "angular",
-    "clientTheme": "flatly",
+    "clientTheme": "darkly",
     "clientThemeVariant": "primary",
     "creationTimestamp": 1688505783965,
     "databaseType": "sql",

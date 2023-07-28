@@ -8,7 +8,7 @@
           </mat-card-header>
           <hr />
           <mat-card-content class="inner-html">
-            <div [innerHTML]="game.gameDetails?.description"></div>
+            <div class="inner-highlight" [innerHTML]="game.gameDetails?.description"></div>
           </mat-card-content>
         </mat-card>
       </div>
@@ -118,7 +118,7 @@
                 <div *ngIf="hasSteamAppid">Steam URL</div>
               </div>
               <div class="col-8">
-                <a *ngIf="hasSteamAppid" [attr.href]="game.gameDetails?.steamUrl"> {{ game.gameDetails?.steamUrl }}</a>
+                <a class="highlight" *ngIf="hasSteamAppid" [attr.href]="game.gameDetails?.steamUrl"> {{ game.gameDetails?.steamUrl }}</a>
               </div>
             </div>
 

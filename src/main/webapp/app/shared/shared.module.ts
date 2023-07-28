@@ -17,6 +17,8 @@ import { MatCardModule } from '@angular/material/card';
 import { SeparateCategoriesPipe } from './pipes/separate-categories.pipe';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarAlertComponent } from './components/snack-bar-alert/snack-bar-alert.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 /**
  * Application wide Module
@@ -36,6 +38,8 @@ import { SnackBarAlertComponent } from './components/snack-bar-alert/snack-bar-a
     MatProgressSpinnerModule,
     MatCardModule,
     MatSnackBarModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   exports: [
     CommonModule,
@@ -54,6 +58,8 @@ import { SnackBarAlertComponent } from './components/snack-bar-alert/snack-bar-a
     SeparateCategoriesPipe,
     MatSnackBarModule,
     SnackBarAlertComponent,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
 })
 export default class SharedModule {}

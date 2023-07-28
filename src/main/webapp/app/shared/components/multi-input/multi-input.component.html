@@ -1,4 +1,4 @@
-<div class="multi-select-container">
+<div class="mat-field">
   <label>{{ label }}</label>
   <select multiple [(ngModel)]="selectedOptions" (ngModelChange)="emitSelectedOptions()">
     <option *ngFor="let option of options" [value]="option">{{ option }}</option>

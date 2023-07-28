@@ -10,41 +10,39 @@
               <br />
             </mat-card-header>
             <mat-card-content>
-              <div class="mb-4 mt-3">
-                <label class="form-label" for="field_title">Game Title</label>
-                <input id="field_title" name="title" formControlName="title" class="form-control" type="text" />
-                <jhi-validation-error [abstractControl]="gameDetailsForm.get('title')" [absolutePosition]="true"> </jhi-validation-error>
-              </div>
+              <mat-form-field class="mt-4 mb-4 mat-field">
+                <mat-label for="field_title">Game Title</mat-label>
+                <input matInput id="field_title" name="title" formControlName="title" type="text" />
+              </mat-form-field>
+              <jhi-validation-error [abstractControl]="gameDetailsForm.get('title')" [absolutePosition]="true" />
 
               <div formGroupName="gameDetails">
-                <div class="mb-4 mt-3">
-                  <label class="form-label" for="field_releaseDate">Release Date</label>
-                  <div class="input-group">
-                    <input id="field_releaseDate" name="releaseDate" formControlName="releaseDate" class="form-control" type="date" />
-                  </div>
-                  <jhi-validation-error
-                    [abstractControl]="gameDetailsForm.get('gameDetails')?.get('releaseDate')"
-                    [absolutePosition]="true"
-                  >
-                  </jhi-validation-error>
-                </div>
+                <mat-form-field class="mb-4 mt-4 mat-field">
+                  <mat-label for="field_releaseDate">Release Date</mat-label>
+                  <input matInput id="field_releaseDate" name="releaseDate" formControlName="releaseDate" [matDatepicker]="picker" />
+                  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+                <jhi-validation-error
+                  [abstractControl]="gameDetailsForm.get('gameDetails')?.get('releaseDate')"
+                  [absolutePosition]="true"
+                />
 
                 <div class="row">
                   <div class="col-6">
-                    <div class="mb-4 mt-3">
-                      <label class="form-label" for="field_imageUrl">Image URL</label>
-                      <input id="field_imageUrl" name="imageUrl" formControlName="imageUrl" class="form-control" type="text" />
-                      <jhi-validation-error
-                        [abstractControl]="gameDetailsForm.get('gameDetails')?.get('imageUrl')"
-                        [absolutePosition]="true"
-                      >
-                      </jhi-validation-error>
-                    </div>
+                    <mat-form-field class="mb-4 mt-4 mat-field">
+                      <mat-label for="field_imageUrl">Image URL</mat-label>
+                      <input matInput id="field_imageUrl" name="imageUrl" formControlName="imageUrl" type="text" />
+                    </mat-form-field>
+                    <jhi-validation-error
+                      [abstractControl]="gameDetailsForm.get('gameDetails')?.get('imageUrl')"
+                      [absolutePosition]="true"
+                    />
                   </div>
                   <div class="col-6">
                     <div *ngIf="gameDetailsForm.get('gameDetails')?.get('imageUrl')?.value != ''">
-                      <label class="form-label" for="image_imageUrl">Image Preview</label>
-                      <div class="mb-4 mt-3">
+                      <label class="form-label mt-4" for="image_imageUrl">Image Preview</label>
+                      <div class="mb-4">
                         <img
                           id="image_imageUrl"
                           name="image_imageUrl"
@@ -59,20 +57,19 @@
 
                 <div class="row">
                   <div class="col-6">
-                    <div class="mb-4 mt-3">
-                      <label class="form-label" for="field_thumbnailUrl">Thumbnail URL</label>
-                      <input id="field_thumbnailUrl" name="thumbnailUrl" formControlName="thumbnailUrl" class="form-control" type="text" />
-                      <jhi-validation-error
-                        [abstractControl]="gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')"
-                        [absolutePosition]="true"
-                      >
-                      </jhi-validation-error>
-                    </div>
+                    <mat-form-field class="mb-4 mt-4 mat-field">
+                      <mat-label for="field_thumbnailUrl">Thumbnail URL</mat-label>
+                      <input matInput id="field_thumbnailUrl" name="thumbnailUrl" formControlName="thumbnailUrl" type="text" />
+                    </mat-form-field>
+                    <jhi-validation-error
+                      [abstractControl]="gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')"
+                      [absolutePosition]="true"
+                    />
                   </div>
                   <div class="col-6">
                     <div *ngIf="gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')?.value != ''">
-                      <label class="form-label" for="image_thumbnailUrl">Thumbnail Preview</label>
-                      <div class="mb-4 mt-3">
+                      <label class="form-label mt-4" for="image_thumbnailUrl">Thumbnail Preview</label>
+                      <div class="mb-4">
                         <img
                           id="image_thumbnailUrl"
                           name="image_thumbnailUrl"
@@ -85,79 +82,58 @@
                   </div>
                 </div>
 
-                <div class="mb-4 mt-3">
-                  <label class="form-label" for="field_pegiRating">Pegi Rating</label>
-                  <select id="field_pegiRating" name="pegiRating" formControlName="pegiRating" class="form-control">
+                <mat-form-field class="mb-4 mt-4 mat-field">
+                  <mat-label for="field_pegiRating">Pegi Rating</mat-label>
+                  <select matNativeControl id="field_pegiRating" name="pegiRating" formControlName="pegiRating">
                     <option [ngValue]="pegiRatingOption" *ngFor="let pegiRatingOption of pegiRatingList">{{ pegiRatingOption }}</option>
                   </select>
-                  <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('pegiRating')" [absolutePosition]="true">
-                  </jhi-validation-error>
-                </div>
+                </mat-form-field>
+                <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('pegiRating')" [absolutePosition]="true" />
 
-                <div class="mb-4 mt-3">
-                  <label class="form-label" for="field_metacriticScore">Metacritic Score</label>
-                  <input
-                    id="field_metacriticScore"
-                    name="metacriticScore"
-                    formControlName="metacriticScore"
-                    class="form-control"
-                    type="number"
-                  />
-                  <jhi-validation-error
-                    [abstractControl]="gameDetailsForm.get('gameDetails')?.get('metacriticScore')"
-                    [absolutePosition]="true"
-                  >
-                  </jhi-validation-error>
-                </div>
+                <mat-form-field class="mb-4 mt-4 mat-field">
+                  <mat-label for="field_metacriticScore">Metacritic Score</mat-label>
+                  <input matInput id="field_metacriticScore" name="metacriticScore" formControlName="metacriticScore" type="number" />
+                </mat-form-field>
+                <jhi-validation-error
+                  [abstractControl]="gameDetailsForm.get('gameDetails')?.get('metacriticScore')"
+                  [absolutePosition]="true"
+                />
 
-                <div class="mb-4 mt-3">
-                  <label class="form-label" for="field_price">Price</label>
-                  <input id="field_price" name="price" formControlName="price" class="form-control" type="number" />
-                  <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('price')" [absolutePosition]="true">
-                  </jhi-validation-error>
-                </div>
+                <mat-form-field class="mb-4 mt-4 mat-field">
+                  <mat-label for="field_price">Price</mat-label>
+                  <input matInput id="field_price" name="price" formControlName="price" type="number" />
+                </mat-form-field>
+                <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('price')" [absolutePosition]="true" />
 
-                <div class="mb-4 mt-3">
-                  <label class="form-label" for="field_description">Description</label>
-                  <textarea
-                    id="field_description"
-                    name="description"
-                    formControlName="description"
-                    class="form-control"
-                    type="text"
-                    rows="6"
-                  >
+                <mat-form-field class="mb-4 mt-4 mat-field">
+                  <mat-label for="field_description">Description</mat-label>
+                  <textarea matNativeControl id="field_description" name="description" formControlName="description" type="text" rows="6">
                   </textarea>
-                  <jhi-validation-error
-                    [abstractControl]="gameDetailsForm.get('gameDetails')?.get('description')"
-                    [absolutePosition]="true"
-                  >
-                  </jhi-validation-error>
-                </div>
+                </mat-form-field>
+                <jhi-validation-error
+                  [abstractControl]="gameDetailsForm.get('gameDetails')?.get('description')"
+                  [absolutePosition]="true"
+                />
 
-                <div class="mb-4 mt-3">
-                  <label class="form-label" for="field_snippet">Snippet</label>
-                  <textarea id="field_snippet" name="snippet" formControlName="snippet" class="form-control" type="text" rows="3">
-                  </textarea>
-                  <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('snippet')" [absolutePosition]="true">
-                  </jhi-validation-error>
-                </div>
+                <mat-form-field class="mb-4 mt-4 mat-field">
+                  <mat-label for="field_snippet">Snippet</mat-label>
+                  <textarea matNativeControl id="field_snippet" name="snippet" formControlName="snippet" type="text" rows="3"> </textarea>
+                </mat-form-field>
+                <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('snippet')" [absolutePosition]="true" />
 
-                <div class="mb-4 mt-3">
-                  <label class="form-label" for="field_notes">Notes</label>
-                  <textarea id="field_notes" name="notes" formControlName="notes" class="form-control" type="text" rows="3"> </textarea>
-                  <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('notes')" [absolutePosition]="true">
-                  </jhi-validation-error>
-                </div>
+                <mat-form-field class="mb-4 mt-4 mat-field">
+                  <mat-label for="field_notes">Notes</mat-label>
+                  <textarea matNativeControl id="field_notes" name="notes" formControlName="notes" type="text" rows="3"> </textarea>
+                </mat-form-field>
+                <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('notes')" [absolutePosition]="true" />
 
-                <div class="mb-4 mt-3">
-                  <label class="form-label" for="field_steamAppid">Steam Apiid</label>
-                  <input id="field_steamAppid" name="steamAppid" formControlName="steamAppid" class="form-control" type="text" />
-                  <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('steamAppid')" [absolutePosition]="true">
-                  </jhi-validation-error>
-                </div>
+                <mat-form-field class="mb-4 mt-4 mat-field">
+                  <mat-label for="field_steamAppid">Steam Apiid</mat-label>
+                  <input matInput id="field_steamAppid" name="steamAppid" formControlName="steamAppid" type="text" />
+                </mat-form-field>
+                <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('steamAppid')" [absolutePosition]="true" />
 
-                <div class="mb-4 mt-3">
+                <div class="mb-4 mt-4">
                   <label class="form-label" for="field_developer">Developers</label>
 
                   <jhi-chip-grid-input
@@ -172,7 +148,7 @@
                   </jhi-chip-grid-input>
                 </div>
 
-                <div class="mb-4 mt-3">
+                <div class="mb-4 mt-4">
                   <label class="form-label" for="field_publisher">Publishers</label>
 
                   <jhi-chip-grid-input
@@ -187,7 +163,7 @@
                   </jhi-chip-grid-input>
                 </div>
 
-                <div class="mb-4 mt-3">
+                <div class="mb-4 mt-4">
                   <label class="form-label" for="field_platform">Platforms</label>
 
                   <jhi-chip-grid-input
@@ -202,7 +178,7 @@
                   </jhi-chip-grid-input>
                 </div>
 
-                <div class="mb-4 mt-3">
+                <div class="mb-4 mt-4">
                   <label class="form-label" for="field_category">Categories</label>
 
                   <jhi-chip-grid-input
@@ -236,25 +212,20 @@
             </mat-card-header>
             <mat-card-content>
               <div class="row">
-                <div class="mb-4 mt-3 col-lg-4" formGroupName="gameDetails">
-                  <label class="form-label" for="steamAppid">Steam Apiid</label>
-                  <input id="steamAppid" name="steamAppid" formControlName="steamAppid" class="form-control" type="text" />
-                </div>
+                <mat-form-field class="col-lg-12" formGroupName="gameDetails">
+                  <mat-label for="steamAppid">Steam Apiid</mat-label>
+                  <input matInput id="steamAppid" name="steamAppid" formControlName="steamAppid" type="text" />
+                </mat-form-field>
 
-                <div class="mb-4 mt-3 col-lg-6" style="position: relative">
-                  <button type="button" (click)="fillFormFromSteam()" class="btn btn-info" style="position: absolute; bottom: 0">
+                <div class="col-lg-10">
+                  <button type="button" (click)="fillFormFromSteam()" class="btn btn-primary">
                     <fa-icon icon="download"></fa-icon>
                     Steam API Search
                   </button>
                 </div>
 
-                <div class="mb-4 mt-3 col-lg-3" style="position: relative">
-                  <mat-progress-spinner
-                    *ngIf="showSpinner"
-                    mode="indeterminate"
-                    class="spinner"
-                    style="position: absolute; left: 0; bottom: 0"
-                  >
+                <div class="mb-4 mt-3 col-lg-2" style="position: relative">
+                  <mat-progress-spinner *ngIf="showSpinner" mode="indeterminate" class="spinner" style="position: absolute">
                   </mat-progress-spinner>
                 </div>
               </div>

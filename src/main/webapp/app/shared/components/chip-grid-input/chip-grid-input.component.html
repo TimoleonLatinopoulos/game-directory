@@ -1,5 +1,5 @@
 <form class="form-control-class">
-  <mat-form-field class="multi-select-container">
+  <mat-form-field class="mat-field">
     <mat-chip-grid #chipGrid aria-label="Category selection">
       <mat-chip-row *ngFor="let category of categories" (removed)="remove(category)">
         {{ category.description }}
