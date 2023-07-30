@@ -1,7 +1,7 @@
 import { SnackBarAlertComponent } from './../../shared/components/snack-bar-alert/snack-bar-alert.component';
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
-import { EntityArrayResponseType, EntityResponseType, PlatformService } from 'app/entities/platform/service/platform.service';
+import { EntityArrayResponseType, PlatformService } from 'app/entities/platform/service/platform.service';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { DeveloperService } from 'app/entities/developer/service/developer.service';
@@ -14,13 +14,27 @@ import { greekDateToEng, getDateWithTimeOffset } from 'app/shared/util/date-util
 import { MatAutocomplete } from '@angular/material/autocomplete';
 import { GameService } from 'app/entities/game/service/game.service';
 import { getPegiRating, pegiRatingList } from 'app/entities/game-details/game-details.model';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MAT_DATE_FORMATS } from '@angular/material/core';
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'YYYY',
+  },
+};
 
 @Component({
   selector: 'jhi-create-game-entry',
   templateUrl: './create-game-entry.component.html',
   styleUrls: ['./create-game-entry.component.scss'],
+  providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }],
 })
 export class CreateGameEntryComponent implements OnInit {
   platformPlaceholder = 'New Platform...';
@@ -29,6 +43,10 @@ export class CreateGameEntryComponent implements OnInit {
   categoryPlaceholder = 'New Category...';
 
   gameDetailsForm: FormGroup;
+
+  public update = false;
+  public gameId: number;
+
   public pegiRatingList = pegiRatingList;
 
   public platformList: ICategory[] = [];
@@ -57,7 +75,8 @@ export class CreateGameEntryComponent implements OnInit {
     private steamApiService: SteamApiService,
     private gameService: GameService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private route: ActivatedRoute
   ) {
     this.gameDetailsForm = this.fb.group({
       id: [null],
@@ -84,6 +103,12 @@ export class CreateGameEntryComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchData();
+
+    this.update = this.route.snapshot.data['update'];
+    if (this.update) {
+      this.gameId = Number(this.route.snapshot.paramMap.get('id'));
+      this.fetchGame();
+    }
   }
 
   public fetchData(): void {
@@ -109,16 +134,39 @@ export class CreateGameEntryComponent implements OnInit {
     });
   }
 
-  public save(): void {
-    this.gameService.create(this.gameDetailsForm.value).subscribe(
-      (response: any) => {
-        this.gameDetailsForm.reset();
-        this.router.navigate(['/game-preview/' + (response.body.id as string)]);
-      },
-      (error: any) => {
-        this.openSnackBar(error.error.detail);
+  public fetchGame(): void {
+    this.gameService.find(this.gameId).subscribe((response: any) => {
+      this.gameDetailsForm.patchValue(response.body);
+
+      if (this.gameDetailsForm.get('gameDetails')?.value != null) {
+        this.steamPlatformList = this.gameDetailsForm.get('gameDetails')?.get('platforms')?.value;
+        this.steamPublisherList = this.gameDetailsForm.get('gameDetails')?.get('publishers')?.value;
+        this.steamDeveloperList = this.gameDetailsForm.get('gameDetails')?.get('developers')?.value;
+        this.steamCategoryList = this.gameDetailsForm.get('gameDetails')?.get('categories')?.value;
       }
-    );
+    });
+  }
+
+  public save(): void {
+    if (this.update) {
+      this.gameService.update(this.gameDetailsForm.value).subscribe(
+        (response: any) => {
+          this.router.navigate(['/game-preview/' + (response.body.id as string)]);
+        },
+        (error: any) => {
+          this.openSnackBar(error.error.detail);
+        }
+      );
+    } else {
+      this.gameService.create(this.gameDetailsForm.value).subscribe(
+        (response: any) => {
+          this.router.navigate(['/game-preview/' + (response.body.id as string)]);
+        },
+        (error: any) => {
+          this.openSnackBar(error.error.detail);
+        }
+      );
+    }
   }
 
   public fillFormFromSteam(): void {

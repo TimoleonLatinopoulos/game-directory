@@ -16,6 +16,9 @@ public interface GameRepository extends JpaRepository<Game, Long>, GameRepositor
     @Query("select game from Game game where game.title = ?1")
     List<Game> findByTitle(@Param("title") String title);
 
+    @Query("select game from Game game where game.title = ?1 and game.id != ?2")
+    List<Game> findByTitleAndDifferentId(@Param("title") String title, @Param("id") Long id);
+
     @Query(
         "select game from Game game " +
         "inner join fetch game.gameDetails gameDetails " +

@@ -4,7 +4,14 @@
       <div class="col-lg-8">
         <mat-card>
           <mat-card-header>
-            <mat-card-title>{{ game.title }}</mat-card-title>
+            <mat-card-title style="position: relative">{{ game.title }}</mat-card-title>
+
+            <div class="float-right">
+              <button type="button" (click)="editGameDetails()" class="btn btn-primary">
+                <fa-icon icon="pencil"></fa-icon>
+                Edit
+              </button>
+            </div>
           </mat-card-header>
           <hr />
           <mat-card-content class="inner-html">

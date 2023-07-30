@@ -68,6 +68,12 @@ public class GameResource extends AbstractApiResource {
         if (game.getId() != null) {
             throw new BadRequestAlertException("A new game cannot already have an ID", ENTITY_NAME, "idexists");
         }
+
+        List<Game> games = gameRepository.findByTitle(game.getTitle());
+        if (!games.isEmpty()) {
+            throw new IllegalStateException("This game title is already stored in the database!");
+        }
+
         GameDTO result = gameService.save(game);
         return ResponseEntity
             .created(new URI("/api/games/" + result.getId()))
@@ -86,7 +92,7 @@ public class GameResource extends AbstractApiResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/games/{id}")
-    public ResponseEntity<Game> updateGame(@PathVariable(value = "id", required = false) final Long id, @RequestBody Game game)
+    public ResponseEntity<GameDTO> updateGame(@PathVariable(value = "id", required = false) final Long id, @RequestBody GameDTO game)
         throws URISyntaxException {
         log.debug("REST request to update Game : {}, {}", id, game);
         if (game.getId() == null) {
@@ -100,7 +106,12 @@ public class GameResource extends AbstractApiResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Game result = gameService.update(game);
+        List<Game> games = gameRepository.findByTitleAndDifferentId(game.getTitle(), game.getId());
+        if (!games.isEmpty()) {
+            throw new IllegalStateException("This game title is given to a different game stored in the database!");
+        }
+
+        GameDTO result = gameService.update(game);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, game.getId().toString()))

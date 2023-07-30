@@ -19,9 +19,20 @@ export const displaysRoute: Routes = [
     component: CreateGameEntryComponent,
     data: {
       authorities: [Authority.ADMIN],
+      update: false,
     },
     canActivate: [UserRouteAccessService],
     title: 'New Game Entry',
+  },
+  {
+    path: 'edit-entry/:id',
+    component: CreateGameEntryComponent,
+    data: {
+      authorities: [Authority.ADMIN],
+      update: true,
+    },
+    canActivate: [UserRouteAccessService],
+    title: 'Edit Game Entry',
   },
   {
     path: 'game-preview/:id',

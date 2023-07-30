@@ -65,11 +65,32 @@ public class GameService {
     public GameDTO save(GameDTO gameDTO) {
         log.debug("Request to save Game : {}", gameDTO);
 
-        List<Game> games = this.findByTitle(gameDTO.getTitle());
-        if (!games.isEmpty()) {
-            throw new IllegalStateException("This game title is already stored in the database!");
-        }
+        this.checkGameDetailsLists(gameDTO);
 
+        Game game = gameMapper.toEntity(gameDTO);
+        Game result = gameRepository.save(game);
+
+        return gameMapper.toDto(result);
+    }
+
+    /**
+     * Update a game.
+     *
+     * @param gameDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public GameDTO update(GameDTO gameDTO) {
+        log.debug("Request to update Game : {}", gameDTO);
+
+        this.checkGameDetailsLists(gameDTO);
+
+        Game game = gameMapper.toEntity(gameDTO);
+        Game result = gameRepository.save(game);
+
+        return gameMapper.toDto(result);
+    }
+
+    public void checkGameDetailsLists(GameDTO gameDTO) {
         Set<Platform> platforms = gameDTO.getGameDetails().getPlatforms();
         Set<Developer> developers = gameDTO.getGameDetails().getDevelopers();
         Set<Category> categories = gameDTO.getGameDetails().getCategories();
@@ -133,22 +154,6 @@ public class GameService {
             }
             gameDTO.getGameDetails().setPublishers(new HashSet<>(publisherList));
         }
-
-        Game game = gameMapper.toEntity(gameDTO);
-        Game result = gameRepository.save(game);
-
-        return gameMapper.toDto(result);
-    }
-
-    /**
-     * Update a game.
-     *
-     * @param game the entity to save.
-     * @return the persisted entity.
-     */
-    public Game update(Game game) {
-        log.debug("Request to update Game : {}", game);
-        return gameRepository.save(game);
     }
 
     /**

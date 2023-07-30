@@ -1,6 +1,6 @@
 import { EntityResponseType, GameService } from './../../entities/game/service/game.service';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IGame } from 'app/entities/game/game.model';
 import { getPegiNumber } from 'app/entities/game-details/game-details.model';
 
@@ -21,7 +21,7 @@ export class GamePreviewComponent implements OnInit {
   public releaseDate: string;
   public result: IGame;
 
-  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService) {}
+  constructor(private activatedRoute: ActivatedRoute, private gameService: GameService, private router: Router) {}
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
@@ -57,5 +57,9 @@ export class GamePreviewComponent implements OnInit {
         }
       }
     });
+  }
+
+  editGameDetails(): void {
+    this.router.navigate(['/edit-entry', this.game.id]);
   }
 }
