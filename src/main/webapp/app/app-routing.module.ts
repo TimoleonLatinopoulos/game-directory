@@ -10,6 +10,7 @@ import LoginComponent from './login/login.component';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import { DisplaysModule } from './displays/displays.module';
+import FooterComponent from './layouts/footer/footer.component';
 
 @NgModule({
   imports: [
@@ -19,6 +20,11 @@ import { DisplaysModule } from './displays/displays.module';
           path: '',
           component: NavbarComponent,
           outlet: 'navbar',
+        },
+        {
+          path: '',
+          component: FooterComponent,
+          outlet: 'footer',
         },
         {
           path: 'admin',

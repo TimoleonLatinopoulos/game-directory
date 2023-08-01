@@ -19,12 +19,22 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnackBarAlertComponent } from './components/snack-bar-alert/snack-bar-alert.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DialogComponent } from './components/dialog/dialog.component';
 
 /**
  * Application wide Module
  */
 @NgModule({
-  declarations: [ValidationErrorComponent, MultiInputComponent, ChipGridInputComponent, SeparateCategoriesPipe, SnackBarAlertComponent],
+  declarations: [
+    ValidationErrorComponent,
+    MultiInputComponent,
+    ChipGridInputComponent,
+    SeparateCategoriesPipe,
+    SnackBarAlertComponent,
+    DialogComponent,
+  ],
   imports: [
     CommonModule,
     AlertComponent,
@@ -40,6 +50,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSnackBarModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSelectModule,
+    MatDialogModule,
   ],
   exports: [
     CommonModule,
@@ -60,6 +72,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     SnackBarAlertComponent,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatSelectModule,
+    MatDialogModule,
   ],
 })
 export default class SharedModule {}

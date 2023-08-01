@@ -11,6 +11,7 @@ import SharedModule from 'app/shared/shared.module';
 import { GamePreviewComponent } from './game-preview/game-preview.component';
 import { SeparateCategoriesPipe } from 'app/shared/pipes/separate-categories.pipe';
 import { GameListComponent } from './game-list/game-list.component';
+import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
 
 @NgModule({
   declarations: [CreateGameEntryComponent, GamePreviewComponent, GameListComponent],
@@ -22,6 +23,7 @@ import { GameListComponent } from './game-list/game-list.component';
     MatPaginatorModule,
     SharedModule,
     CommonModule,
+    HasAnyAuthorityDirective,
   ],
   providers: [SeparateCategoriesPipe],
 })

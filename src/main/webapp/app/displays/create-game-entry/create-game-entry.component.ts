@@ -93,10 +93,10 @@ export class CreateGameEntryComponent implements OnInit {
         snippet: ['', Validators.required],
         notes: [''],
         steamAppid: [null],
-        platforms: [[]],
-        developers: [[]],
-        publishers: [[]],
-        categories: [[]],
+        platforms: [[], Validators.required],
+        developers: [[], Validators.required],
+        publishers: [[], Validators.required],
+        categories: [[], Validators.required],
       }),
     });
   }
@@ -284,7 +284,7 @@ export class CreateGameEntryComponent implements OnInit {
     this.snackBar.openFromComponent(SnackBarAlertComponent, {
       duration: 5000,
       data: errorMessage,
-      panelClass: 'error-snackbar',
+      panelClass: ['snackbar', 'error-snackbar'],
     });
   }
 }

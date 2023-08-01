@@ -1,8 +1,8 @@
 <div class="row d-flex justify-content-center">
-  <div class="col-10">
+  <div class="col-lg-10 col-sm-12">
     <form [formGroup]="gameDetailsForm" (ngSubmit)="save()">
       <div class="row">
-        <div class="col-lg-8">
+        <div class="col-lg-8 mb-4">
           <mat-card>
             <mat-card-header>
               <h2 *ngIf="!update; else create">Create a new Game Entry</h2>
@@ -49,7 +49,7 @@
                         <img
                           id="image_imageUrl"
                           name="image_imageUrl"
-                          class="text-error thumbnail"
+                          class="text-error edit-thumbnail"
                           [src]="gameDetailsForm.get('gameDetails')?.get('imageUrl')?.value"
                           alt="Not Found!"
                         />
@@ -76,7 +76,7 @@
                         <img
                           id="image_thumbnailUrl"
                           name="image_thumbnailUrl"
-                          class="text-error thumbnail"
+                          class="text-error edit-thumbnail"
                           [src]="gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')?.value"
                           alt="Not Found!"
                         />
@@ -87,9 +87,11 @@
 
                 <mat-form-field class="mb-4 mt-4 mat-field">
                   <mat-label for="field_pegiRating">Pegi Rating</mat-label>
-                  <select matNativeControl id="field_pegiRating" name="pegiRating" formControlName="pegiRating">
-                    <option [ngValue]="pegiRatingOption" *ngFor="let pegiRatingOption of pegiRatingList">{{ pegiRatingOption }}</option>
-                  </select>
+                  <mat-select id="field_pegiRating" name="pegiRating" formControlName="pegiRating">
+                    <mat-option [value]="pegiRatingOption" *ngFor="let pegiRatingOption of pegiRatingList">{{
+                      pegiRatingOption
+                    }}</mat-option>
+                  </mat-select>
                 </mat-form-field>
                 <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('pegiRating')" [absolutePosition]="true" />
 
@@ -206,7 +208,7 @@
           </mat-card>
         </div>
 
-        <div class="col-lg-4">
+        <div *ngIf="!update" class="col-lg-4">
           <mat-card>
             <mat-card-header>
               <h2>Search through Steam</h2>

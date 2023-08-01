@@ -92,6 +92,7 @@ public class GameResource extends AbstractApiResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/games/{id}")
+    @Secured({ AuthoritiesConstants.ADMIN })
     public ResponseEntity<GameDTO> updateGame(@PathVariable(value = "id", required = false) final Long id, @RequestBody GameDTO game)
         throws URISyntaxException {
         log.debug("REST request to update Game : {}, {}", id, game);
@@ -130,6 +131,7 @@ public class GameResource extends AbstractApiResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/games/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @Secured({ AuthoritiesConstants.ADMIN })
     public ResponseEntity<Game> partialUpdateGame(@PathVariable(value = "id", required = false) final Long id, @RequestBody Game game)
         throws URISyntaxException {
         log.debug("REST request to partial update Game partially : {}, {}", id, game);
@@ -158,6 +160,7 @@ public class GameResource extends AbstractApiResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of games in body.
      */
     @GetMapping("/games")
+    @Secured({ AuthoritiesConstants.ADMIN })
     public List<Game> getAllGames() {
         log.debug("REST request to get all Games");
         return gameService.findAll();
@@ -194,6 +197,7 @@ public class GameResource extends AbstractApiResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/games/{id}")
+    @Secured({ AuthoritiesConstants.ADMIN })
     public ResponseEntity<Void> deleteGame(@PathVariable Long id) {
         log.debug("REST request to delete Game : {}", id);
         gameService.delete(id);

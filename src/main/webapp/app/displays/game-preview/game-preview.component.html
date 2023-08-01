@@ -1,29 +1,33 @@
 <div class="row d-flex justify-content-center">
-  <div class="col-10">
-    <div class="row">
-      <div class="col-lg-8">
+  <div class="col-lg-10 col-sm-12">
+    <div class="row flex-container">
+      <div class="col-lg-8 A">
         <mat-card>
           <mat-card-header>
             <mat-card-title style="position: relative">{{ game.title }}</mat-card-title>
-
-            <div class="float-right">
-              <button type="button" (click)="editGameDetails()" class="btn btn-primary">
-                <fa-icon icon="pencil"></fa-icon>
-                Edit
-              </button>
-            </div>
           </mat-card-header>
           <hr />
           <mat-card-content class="inner-html">
-            <div class="inner-highlight" [innerHTML]="game.gameDetails?.description"></div>
+            <div class="inner-highlight inner-img" [innerHTML]="game.gameDetails?.description"></div>
           </mat-card-content>
         </mat-card>
       </div>
 
-      <div class="col-lg-4">
+      <div class="col-lg-4 B mb-4">
         <mat-card>
           <mat-card-header>
             <mat-card-title>Game Information</mat-card-title>
+
+            <div class="float-right" *jhiHasAnyAuthority="'ROLE_ADMIN'">
+              <button type="button" (click)="editGameDetails()" class="btn btn-primary">
+                <fa-icon icon="pencil"></fa-icon>
+                Edit
+              </button>
+              <button type="button" (click)="deleteGame()" class="btn btn-danger">
+                <fa-icon icon="trash-alt"></fa-icon>
+                Delete
+              </button>
+            </div>
           </mat-card-header>
           <hr />
           <mat-card-content>

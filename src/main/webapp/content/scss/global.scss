@@ -27,6 +27,15 @@ a:hover {
 
 .thumbnail {
   min-width: 300px;
+  max-width: 300px;
+  border-radius: 10px;
+  border: 1px solid #222;
+  margin-right: 30px;
+  box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+.edit-thumbnail {
+  max-width: 100%;
   border-radius: 10px;
   border: 1px solid #222;
   margin-right: 30px;
@@ -45,6 +54,12 @@ a:hover {
   }
 }
 
+.inner-img {
+  img {
+    max-width: 100%;
+  }
+}
+
 .highlight {
   color: #00aeb4 !important;
 }
@@ -55,22 +70,43 @@ a:hover {
   margin-bottom: -15px !important;
 }
 
+.float-right {
+  position: absolute;
+  right: 0;
+  padding-right: 10px;
+}
+
 .bold {
   font-weight: bold;
 }
 
-.error-snackbar {
-  background: #aab;
-  color: #bf0303 !important;
-  min-width: 500px;
+.error-snackbar div {
+  background: #2b2b2b !important;
+  min-width: 500px !important;
   font-weight: bold !important;
 }
+.error-snackbar span {
+  color: #e90202 !important;
+}
 .error-snackbar button {
-  background: #aab;
-  color: #bf0303 !important;
+  background: #2b2b2b !important;
+  color: #e90202 !important;
   border: none;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  font-weight: bold;
+}
+
+.success-snackbar div {
+  background: #2b2b2b !important;
+  min-width: 500px !important;
+  font-weight: bold !important;
+}
+.success-snackbar span {
+  color: #01f536 !important;
+}
+.success-snackbar button {
+  background: #2b2b2b !important;
+  color: #01f536 !important;
+  border: none;
   font-weight: bold;
 }
 
