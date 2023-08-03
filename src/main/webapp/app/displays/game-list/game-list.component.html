@@ -1,18 +1,92 @@
 <div class="row d-flex justify-content-center">
-  <div class="col-10">
+  <form [formGroup]="filterForm" class="col-lg-10 col-sm-12">
     <mat-card>
       <mat-card-header style="position: relative">
         <h3 style="position: absolute; top: 50%; transform: translate(0, -50%)">{{ userGames ? 'My Games' : 'Game List' }}</h3>
 
-        <mat-form-field style="margin-left: auto; margin-right: 0; min-width: 300px">
+        <mat-form-field class="search-field">
           <span matPrefix style="height: 0"> </span>
-          <input type="tel" matInput placeholder="Search" name="search" (input)="filter($event.target)" />
+          <input matInput placeholder="Search Game Title" formControlName="title" (input)="filter()" />
           <button matSuffix mat-button style="border: none; background: transparent">
             <fa-icon icon="search"></fa-icon>
           </button>
         </mat-form-field>
       </mat-card-header>
+
+      <mat-accordion>
+        <mat-expansion-panel class="filter-card">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <fa-icon class="p-2" icon="filter"></fa-icon>
+              <h4>Filters</h4>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <mat-panel-description>
+            <div class="p-4 filter-card">
+              <div class="row">
+                <mat-form-field class="mat-field filter-field col-2">
+                  <mat-label>Developer</mat-label>
+                  <input matInput id="field_developer" formControlName="developer" [matAutocomplete]="developerAuto" />
+                  <mat-autocomplete #developerAuto="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option [value]="developer" *ngFor="let developer of filteredDevelopers | async">
+                      {{ developer.description }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field class="mat-field filter-field col-2">
+                  <mat-label>Publisher</mat-label>
+                  <input matInput formControlName="publisher" [matAutocomplete]="publisherAuto" />
+                  <mat-autocomplete #publisherAuto="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option [value]="publisher" *ngFor="let publisher of filteredPublishers | async">
+                      {{ publisher.description }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field class="mat-field filter-field col-2">
+                  <mat-label>Platform</mat-label>
+                  <input matInput type="text" formControlName="platform" [matAutocomplete]="platformAuto" />
+                  <mat-autocomplete #platformAuto="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option [value]="platform" *ngFor="let platform of filteredPlatforms | async">
+                      {{ platform.description }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-form-field class="mat-field filter-field col-2">
+                  <mat-label>Genre</mat-label>
+                  <input matInput formControlName="category" [matAutocomplete]="categoryAuto" />
+                  <mat-autocomplete type="text" #categoryAuto="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option [value]="category" *ngFor="let category of filteredCategories | async">
+                      {{ category.description }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-checkbox *ngIf="userGames" class="col-2" formControlName="favourite" color="primary">Favourite</mat-checkbox>
+              </div>
+
+              <div class="row pt-2">
+                <div class="col-2">
+                  <button type="button" (click)="clearFormFields()" class="btn btn-danger" style="padding-left: 50px; padding-right: 50px">
+                    CLEAR
+                  </button>
+                </div>
+                <div class="col-2">
+                  <button type="button" (click)="filterSearch()" class="btn btn-info" style="padding-left: 50px; padding-right: 50px">
+                    SEARCH
+                  </button>
+                </div>
+              </div>
+            </div>
+          </mat-panel-description>
+        </mat-expansion-panel>
+      </mat-accordion>
+
       <hr />
+
       <mat-card-content *ngIf="gameListDataResult !== undefined">
         <div *ngFor="let game of gameListDataResult.data">
           <div class="pt-3 d-flex align-items-start flex-grow-1">
@@ -42,8 +116,7 @@
         [showFirstLastButtons]="true"
         [length]="gameListDataResult !== undefined && gameListDataResult.total != null ? gameListDataResult.total : 0"
         aria-label="Select page"
-      >
-      </mat-paginator>
+      />
     </mat-card>
-  </div>
+  </form>
 </div>

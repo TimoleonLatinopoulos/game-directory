@@ -8,7 +8,6 @@ import { ValidationErrorComponent } from './components/validation-error/validati
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MultiInputComponent } from './components/multi-input/multi-input.component';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ChipGridInputComponent } from './components/chip-grid-input/chip-grid-input.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -22,6 +21,9 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { DialogComponent } from './components/dialog/dialog.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 /**
  * Application wide Module
@@ -52,6 +54,9 @@ import { DialogComponent } from './components/dialog/dialog.component';
     MatNativeDateModule,
     MatSelectModule,
     MatDialogModule,
+    MatAutocompleteModule,
+    MatCheckboxModule,
+    MatExpansionModule,
   ],
   exports: [
     CommonModule,
@@ -74,6 +79,9 @@ import { DialogComponent } from './components/dialog/dialog.component';
     MatNativeDateModule,
     MatSelectModule,
     MatDialogModule,
+    MatAutocompleteModule,
+    MatCheckboxModule,
+    MatExpansionModule,
   ],
 })
 export default class SharedModule {}

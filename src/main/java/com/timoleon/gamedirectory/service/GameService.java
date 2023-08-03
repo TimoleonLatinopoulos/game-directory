@@ -2,13 +2,12 @@ package com.timoleon.gamedirectory.service;
 
 import com.timoleon.gamedirectory.domain.*;
 import com.timoleon.gamedirectory.domain.search.SearchCriteria;
-import com.timoleon.gamedirectory.domain.search.SearchSortItem;
 import com.timoleon.gamedirectory.repository.GameRepository;
+import com.timoleon.gamedirectory.repository.UserGameRepository;
 import com.timoleon.gamedirectory.service.dto.GameDTO;
 import com.timoleon.gamedirectory.service.dto.GameGridDTO;
 import com.timoleon.gamedirectory.service.mapper.GameGridMapper;
 import com.timoleon.gamedirectory.service.mapper.GameMapper;
-import com.timoleon.gamedirectory.web.rest.errors.BadRequestAlertException;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -35,7 +34,7 @@ public class GameService {
     private final PublisherService publisherService;
     private final CategoryService categoryService;
 
-    private final UserService userService;
+    private final UserGameRepository userGameRepository;
 
     private final GameMapper gameMapper;
 
@@ -47,7 +46,7 @@ public class GameService {
         DeveloperService developerService,
         PublisherService publisherService,
         CategoryService categoryService,
-        UserService userService,
+        UserGameRepository userGameRepository,
         GameMapper gameMapper,
         GameGridMapper gameGridMapper
     ) {
@@ -56,7 +55,7 @@ public class GameService {
         this.developerService = developerService;
         this.publisherService = publisherService;
         this.categoryService = categoryService;
-        this.userService = userService;
+        this.userGameRepository = userGameRepository;
         this.gameMapper = gameMapper;
         this.gameGridMapper = gameGridMapper;
     }
@@ -236,8 +235,15 @@ public class GameService {
      *
      * @param id the id of the entity.
      */
+    @Transactional(rollbackFor = Exception.class, timeout = 60)
     public void delete(Long id) {
         log.debug("Request to delete Game : {}", id);
+
+        List<UserGame> userGames = userGameRepository.findAllByGameId(id);
+        if (!userGames.isEmpty()) {
+            userGameRepository.deleteAllByGameId(id);
+        }
+
         gameRepository.deleteById(id);
     }
 }

@@ -30,7 +30,7 @@ export default class LoginComponent implements OnInit, AfterViewInit {
     // if already authenticated then navigate to home page
     this.accountService.identity().subscribe(() => {
       if (this.accountService.isAuthenticated()) {
-        this.router.navigate(['']);
+        this.navigateForUser();
       }
     });
   }
@@ -45,10 +45,18 @@ export default class LoginComponent implements OnInit, AfterViewInit {
         this.authenticationError = false;
         if (!this.router.getCurrentNavigation()) {
           // There were no routing during login (eg from navigationToStoredUrl)
-          this.router.navigate(['']);
+          this.navigateForUser();
         }
       },
       error: () => (this.authenticationError = true),
     });
+  }
+
+  navigateForUser(): void {
+    if (this.accountService.hasAnyAuthority('ROLE_USER')) {
+      this.router.navigate(['/my-games']);
+    } else if (this.accountService.hasAnyAuthority('ROLE_ADMIN')) {
+      this.router.navigate(['']);
+    }
   }
 }

@@ -47,6 +47,13 @@ public interface UserGameRepository extends JpaRepository<UserGame, Long>, UserG
     @Query("select userGame from UserGame userGame where userGame.game.id = :gameId and userGame.user.id = :userId")
     Optional<UserGame> findOneByGameIdAndUserId(@Param("gameId") Long gameId, @Param("userId") Long userId);
 
+    @Query("select userGame from UserGame userGame where userGame.game.id = :gameId")
+    List<UserGame> findAllByGameId(@Param("gameId") Long gameId);
+
+    @Modifying
+    @Query("delete UserGame userGame where userGame.game.id = :gameId")
+    void deleteAllByGameId(@Param("gameId") Long gameId);
+
     @Modifying
     @Query(
         "update UserGame userGame " +

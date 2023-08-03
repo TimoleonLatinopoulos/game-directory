@@ -110,7 +110,7 @@ export class GamePreviewComponent implements OnInit {
             this.router.navigate(['../']);
           },
           (error: any) => {
-            this.openSnackBar(error.error.detail);
+            this.openErrorSnackBar(error.error.detail);
           }
         );
       }
@@ -121,10 +121,10 @@ export class GamePreviewComponent implements OnInit {
     this.userGameService.create(this.game.id).subscribe(
       () => {
         this.openSnackBar('The game has been added to your games list!');
-        this.router.navigate(['../']);
+        this.router.navigate(['../my-games']);
       },
       (error: any) => {
-        this.openSnackBar(error.error.detail);
+        this.openErrorSnackBar(error.error.detail);
       }
     );
   }
@@ -143,7 +143,7 @@ export class GamePreviewComponent implements OnInit {
           this.favouriteToggle = false;
         },
         (error: any) => {
-          this.openSnackBar(error.error.detail);
+          this.openErrorSnackBar(error.error.detail);
           this.favouriteToggle = false;
         }
       );
@@ -156,5 +156,26 @@ export class GamePreviewComponent implements OnInit {
       data: errorMessage,
       panelClass: ['snackbar', 'success-snackbar'],
     });
+  }
+
+  openErrorSnackBar(errorMessage: string): void {
+    this.snackBar.openFromComponent(SnackBarAlertComponent, {
+      duration: 5000,
+      data: errorMessage,
+      panelClass: ['snackbar', 'error-snackbar'],
+    });
+  }
+
+  removeUserGame(): void {
+    this.userGameService.delete(this.userGame.id).subscribe(
+      () => {
+        this.openSnackBar('The game has been removed from your games list!');
+        this.router.navigate(['../my-games']);
+      },
+      (error: any) => {
+        this.openErrorSnackBar(error.error.detail);
+        this.favouriteToggle = false;
+      }
+    );
   }
 }

@@ -101,11 +101,11 @@ a:hover {
   font-weight: bold !important;
 }
 .success-snackbar span {
-  color: #01f536 !important;
+  color: #35c0eb !important;
 }
 .success-snackbar button {
   background: #2b2b2b !important;
-  color: #01f536 !important;
+  color: #35c0eb !important;
   border: none;
   font-weight: bold;
 }
@@ -121,6 +121,10 @@ mat-paginator {
 
 mat-card-subtitle {
   color: lightslategray !important;
+}
+
+.mat-mdc-text-field-wrapper:not(.mdc-text-field--disabled) {
+  background-color: #667 !important;
 }
 
 /* ==========================================================================
