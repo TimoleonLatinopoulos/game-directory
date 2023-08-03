@@ -2,7 +2,7 @@
   <div class="col-10">
     <mat-card>
       <mat-card-header style="position: relative">
-        <h3 style="position: absolute; top: 50%; transform: translate(0, -50%)">Game List</h3>
+        <h3 style="position: absolute; top: 50%; transform: translate(0, -50%)">{{ userGames ? 'My Games' : 'Game List' }}</h3>
 
         <mat-form-field style="margin-left: auto; margin-right: 0; min-width: 300px">
           <span matPrefix style="height: 0"> </span>
@@ -16,8 +16,11 @@
       <mat-card-content *ngIf="gameListDataResult !== undefined">
         <div *ngFor="let game of gameListDataResult.data">
           <div class="pt-3 d-flex align-items-start flex-grow-1">
-            <div>
-              <img class="thumbnail" [src]="game.gameDetails?.thumbnailUrl" alt="Not Found!" />
+            <div style="position: relative">
+              <img style="display: block" class="thumbnail" [src]="game.gameDetails?.thumbnailUrl" alt="Not Found!" />
+              <div *ngIf="game.favourite">
+                <fa-icon class="floating-icon" [icon]="['fas', 'star']"></fa-icon>
+              </div>
             </div>
             <div class="d-flex flex-column">
               <a class="reference-text highlight" [attr.href]="'/game-preview/' + game.id">{{ game.title }}</a>

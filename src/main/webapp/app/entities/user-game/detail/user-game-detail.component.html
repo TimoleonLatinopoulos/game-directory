@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <div *ngIf="userGame">
+      <h2 data-cy="userGameDetailsHeading"><span jhiTranslate="gameDirectoryApp.userGame.detail.title">User Game</span></h2>
+
+      <hr />
+
+      <jhi-alert-error></jhi-alert-error>
+
+      <jhi-alert></jhi-alert>
+
+      <dl class="row-md jh-entity-details">
+        <dt><span jhiTranslate="global.field.id">ID</span></dt>
+        <dd>
+          <span>{{ userGame.id }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.userGame.favourite">Favourite</span></dt>
+        <dd>
+          <span>{{ userGame.favourite }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.userGame.dateAdded">Date Added</span></dt>
+        <dd>
+          <span>{{ userGame.dateAdded | formatMediumDate }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.userGame.title">Title</span></dt>
+        <dd>
+          <span>{{ userGame.title }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.userGame.user">User</span></dt>
+        <dd>
+          <span>{{ userGame.user?.login }}</span>
+        </dd>
+        <dt><span jhiTranslate="gameDirectoryApp.userGame.game">Game</span></dt>
+        <dd>
+          <div *ngIf="userGame.game">
+            <a [routerLink]="['/game', userGame.game.id, 'view']">{{ userGame.game.id }}</a>
+          </div>
+        </dd>
+      </dl>
+
+      <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+      </button>
+
+      <button type="button" [routerLink]="['/user-game', userGame.id, 'edit']" class="btn btn-primary">
+        <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+      </button>
+    </div>
+  </div>
+</div>

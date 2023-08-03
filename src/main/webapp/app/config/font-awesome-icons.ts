@@ -39,8 +39,11 @@ import {
   faWrench,
   faGamepad,
   faDownload,
+  faStar,
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
+
+import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons';
 
 import { faSteamSymbol, faInstagram, faTwitter, faLinkedin, faGithub } from '@fortawesome/free-brands-svg-icons';
 
@@ -90,5 +93,7 @@ export const fontAwesomeIcons = [
   faTwitter,
   faLinkedin,
   faGithub,
+  faStar,
+  faStarRegular,
   // jhipster-needle-add-icon-import
 ];

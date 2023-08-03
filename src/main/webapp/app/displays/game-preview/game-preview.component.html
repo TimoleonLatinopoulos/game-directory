@@ -28,6 +28,26 @@
                 Delete
               </button>
             </div>
+            <div class="float-right" *jhiHasAnyAuthority="'ROLE_USER'">
+              <div *ngIf="showUserGame">
+                <div *ngIf="userGame == null; else userGameRef">
+                  <button type="button" (click)="addToUserGames()" class="btn btn-primary">
+                    <fa-icon icon="add"></fa-icon>
+                    Add to My Games
+                  </button>
+                </div>
+                <ng-template #userGameRef>
+                  <button type="button" (click)="favourite()" class="btn btn-primary">
+                    <div *ngIf="this.userGame?.favourite; else notFavourite">
+                      <fa-icon [icon]="['fas', 'star']"></fa-icon>
+                    </div>
+                    <ng-template #notFavourite>
+                      <fa-icon [icon]="['far', 'star']"></fa-icon>
+                    </ng-template>
+                  </button>
+                </ng-template>
+              </div>
+            </div>
           </mat-card-header>
           <hr />
           <mat-card-content>
@@ -111,7 +131,7 @@
                 <div>Price</div>
               </div>
               <div class="col-8">
-                <div>{{ game.gameDetails?.price }} €</div>
+                <div>{{ game.gameDetails?.price === 0 ? 'Free' : game.gameDetails?.price + '€' }}</div>
               </div>
             </div>
 

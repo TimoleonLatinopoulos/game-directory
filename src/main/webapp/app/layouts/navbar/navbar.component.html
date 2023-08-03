@@ -27,6 +27,14 @@
             </span>
           </a>
         </li>
+        <li *jhiHasAnyAuthority="'ROLE_USER'" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+          <a class="nav-link" routerLink="/my-games" (click)="collapseNavbar()">
+            <span>
+              <fa-icon icon="gamepad"></fa-icon>
+              <span>My Games</span>
+            </span>
+          </a>
+        </li>
         <li *jhiHasAnyAuthority="'ROLE_ADMIN'" class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
           <a class="nav-link" routerLink="/new-entry" (click)="collapseNavbar()">
             <span>

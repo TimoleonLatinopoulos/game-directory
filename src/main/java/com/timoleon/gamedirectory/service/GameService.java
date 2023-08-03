@@ -8,6 +8,7 @@ import com.timoleon.gamedirectory.service.dto.GameDTO;
 import com.timoleon.gamedirectory.service.dto.GameGridDTO;
 import com.timoleon.gamedirectory.service.mapper.GameGridMapper;
 import com.timoleon.gamedirectory.service.mapper.GameMapper;
+import com.timoleon.gamedirectory.web.rest.errors.BadRequestAlertException;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -34,6 +35,8 @@ public class GameService {
     private final PublisherService publisherService;
     private final CategoryService categoryService;
 
+    private final UserService userService;
+
     private final GameMapper gameMapper;
 
     private final GameGridMapper gameGridMapper;
@@ -44,6 +47,7 @@ public class GameService {
         DeveloperService developerService,
         PublisherService publisherService,
         CategoryService categoryService,
+        UserService userService,
         GameMapper gameMapper,
         GameGridMapper gameGridMapper
     ) {
@@ -52,6 +56,7 @@ public class GameService {
         this.developerService = developerService;
         this.publisherService = publisherService;
         this.categoryService = categoryService;
+        this.userService = userService;
         this.gameMapper = gameMapper;
         this.gameGridMapper = gameGridMapper;
     }
@@ -221,14 +226,6 @@ public class GameService {
      */
     @Transactional(readOnly = true, timeout = 60)
     public Page<GameGridDTO> search(SearchCriteria criteria, PageRequest pageRequest) {
-        // temp solution
-        if (criteria.getSort() == null) {
-            SearchSortItem sortItem = new SearchSortItem("title", "asc");
-            List<SearchSortItem> sortItems = new ArrayList<>();
-            sortItems.add(sortItem);
-            criteria.setSort(sortItems);
-        }
-
         Page<Game> page = gameRepository.search(criteria, pageRequest);
         List<GameGridDTO> list = new ArrayList<>(page.getContent()).stream().map(gameGridMapper::toDto).collect(Collectors.toList());
         return new PageImpl<>(list, page.getPageable(), page.getTotalElements());

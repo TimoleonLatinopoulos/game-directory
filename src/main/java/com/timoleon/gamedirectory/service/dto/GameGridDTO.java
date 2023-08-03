@@ -3,9 +3,9 @@ package com.timoleon.gamedirectory.service.dto;
 public class GameGridDTO {
 
     private Long id;
-
     private String title;
     private GameDetailsGridDTO gameDetails;
+    private Boolean favourite;
 
     public Long getId() {
         return id;
@@ -29,5 +29,13 @@ public class GameGridDTO {
 
     public void setGameDetails(GameDetailsGridDTO gameDetails) {
         this.gameDetails = gameDetails;
+    }
+
+    public Boolean getFavourite() {
+        return favourite;
+    }
+
+    public void setFavourite(Boolean favourite) {
+        this.favourite = favourite;
     }
 }

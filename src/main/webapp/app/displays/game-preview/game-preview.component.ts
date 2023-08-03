@@ -7,6 +7,9 @@ import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { GameService } from 'app/entities/game/service/game.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackBarAlertComponent } from 'app/shared/components/snack-bar-alert/snack-bar-alert.component';
+import { IUserGame } from 'app/entities/user-game/user-game.model';
+import { AccountService } from 'app/core/auth/account.service';
+import { UserGameService } from 'app/entities/user-game/service/user-game.service';
 
 @Component({
   selector: 'jhi-game-preview',
@@ -15,6 +18,9 @@ import { SnackBarAlertComponent } from 'app/shared/components/snack-bar-alert/sn
 })
 export class GamePreviewComponent implements OnInit {
   public game: IGame;
+  public userGame: IUserGame;
+  public showUserGame = false;
+  public favouriteToggle = false;
 
   public hasPegiRating = false;
   public hasMetacritic = false;
@@ -29,6 +35,8 @@ export class GamePreviewComponent implements OnInit {
 
   constructor(
     private gameService: GameService,
+    private userGameService: UserGameService,
+    private accountService: AccountService,
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
@@ -39,6 +47,18 @@ export class GamePreviewComponent implements OnInit {
     window.scrollTo(0, 0);
     this.activatedRoute.data.subscribe(object => {
       this.game = object.game as IGame;
+
+      if (this.accountService.hasAnyAuthority('ROLE_USER')) {
+        this.userGameService.findByGameId(this.game.id).subscribe(
+          (response: any) => {
+            this.userGame = response.body;
+            this.showUserGame = true;
+          },
+          () => {
+            this.showUserGame = true;
+          }
+        );
+      }
 
       if (this.game.gameDetails != null) {
         if (this.game.gameDetails.releaseDate) {
@@ -86,7 +106,7 @@ export class GamePreviewComponent implements OnInit {
       if (this.delete) {
         this.gameService.delete(this.game.id).subscribe(
           () => {
-            this.openSnackBar('The game has been deleted');
+            this.openSnackBar('The game has been deleted!');
             this.router.navigate(['../']);
           },
           (error: any) => {
@@ -95,6 +115,39 @@ export class GamePreviewComponent implements OnInit {
         );
       }
     });
+  }
+
+  addToUserGames(): void {
+    this.userGameService.create(this.game.id).subscribe(
+      () => {
+        this.openSnackBar('The game has been added to your games list!');
+        this.router.navigate(['../']);
+      },
+      (error: any) => {
+        this.openSnackBar(error.error.detail);
+      }
+    );
+  }
+
+  favourite(): void {
+    if (!this.favouriteToggle) {
+      this.favouriteToggle = true;
+      this.userGameService.setFavourite(this.userGame.id).subscribe(
+        (response: any) => {
+          this.userGame = response.body;
+          if (this.userGame.favourite) {
+            this.openSnackBar('The game has been set as favourite!');
+          } else {
+            this.openSnackBar('The game has been reset!');
+          }
+          this.favouriteToggle = false;
+        },
+        (error: any) => {
+          this.openSnackBar(error.error.detail);
+          this.favouriteToggle = false;
+        }
+      );
+    }
   }
 
   openSnackBar(errorMessage: string): void {

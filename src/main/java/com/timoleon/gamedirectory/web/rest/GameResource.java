@@ -183,7 +183,7 @@ public class GameResource extends AbstractApiResource {
     @GetMapping("/games/search")
     @Timed
     public PageResponse<GameGridDTO> search(HttpServletRequest request, Authentication authentication) {
-        log.debug("REST request to search a page of ApplicationNational");
+        log.debug("REST request to search a page of Games");
 
         PageRequest pageRequest = this.extractPageRequestFromRequest(request);
         SearchCriteria searchCriteria = this.extractSearchCriteriaFromRequest(request);

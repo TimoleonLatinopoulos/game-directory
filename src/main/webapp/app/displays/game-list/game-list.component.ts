@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PageEvent } from '@angular/material/paginator';
+import { ActivatedRoute } from '@angular/router';
 import { ISearchType } from 'app/entities/game/game.model';
 import { GameService } from 'app/entities/game/service/game.service';
+import { UserGameService } from 'app/entities/user-game/service/user-game.service';
 
 @Component({
   selector: 'jhi-game-list',
@@ -12,6 +14,8 @@ export class GameListComponent implements OnInit {
   public isLoading = false;
   public gameListDataResult: ISearchType;
 
+  public userGames = false;
+
   public state = {
     skip: 0,
     take: 10,
@@ -19,9 +23,10 @@ export class GameListComponent implements OnInit {
     sort: [{ field: 'title', dir: 'asc' }],
   };
 
-  constructor(public gameService: GameService) {}
+  constructor(public gameService: GameService, public userGameService: UserGameService, public route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.userGames = this.route.snapshot.data['userGames'];
     this.fetchGameData();
   }
 
@@ -50,18 +55,34 @@ export class GameListComponent implements OnInit {
 
   public fetchGameData(): void {
     this.isLoading = true;
-    this.gameService.search(this.state).subscribe(
-      (res: any) => {
-        this.gameListDataResult = {
-          data: res.data.content,
-          total: res.data.totalEntries,
-        };
-        this.isLoading = false;
-        window.scrollTo(0, 0);
-      },
-      () => {
-        this.isLoading = false;
-      }
-    );
+    if (this.userGames) {
+      this.userGameService.search(this.state).subscribe(
+        (res: any) => {
+          this.gameListDataResult = {
+            data: res.data.content,
+            total: res.data.totalEntries,
+          };
+          this.isLoading = false;
+          window.scrollTo(0, 0);
+        },
+        () => {
+          this.isLoading = false;
+        }
+      );
+    } else {
+      this.gameService.search(this.state).subscribe(
+        (res: any) => {
+          this.gameListDataResult = {
+            data: res.data.content,
+            total: res.data.totalEntries,
+          };
+          this.isLoading = false;
+          window.scrollTo(0, 0);
+        },
+        () => {
+          this.isLoading = false;
+        }
+      );
+    }
   }
 }

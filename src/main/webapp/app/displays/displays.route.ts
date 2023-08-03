@@ -12,7 +12,20 @@ export const displaysRoute: Routes = [
     path: '',
     component: GameListComponent,
     canActivate: [UserRouteAccessService],
+    data: {
+      userGames: false,
+    },
     title: 'Game List',
+  },
+  {
+    path: 'my-games',
+    component: GameListComponent,
+    data: {
+      authorities: [Authority.USER],
+      userGames: true,
+    },
+    canActivate: [UserRouteAccessService],
+    title: 'My Games',
   },
   {
     path: 'new-entry',
