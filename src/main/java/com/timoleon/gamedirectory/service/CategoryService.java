@@ -1,11 +1,9 @@
 package com.timoleon.gamedirectory.service;
 
 import com.timoleon.gamedirectory.domain.Category;
-import com.timoleon.gamedirectory.domain.Developer;
 import com.timoleon.gamedirectory.repository.CategoryRepository;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -78,6 +76,17 @@ public class CategoryService {
     public List<Category> findAll() {
         log.debug("Request to get all Categories");
         return categoryRepository.findAll();
+    }
+
+    /**
+     * Get all the categories used in gameDetails.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<Category> findAllUsed() {
+        log.debug("Request to get all Categories used in gameDetails");
+        return categoryRepository.findAllUsed();
     }
 
     /**

@@ -2,8 +2,13 @@
   position: absolute;
   top: 0;
   right: 0;
-  margin-right: 40px;
   margin-top: 10px;
+}
+
+.float-right-icon {
+  position: absolute;
+  right: 0;
+  padding: 10px;
 }
 
 .search-field {
@@ -12,38 +17,116 @@
   min-width: 300px;
 }
 
+.search-button {
+  border: none;
+  background: transparent;
+}
+
 .header-text {
   position: absolute;
   top: 50%;
   transform: translate(0, -50%);
 }
 
-// margin-left: 0px;
-//     /* top: 100%; */
-//     transform: translate(0, 50%);
-
-@media only screen and (max-width: 830px) {
+@media only screen and (max-width: 991px) {
   .auto-margin {
     margin-left: 0px;
     transform: translate(0, 50%);
+    padding-top: 5px;
   }
   .mat-header {
     height: 7em;
   }
+  .mat-expanded {
+    margin-top: 20px !important;
+  }
+  .mat-expansion-panel {
+    background-color: #343445 !important;
+    right: 5%;
+    top: 8rem;
+  }
+  #search-field {
+    display: block;
+  }
+  #top-search {
+    display: none;
+  }
+  .list-snippet {
+    font-size: smaller;
+    display: initial;
+  }
+  .thumbnail {
+    width: 150px;
+    margin-right: 10px;
+  }
+  .list-text {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .floating-icon {
+    margin-right: 15px;
+  }
+  #list-item {
+    padding-top: 0px !important;
+  }
+  #image-item {
+    display: block;
+    margin-top: 10px;
+  }
 }
 
-@media only screen and (min-width: 830px) {
+@media only screen and (min-width: 992px) {
   .auto-margin {
     margin-left: 10em;
   }
   .mat-header {
     height: 6em;
   }
+  .mat-expanded {
+    margin-top: 0 !important;
+  }
+  .mat-expansion-panel {
+    background-color: #445 !important;
+    right: 4%;
+    top: 9rem;
+  }
+  #search-field {
+    display: none;
+  }
+  #top-search {
+    display: block;
+  }
+  .list-snippet {
+    font-size: initial;
+    display: block;
+  }
+  .thumbnail {
+    width: 300px;
+  }
+  .list-text {
+    overflow: auto;
+    white-space: normal;
+    text-overflow: initial;
+  }
+  .floating-icon {
+    margin-right: 40px;
+  }
+  #list-item {
+    padding-top: 1rem !important;
+  }
+  #image-item {
+    display: initial;
+  }
+}
+
+.list-text {
+  display: block !important;
 }
 
 .filter-field {
-  // margin-right: auto;
   min-width: 300px;
+  padding-bottom: 10px;
 }
 
 .btn-filter {
@@ -51,7 +134,6 @@
   padding-right: 10px;
   margin-left: 10px;
   margin-right: 10px;
-  width: 20%;
 }
 
 /* ==========================================================================
@@ -59,7 +141,8 @@ Mat-Accordion Style
 ========================================================================== */
 mat-accordion {
   margin: auto;
-  width: 90%;
+  width: 95%;
+  z-index: 1;
 }
 
 .mat-expanded {
@@ -76,20 +159,21 @@ mat-accordion {
 
 ::ng-deep .mat-expansion-panel-body {
   background-color: #343445 !important;
+  margin-left: 10px;
 }
 
 .mat-expansion-panel {
   max-width: 62px;
   border-radius: 32px !important;
-  background-color: #445 !important;
-
   position: fixed;
-  right: 5%;
-  top: 8rem;
 }
 
 ::ng-deep .mat-expansion-indicator {
   display: none;
+}
+
+.mat-expansion-panel-header {
+  background-color: #343445 !important;
 }
 
 .mat-expanded .red-text {
@@ -98,4 +182,16 @@ mat-accordion {
   font-size: x-large;
   position: relative;
   margin-right: 0px !important;
+}
+
+.not-found-text-container {
+  height: 100px;
+}
+
+.not-found-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-size: large;
+  padding-top: 20px;
 }

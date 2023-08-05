@@ -1,20 +1,13 @@
 package com.timoleon.gamedirectory.web.rest;
 
 import com.timoleon.gamedirectory.domain.Category;
-import com.timoleon.gamedirectory.repository.CategoryRepository;
 import com.timoleon.gamedirectory.service.CategoryService;
-import com.timoleon.gamedirectory.web.rest.errors.BadRequestAlertException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
@@ -28,11 +21,8 @@ public class CategoryResource {
 
     private final CategoryService categoryService;
 
-    private final CategoryRepository categoryRepository;
-
-    public CategoryResource(CategoryService categoryService, CategoryRepository categoryRepository) {
+    public CategoryResource(CategoryService categoryService) {
         this.categoryService = categoryService;
-        this.categoryRepository = categoryRepository;
     }
 
     /**
@@ -44,6 +34,17 @@ public class CategoryResource {
     public List<Category> getAllCategories() {
         log.debug("REST request to get all Categories");
         return categoryService.findAll();
+    }
+
+    /**
+     * {@code GET  /categories/used} : get all the categories used in gameDetails.
+     *
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of categories in body.
+     */
+    @GetMapping("/categories/used")
+    public List<Category> getAllUsedCategories() {
+        log.debug("REST request to get all Categories used in gameDetails");
+        return categoryService.findAllUsed();
     }
 
     /**

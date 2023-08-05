@@ -18,7 +18,7 @@ public class CustomUtil {
     }
 
     public static String stripAccents(String s) {
-        if (!StringUtils.isEmpty(s)) {
+        if (StringUtils.hasLength(s)) {
             s = Normalizer.normalize(s, Normalizer.Form.NFD);
             s = s.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
         }

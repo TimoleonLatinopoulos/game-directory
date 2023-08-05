@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 /**
  * Spring Data JPA repository for the Game entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface GameRepository extends JpaRepository<Game, Long>, GameRepositoryCustom {
     @Query("select game from Game game where game.title = ?1")

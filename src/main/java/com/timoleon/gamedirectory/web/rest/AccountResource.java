@@ -10,7 +10,6 @@ import com.timoleon.gamedirectory.service.dto.PasswordChangeDTO;
 import com.timoleon.gamedirectory.web.rest.errors.*;
 import com.timoleon.gamedirectory.web.rest.vm.KeyAndPasswordVM;
 import com.timoleon.gamedirectory.web.rest.vm.ManagedUserVM;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.*;
 import org.apache.commons.lang3.StringUtils;

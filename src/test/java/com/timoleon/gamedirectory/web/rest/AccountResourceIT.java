@@ -14,7 +14,6 @@ import com.timoleon.gamedirectory.security.AuthoritiesConstants;
 import com.timoleon.gamedirectory.service.UserService;
 import com.timoleon.gamedirectory.service.dto.AdminUserDTO;
 import com.timoleon.gamedirectory.service.dto.PasswordChangeDTO;
-import com.timoleon.gamedirectory.service.dto.UserDTO;
 import com.timoleon.gamedirectory.web.rest.vm.KeyAndPasswordVM;
 import com.timoleon.gamedirectory.web.rest.vm.ManagedUserVM;
 import java.time.Instant;

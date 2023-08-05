@@ -57,102 +57,126 @@
             <img style="object-fit: cover; width: 100%" [src]="game.gameDetails?.imageUrl" alt="Not Found!" />
 
             <div class="row pt-4">
-              <div class="col-4 bold">
+              <div class="col-md-4 col-5 bold">
                 <div>Title</div>
               </div>
-              <div class="col-8">
-                <div>{{ game.title }}</div>
+              <div class="col-md-8 col-7 text-container">
+                <div class="bottom-text">
+                  {{ game.title }}
+                </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-4 bold">
+              <div class="col-md-4 col-5 bold">
                 <div>Platform (s)</div>
               </div>
-              <div class="col-8">
-                {{ this.game.gameDetails?.platforms | separateCategories }}
+              <div class="col-md-8 col-7 text-container">
+                <div class="bottom-text">
+                  {{ this.game.gameDetails?.platforms | separateCategories }}
+                </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-4 bold">
+              <div class="col-md-4 col-5 bold">
                 <div>Developer (s)</div>
               </div>
-              <div class="col-8">
-                {{ this.game.gameDetails?.developers | separateCategories }}
+              <div class="col-md-8 col-7 text-container">
+                <div class="bottom-text">
+                  {{ this.game.gameDetails?.developers | separateCategories }}
+                </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-4 bold">
+              <div class="col-md-4 col-5 bold">
                 <div>Publisher (s)</div>
               </div>
-              <div class="col-8">
-                {{ this.game.gameDetails?.publishers | separateCategories }}
+              <div class="col-md-8 col-7 text-container">
+                <div class="bottom-text">
+                  {{ this.game.gameDetails?.publishers | separateCategories }}
+                </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-4 bold">
+              <div class="col-md-4 col-5 bold">
                 <div>Genre (s)</div>
               </div>
-              <div class="col-8">
-                {{ this.game.gameDetails?.categories | separateCategories }}
+              <div class="col-md-8 col-7 text-container">
+                <div class="bottom-text">
+                  {{ this.game.gameDetails?.categories | separateCategories }}
+                </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-4 bold">
+              <div class="col-md-4 col-5 bold">
                 <div>Release Date</div>
               </div>
-              <div class="col-8">
-                <div *ngIf="releaseDate; else toBeAnnounced">{{ releaseDate | date : 'dd/MM/yyyy' }}</div>
-                <ng-template #toBeAnnounced>To be announced</ng-template>
+              <div class="col-md-8 col-7 text-container">
+                <div class="bottom-text">
+                  <div *ngIf="releaseDate; else toBeAnnounced">
+                    {{ releaseDate | date : 'dd/MM/yyyy' }}
+                  </div>
+                  <ng-template #toBeAnnounced>To be announced</ng-template>
+                </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-4 bold">
+              <div class="col-md-4 col-5 bold">
                 <div *ngIf="hasPegiRating">Pegi Rating</div>
               </div>
-              <div class="col-8">
-                <div *ngIf="hasPegiRating">{{ pegiRatingValue }}</div>
+              <div class="col-md-8 col-7 text-container">
+                <div *ngIf="hasPegiRating" class="bottom-text">
+                  {{ pegiRatingValue }}
+                </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-4 bold">
+              <div class="col-md-4 col-5 bold">
                 <div *ngIf="hasMetacritic">Metacritic Score</div>
               </div>
-              <div class="col-8">
-                <div *ngIf="hasMetacritic">{{ game.gameDetails?.metacriticScore }}</div>
+              <div class="col-md-8 col-7 text-container">
+                <div *ngIf="hasMetacritic" class="bottom-text">
+                  {{ game.gameDetails?.metacriticScore }}
+                </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-4 bold">
+              <div class="col-md-4 col-5 bold">
                 <div>Price</div>
               </div>
-              <div class="col-8">
-                <div>{{ game.gameDetails?.price === 0 ? 'Free' : game.gameDetails?.price + '€' }}</div>
+              <div class="col-md-8 col-7 text-container">
+                <div class="bottom-text">
+                  {{ game.gameDetails?.price === 0 ? 'Free' : game.gameDetails?.price + '€' }}
+                </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-4 bold">
+              <div class="col-md-4 col-5 bold">
                 <div *ngIf="hasSteamAppid">Steam Appid</div>
               </div>
-              <div class="col-8">
-                <div *ngIf="hasSteamAppid">{{ game.gameDetails?.steamAppid }}</div>
+              <div class="col-md-8 col-7 text-container">
+                <div *ngIf="hasSteamAppid" class="bottom-text">
+                  {{ game.gameDetails?.steamAppid }}
+                </div>
               </div>
             </div>
 
             <div class="row">
-              <div class="col-4 bold">
+              <div class="col-md-4 col-5 bold">
                 <div *ngIf="hasSteamAppid">Steam URL</div>
               </div>
-              <div class="col-8">
-                <a class="highlight" *ngIf="hasSteamAppid" [attr.href]="game.gameDetails?.steamUrl"> {{ game.gameDetails?.steamUrl }}</a>
+              <div class="col-md-8 col-7 text-container">
+                <a class="highlight" *ngIf="hasSteamAppid" [attr.href]="game.gameDetails?.steamUrl">
+                  {{ game.gameDetails?.steamUrl }}
+                </a>
               </div>
             </div>
 

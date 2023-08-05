@@ -1,9 +1,6 @@
 package com.timoleon.gamedirectory.repository;
 
-import com.timoleon.gamedirectory.domain.Game;
-import com.timoleon.gamedirectory.domain.User;
 import com.timoleon.gamedirectory.domain.UserGame;
-import com.timoleon.gamedirectory.domain.search.SearchCriteria;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;

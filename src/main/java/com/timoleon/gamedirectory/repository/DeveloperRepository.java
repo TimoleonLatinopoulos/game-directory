@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 /**
  * Spring Data JPA repository for the Developer entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface DeveloperRepository extends JpaRepository<Developer, Long> {
     Optional<Developer> findByDescription(String description);

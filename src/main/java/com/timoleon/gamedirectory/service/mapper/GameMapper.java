@@ -1,9 +1,7 @@
 package com.timoleon.gamedirectory.service.mapper;
 
 import com.timoleon.gamedirectory.domain.Game;
-import com.timoleon.gamedirectory.domain.GameDetails;
 import com.timoleon.gamedirectory.service.dto.GameDTO;
-import com.timoleon.gamedirectory.service.dto.GameDetailsDTO;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

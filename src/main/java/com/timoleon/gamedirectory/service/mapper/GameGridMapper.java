@@ -4,7 +4,7 @@ import com.timoleon.gamedirectory.domain.Game;
 import com.timoleon.gamedirectory.service.dto.GameGridDTO;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { PlatformMapper.class, CategoryMapper.class, DeveloperMapper.class, PublisherMapper.class })
 public abstract class GameGridMapper extends EntityMapper<GameGridDTO, Game> {
 
     public abstract GameGridDTO toDto(Game game);

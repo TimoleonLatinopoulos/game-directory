@@ -6,7 +6,6 @@ import { getPegiNumber } from 'app/entities/game-details/game-details.model';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { GameService } from 'app/entities/game/service/game.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { IUserGame } from 'app/entities/user-game/user-game.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { UserGameService } from 'app/entities/user-game/service/user-game.service';

@@ -21,11 +21,13 @@ export class GameListComponent implements OnInit {
   public isLoading = false;
   public gameListDataResult: ISearchType;
 
-  public takeOptions = [6, 12, 24];
-  public gameListView = true;
+  public gameViewType = 'list';
+  public gameViewTypeKey = 'gameViewType';
 
   public userGames = false;
+  public fieldPrefix: string;
   public isGridFiltered = false;
+
   filterForm: FormGroup;
 
   public platformList: ICategory[] = [];
@@ -38,12 +40,28 @@ export class GameListComponent implements OnInit {
   public filteredPublishers: Observable<ICategory[]> | undefined;
   public filteredCategories: Observable<ICategory[]> | undefined;
 
+  public takeOptions = [5, 10, 20];
+  public takeKey = 'take';
   public state = {
     skip: 0,
-    take: 12,
+    take: this.takeOptions[1],
     filter: { logic: 'and', filters: [] as any[] },
     sort: [{ field: 'title', dir: 'asc' }],
   };
+
+  public sortKey = 'sort';
+  public sortKeyValue = 'sortValue';
+  public sortBy: {};
+  public sortByFilters: any[] = [
+    { name: 'Title (A to Z)', field: 'title', dir: 'asc' },
+    { name: 'Title (Z to A)', field: 'title', dir: 'desc' },
+    { name: 'Price (cheapest first)', field: 'gameDetails.price', dir: 'asc' },
+    { name: 'Price (most expensive first)', field: 'gameDetails.price', dir: 'desc' },
+    { name: 'Score (high to low)', field: 'gameDetails.metacriticScore', dir: 'desc' },
+    { name: 'Score (low to high)', field: 'gameDetails.metacriticScore', dir: 'asc' },
+    { name: 'Date Released (older to newer)', field: 'gameDetails.releaseDate', dir: 'asc' },
+    { name: 'Date Released (newer to older)', field: 'gameDetails.releaseDate', dir: 'desc' },
+  ];
 
   constructor(
     public gameService: GameService,
@@ -60,26 +78,49 @@ export class GameListComponent implements OnInit {
   ngOnInit(): void {
     this.filterForm = this.fb.group({
       title: [null],
+      miniTitle: [null],
       platform: [null],
       developer: [null],
       publisher: [null],
       category: [null],
       price: [null],
       favourite: [null],
+      sortBy: [this.sortByFilters[0]],
     });
     this.userGames = this.route.snapshot.data['userGames'];
+    this.fieldPrefix = this.userGames ? 'game.gameDetails' : 'gameDetails';
+
+    const previousGameViewType = sessionStorage.getItem(this.gameViewTypeKey);
+    if (previousGameViewType != null) {
+      this.gameViewType = previousGameViewType;
+    }
+    const previousPageLength = sessionStorage.getItem(this.takeKey);
+    if (previousPageLength != null) {
+      this.state.take = Number(previousPageLength);
+    }
+    const previousSort = sessionStorage.getItem(this.sortKey);
+    if (previousSort != null) {
+      const sort = JSON.parse(previousSort);
+      const index = this.sortByFilters.findIndex(element => element.name === sort.name);
+      this.filterForm.get('sortBy')?.setValue(this.sortByFilters[index]);
+
+      this.handleSort(sort);
+    }
+
     this.fetchGameData();
     this.fetchFilterData();
   }
 
   handlePageEvent(e: PageEvent): void {
     this.state.take = e.pageSize;
+    sessionStorage.setItem(this.takeKey, this.state.take.toString());
+
     this.state.skip = e.pageIndex;
     this.fetchGameData();
   }
 
   public fetchFilterData(): void {
-    this.platformService.getAll().subscribe((result: EntityArrayResponseType) => {
+    this.platformService.getAllUsed().subscribe((result: EntityArrayResponseType) => {
       if (result.body != null) {
         this.platformList = result.body;
         this.filteredPlatforms = this.filterForm.get('platform')?.valueChanges.pipe(
@@ -106,7 +147,7 @@ export class GameListComponent implements OnInit {
         );
       }
     });
-    this.categoryService.getAll().subscribe((result: EntityArrayResponseType) => {
+    this.categoryService.getAllUsed().subscribe((result: EntityArrayResponseType) => {
       if (result.body != null) {
         this.categoryList = result.body;
         this.filteredCategories = this.filterForm.get('category')?.valueChanges.pipe(
@@ -155,47 +196,57 @@ export class GameListComponent implements OnInit {
   }
 
   public filterSearch(): void {
+    const title = this.filterForm.get('miniTitle')?.value;
     const developer = this.filterForm.get('developer')?.value;
     const platform = this.filterForm.get('platform')?.value;
     const publisher = this.filterForm.get('publisher')?.value;
     const category = this.filterForm.get('category')?.value;
     const favourite = this.filterForm.get('favourite')?.value;
+    const sortBy = this.filterForm.get('sortBy')?.value;
 
     this.state.filter.filters = [];
 
-    const fieldPrefix = this.userGames ? 'game.gameDetails' : 'gameDetails';
-
+    if (title != null && title !== '') {
+      const newFilter = { field: 'title', operator: 'like', value: title };
+      this.state.filter.filters.push(newFilter);
+    }
     if (developer != null && developer !== '') {
       const description = developer.description != null ? developer.description : null;
       if (description != null) {
-        const newFilter = { field: fieldPrefix + '.developers.description', operator: 'like', value: description };
+        const newFilter = { field: this.fieldPrefix + '.developers.description', operator: 'like', value: description };
         this.state.filter.filters.push(newFilter);
       }
     }
     if (platform != null && platform !== '') {
       const description = platform.description != null ? platform.description : null;
       if (description != null) {
-        const newFilter = { field: fieldPrefix + '.platforms.description', operator: 'like', value: description };
+        const newFilter = { field: this.fieldPrefix + '.platforms.description', operator: 'like', value: description };
         this.state.filter.filters.push(newFilter);
       }
     }
     if (publisher != null && publisher !== '') {
       const description = publisher.description != null ? publisher.description : null;
       if (description != null) {
-        const newFilter = { field: fieldPrefix + '.publishers.description', operator: 'like', value: description };
+        const newFilter = { field: this.fieldPrefix + '.publishers.description', operator: 'like', value: description };
         this.state.filter.filters.push(newFilter);
       }
     }
     if (category != null && category !== '') {
       const description = category.description != null ? category.description : null;
       if (description != null) {
-        const newFilter = { field: fieldPrefix + '.categories.description', operator: 'like', value: description };
+        const newFilter = { field: this.fieldPrefix + '.categories.description', operator: 'like', value: description };
         this.state.filter.filters.push(newFilter);
       }
     }
     if (this.userGames && favourite) {
       const newFilter = { field: 'favourite', operator: 'eqbool', value: favourite };
       this.state.filter.filters.push(newFilter);
+    }
+    if (this.utilService.isNotNil(sortBy)) {
+      const newSort = { field: sortBy.field, dir: sortBy.dir };
+
+      this.handleSort(newSort);
+      sessionStorage.setItem(this.sortKey, JSON.stringify(sortBy));
     }
 
     if (this.state.filter.filters.length === 0) {
@@ -220,7 +271,7 @@ export class GameListComponent implements OnInit {
             total: res.data.totalEntries,
           };
           this.isLoading = false;
-          this.utilService.toTop();
+          this.utilService.scrollToTop();
         },
         () => {
           this.isLoading = false;
@@ -234,7 +285,7 @@ export class GameListComponent implements OnInit {
             total: res.data.totalEntries,
           };
           this.isLoading = false;
-          this.utilService.toTop();
+          this.utilService.scrollToTop();
         },
         () => {
           this.isLoading = false;
@@ -243,11 +294,30 @@ export class GameListComponent implements OnInit {
     }
   }
 
+  public clearData(): void {
+    this.clearFormFields();
+    this.filterSearch();
+  }
+
   public clearFormFields(): void {
+    this.filterForm.get('miniTitle')?.setValue('');
     this.filterForm.get('platform')?.setValue('');
     this.filterForm.get('developer')?.setValue('');
     this.filterForm.get('publisher')?.setValue('');
     this.filterForm.get('category')?.setValue('');
     this.filterForm.get('favourite')?.setValue('');
+  }
+
+  public setGameView(type: string): void {
+    this.gameViewType = type;
+    sessionStorage.setItem(this.gameViewTypeKey, type);
+  }
+
+  public handleSort(sort: any): void {
+    let field = sort.field;
+    field = field.replace('gameDetails', this.fieldPrefix);
+
+    this.state.sort = [];
+    this.state.sort.push({ field, dir: sort.dir });
   }
 }

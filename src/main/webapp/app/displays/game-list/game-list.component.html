@@ -5,37 +5,42 @@
         <h3 class="header-text">{{ userGames ? 'My Games' : 'Game List' }}</h3>
 
         <div class="header-text auto-margin">
-          <button type="button" (click)="gameListView = true" class="btn btn-primary" [disabled]="gameListView">
+          <button type="button" (click)="setGameView('list')" class="btn btn-primary" [disabled]="gameViewType === 'list'">
             <fa-icon icon="list"></fa-icon>
             LIST VIEW
           </button>
-          <button type="button" (click)="gameListView = false" class="btn btn-primary" [disabled]="!gameListView">
+          <button type="button" (click)="setGameView('grid')" class="btn btn-primary" [disabled]="gameViewType === 'grid'">
             <fa-icon icon="table-cells"></fa-icon>
             GRID VIEW
           </button>
         </div>
 
-        <mat-form-field class="search-field">
+        <mat-form-field id="top-search" class="search-field">
           <span matPrefix style="height: 0"> </span>
           <input matInput placeholder="Search Game Title" formControlName="title" (input)="filter()" />
-          <button matSuffix mat-button style="border: none; background: transparent">
+          <button matSuffix mat-button class="search-button">
             <fa-icon icon="search"></fa-icon>
           </button>
         </mat-form-field>
       </mat-card-header>
 
       <mat-accordion [@.disabled]="true">
-        <mat-expansion-panel (afterExpand)="utilService.toTop()">
+        <mat-expansion-panel (afterExpand)="utilService.scrollToTop()">
           <mat-expansion-panel-header>
-            <mat-panel-title class="position: relative;">
-              <fa-icon class="position: absolute !important;" icon="filter"></fa-icon>
+            <mat-panel-title>
+              <fa-icon icon="filter"></fa-icon>
               <span *ngIf="isGridFiltered" class="red-text">!</span>
               <h4 class="p-4">Filters</h4>
             </mat-panel-title>
           </mat-expansion-panel-header>
 
           <mat-panel-description>
-            <div class="p-4 filter-card">
+            <div>
+              <div id="search-field" class="row">
+                <mat-form-field class="mat-field filter-field col-2">
+                  <input matInput placeholder="Game Title" formControlName="miniTitle" />
+                </mat-form-field>
+              </div>
               <div class="row">
                 <mat-form-field class="mat-field filter-field col-2">
                   <mat-label>Developer</mat-label>
@@ -58,16 +63,6 @@
                 </mat-form-field>
 
                 <mat-form-field class="mat-field filter-field col-2">
-                  <mat-label>Platform</mat-label>
-                  <input matInput type="text" formControlName="platform" [matAutocomplete]="platformAuto" />
-                  <mat-autocomplete #platformAuto="matAutocomplete" [displayWith]="displayFn">
-                    <mat-option [value]="platform" *ngFor="let platform of filteredPlatforms | async">
-                      {{ platform.description }}
-                    </mat-option>
-                  </mat-autocomplete>
-                </mat-form-field>
-
-                <mat-form-field class="mat-field filter-field col-2">
                   <mat-label>Genre</mat-label>
                   <input matInput formControlName="category" [matAutocomplete]="categoryAuto" />
                   <mat-autocomplete type="text" #categoryAuto="matAutocomplete" [displayWith]="displayFn">
@@ -77,14 +72,33 @@
                   </mat-autocomplete>
                 </mat-form-field>
 
-                <mat-checkbox *ngIf="userGames" class="col-2" formControlName="favourite" color="primary">Favourite</mat-checkbox>
+                <mat-form-field class="mat-field filter-field col-2">
+                  <mat-label>Platform</mat-label>
+                  <input matInput type="text" formControlName="platform" [matAutocomplete]="platformAuto" />
+                  <mat-autocomplete #platformAuto="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option [value]="platform" *ngFor="let platform of filteredPlatforms | async">
+                      {{ platform.description }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+
+                <mat-checkbox *ngIf="userGames" class="col-2 pb-4" formControlName="favourite" color="primary">Favourite</mat-checkbox>
+              </div>
+
+              <div class="row">
+                <mat-form-field class="mat-field filter-field col-2">
+                  <mat-label>Sort By</mat-label>
+                  <mat-select formControlName="sortBy">
+                    <mat-option [value]="filter" *ngFor="let filter of sortByFilters">
+                      {{ filter.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
               </div>
 
               <div class="row pt-2">
-                <button type="button" (click)="clearFormFields()" class="btn btn-danger btn-filter">CLEAR</button>
-                <button type="button" (click)="filterSearch()" class="btn btn-info btn-filter">SEARCH</button>
-                <div class="col-4"></div>
-                <div class="col-8"></div>
+                <button type="button" (click)="clearData()" class="btn btn-danger btn-filter col-4 col-sm-3">CLEAR</button>
+                <button type="button" (click)="filterSearch()" class="btn btn-info btn-filter col-4 col-sm-3">SEARCH</button>
               </div>
             </div>
           </mat-panel-description>
@@ -93,23 +107,25 @@
 
       <hr />
 
-      <mat-card-content *ngIf="gameListDataResult !== undefined && gameListView" class="row">
+      <div *ngIf="gameListDataResult?.data?.length === 0" class="not-found-text-container">
+        <span class="not-found-text"> No games found! </span>
+      </div>
+
+      <mat-card-content *ngIf="gameListDataResult !== undefined && gameViewType === 'list'" class="row">
         <div *ngFor="let game of gameListDataResult.data">
-          <div class="pt-3 d-flex align-items-start flex-grow-1">
+          <div id="list-item" class="d-flex align-items-start flex-grow-1">
             <div style="position: relative">
-              <a [attr.href]="'/game-preview/' + game.id">
-                <img style="display: block" class="thumbnail" [src]="game.gameDetails?.thumbnailUrl" alt="Not Found!" />
+              <a id="image-item" [attr.href]="'/game-preview/' + game.id">
+                <img class="thumbnail" [src]="game.gameDetails?.thumbnailUrl" [alt]="game.title" />
               </a>
               <div *ngIf="game.favourite">
-                <fa-icon class="floating-icon" [icon]="['fas', 'star']"></fa-icon>
+                <fa-icon id="rainbow" class="floating-icon" [icon]="['fas', 'star']"></fa-icon>
               </div>
             </div>
-            <div class="d-flex flex-column">
+            <div class="d-flex flex-column list-text">
               <a class="reference-text highlight" [attr.href]="'/game-preview/' + game.id">{{ game.title }}</a>
-              <mat-card-subtitle>
-                {{ game.gameDetails?.publishers | separateCategories }}, {{ game?.gameDetails?.developers | separateCategories }}
-              </mat-card-subtitle>
-              <div>{{ game?.gameDetails?.snippet }}</div>
+              <mat-card-subtitle> {{ game.gameDetails?.publishers }}, {{ game?.gameDetails?.developers }} </mat-card-subtitle>
+              <div class="list-snippet">{{ game?.gameDetails?.snippet }}</div>
             </div>
           </div>
 
@@ -117,16 +133,19 @@
         </div>
       </mat-card-content>
 
-      <div *ngIf="gameListDataResult !== undefined && !gameListView" class="row center">
+      <div *ngIf="gameListDataResult !== undefined && gameViewType === 'grid'" class="row center">
         <div *ngFor="let game of gameListDataResult.data" class="mb-3 flex-fit">
-          <div class="block">
+          <div class="block" style="position: relative">
             <a [attr.href]="'/game-preview/' + game.id">
-              <img class="block-thumbnail" [src]="game.gameDetails?.thumbnailUrl" alt="Not Found!" />
+              <img class="block-thumbnail" [src]="game.gameDetails?.thumbnailUrl" [alt]="game.title" />
             </a>
+            <div *ngIf="game.favourite" class="float-right-icon">
+              <fa-icon id="rainbow" [icon]="['fas', 'star']"></fa-icon>
+            </div>
             <div class="block-text">
               <a class="reference-text highlight" [attr.href]="'/game-preview/' + game.id">{{ game.title }}</a>
               <mat-card-subtitle class="initial">
-                {{ game.gameDetails?.publishers | separateCategories }}, {{ game?.gameDetails?.developers | separateCategories }}
+                {{ game.gameDetails?.publishers }}, {{ game?.gameDetails?.developers }}
               </mat-card-subtitle>
               <div class="initial">{{ game?.gameDetails?.snippet }}</div>
             </div>
@@ -136,7 +155,7 @@
 
       <mat-paginator
         #paginator
-        class="demo-paginator"
+        class="demo-paginator pb-2"
         (page)="handlePageEvent($event)"
         [pageSize]="state.take"
         [pageIndex]="state.skip"

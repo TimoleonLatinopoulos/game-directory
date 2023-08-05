@@ -26,6 +26,10 @@ export class CategoryService {
     return this.http.get<ICategory[]>(this.resourceUrl, { observe: 'response' });
   }
 
+  getAllUsed(): Observable<EntityArrayResponseType> {
+    return this.http.get<ICategory[]>(this.resourceUrl + '/used', { observe: 'response' });
+  }
+
   query(req?: any): Observable<EntityArrayResponseType> {
     const options = createRequestOption(req);
     return this.http.get<ICategory[]>(this.resourceUrl, { params: options, observe: 'response' });

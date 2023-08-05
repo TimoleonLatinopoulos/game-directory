@@ -1,20 +1,13 @@
 package com.timoleon.gamedirectory.web.rest;
 
 import com.timoleon.gamedirectory.domain.Developer;
-import com.timoleon.gamedirectory.repository.DeveloperRepository;
 import com.timoleon.gamedirectory.service.DeveloperService;
-import com.timoleon.gamedirectory.web.rest.errors.BadRequestAlertException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
@@ -28,11 +21,8 @@ public class DeveloperResource {
 
     private final DeveloperService developerService;
 
-    private final DeveloperRepository developerRepository;
-
-    public DeveloperResource(DeveloperService developerService, DeveloperRepository developerRepository) {
+    public DeveloperResource(DeveloperService developerService) {
         this.developerService = developerService;
-        this.developerRepository = developerRepository;
     }
 
     /**

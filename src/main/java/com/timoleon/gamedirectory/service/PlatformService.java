@@ -4,7 +4,6 @@ import com.timoleon.gamedirectory.domain.Platform;
 import com.timoleon.gamedirectory.repository.PlatformRepository;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -77,6 +76,17 @@ public class PlatformService {
     public List<Platform> findAll() {
         log.debug("Request to get all Platforms");
         return platformRepository.findAll();
+    }
+
+    /**
+     * Get all the platforms.
+     *
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<Platform> findAllUsed() {
+        log.debug("Request to get all Platforms used in gameDetails");
+        return platformRepository.findAllUsed();
     }
 
     /**

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 /**
  * Spring Data JPA repository for the Publisher entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface PublisherRepository extends JpaRepository<Publisher, Long> {
     Optional<Publisher> findByDescription(String description);

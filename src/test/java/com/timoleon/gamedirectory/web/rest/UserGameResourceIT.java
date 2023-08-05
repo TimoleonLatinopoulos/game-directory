@@ -25,7 +25,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -153,18 +152,16 @@ class UserGameResourceIT {
             .andExpect(jsonPath("$.[*].title").value(hasItem(DEFAULT_TITLE)));
     }
 
-    @SuppressWarnings({ "unchecked" })
     void getAllUserGamesWithEagerRelationshipsIsEnabled() throws Exception {
-        when(userGameServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        when(userGameServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl<>(new ArrayList<>()));
 
         restUserGameMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
 
         verify(userGameServiceMock, times(1)).findAllWithEagerRelationships(any());
     }
 
-    @SuppressWarnings({ "unchecked" })
     void getAllUserGamesWithEagerRelationshipsIsNotEnabled() throws Exception {
-        when(userGameServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+        when(userGameServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl<>(new ArrayList<>()));
 
         restUserGameMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
         verify(userGameRepositoryMock, times(1)).findAll(any(Pageable.class));

@@ -1,6 +1,5 @@
 package com.timoleon.gamedirectory.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -9,9 +8,6 @@ import com.timoleon.gamedirectory.IntegrationTest;
 import com.timoleon.gamedirectory.domain.Publisher;
 import com.timoleon.gamedirectory.repository.PublisherRepository;
 import jakarta.persistence.EntityManager;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +30,6 @@ class PublisherResourceIT {
 
     private static final String ENTITY_API_URL = "/api/publishers";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
-
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private PublisherRepository publisherRepository;

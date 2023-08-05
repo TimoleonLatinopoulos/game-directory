@@ -70,7 +70,7 @@ public class DateUtil {
 
     public static Calendar stringToCalendar(String date, SimpleDateFormat dateFormat) {
         Calendar cal = null;
-        if (!StringUtils.isEmpty(date) && dateFormat != null) {
+        if (StringUtils.hasLength(date) && dateFormat != null) {
             try {
                 cal = Calendar.getInstance();
                 cal.setTime(dateFormat.parse(date));

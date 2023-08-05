@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { IPlatform, NewPlatform } from '../platform.model';
+import { IPlatform } from '../platform.model';
 import { ICategory } from 'app/entities/category/category.model';
 
 export type PartialUpdatePlatform = Partial<ICategory> & Pick<ICategory, 'id'>;
@@ -25,6 +25,10 @@ export class PlatformService {
 
   getAll(): Observable<EntityArrayResponseType> {
     return this.http.get<ICategory[]>(this.resourceUrl, { observe: 'response' });
+  }
+
+  getAllUsed(): Observable<EntityArrayResponseType> {
+    return this.http.get<ICategory[]>(this.resourceUrl + '/used', { observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

@@ -1,8 +1,8 @@
 <div class="row d-flex justify-content-center">
   <div class="col-lg-10 col-sm-12">
     <form [formGroup]="gameDetailsForm" (ngSubmit)="save()">
-      <div class="row flex-container">
-        <div class="col-lg-8 mb-4 A">
+      <div class="row flex-container justify-content-center">
+        <div [ngClass]="update ? 'col-lg-12' : 'col-lg-8'" class="mb-4 A">
           <mat-card>
             <mat-card-header>
               <h2 *ngIf="!update; else create">Create a new Game Entry</h2>

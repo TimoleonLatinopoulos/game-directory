@@ -1,6 +1,5 @@
 package com.timoleon.gamedirectory;
 
-import com.timoleon.gamedirectory.GameDirectoryApp;
 import com.timoleon.gamedirectory.config.AsyncSyncConfiguration;
 import com.timoleon.gamedirectory.config.EmbeddedSQL;
 import java.lang.annotation.ElementType;

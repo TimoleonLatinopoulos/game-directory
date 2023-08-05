@@ -66,7 +66,7 @@ public abstract class AbstractApiSpecification<T extends Object> {
         Pageable pageable,
         EntityManager entityManager,
         Class<T> clazz,
-        EntityGraph entityGraph,
+        EntityGraph<T> entityGraph,
         List<String> fetchAssocs
     ) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
@@ -102,7 +102,7 @@ public abstract class AbstractApiSpecification<T extends Object> {
 
         orderList = getOrderFromCriteria(root, builder, criteria);
         List<T> resultList = new ArrayList<>();
-        TypedQuery tp;
+        TypedQuery<T> tp;
         query.select(root).orderBy(orderList);
         if (ids.size() > 999) {
             List<List<Long>> idPartitionsList = Lists.partition(ids, 999);
@@ -141,7 +141,7 @@ public abstract class AbstractApiSpecification<T extends Object> {
         return new PageImpl<>(resultList, pageable, count);
     }
 
-    public List<T> getAll(EntityManager entityManager, Class<T> clazz, EntityGraph entityGraph, List<String> fetchAssocs) {
+    public List<T> getAll(EntityManager entityManager, Class<T> clazz, EntityGraph<T> entityGraph, List<String> fetchAssocs) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<T> query = builder.createQuery(clazz);
@@ -153,7 +153,7 @@ public abstract class AbstractApiSpecification<T extends Object> {
 
         query.select(root);
 
-        TypedQuery tp;
+        TypedQuery<T> tp;
         if (entityGraph != null) {
             tp = entityManager.createQuery(query).setHint("javax.persistence.fetchgraph", entityGraph);
         } else {
@@ -187,7 +187,7 @@ public abstract class AbstractApiSpecification<T extends Object> {
             query.where(builder.and(criteriaList.toArray(new Predicate[0]))).select(root.join(selectField)).distinct(true);
         }
 
-        TypedQuery tp = entityManager.createQuery(query);
+        TypedQuery<T> tp = entityManager.createQuery(query);
         return tp.getResultList();
     }
 
@@ -203,7 +203,7 @@ public abstract class AbstractApiSpecification<T extends Object> {
     ) {
         List<Predicate> predicates = new ArrayList<>();
 
-        if (!StringUtils.isEmpty(lastModifiedDate)) {
+        if (StringUtils.hasLength(lastModifiedDate)) {
             ZonedDateTime temp = ZonedDateTime.parse(lastModifiedDate);
             predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("lastModifiedDate"), temp));
         }
@@ -845,7 +845,7 @@ public abstract class AbstractApiSpecification<T extends Object> {
             searchCriteria
                 .getSort()
                 .forEach(sort -> {
-                    if (!StringUtils.isEmpty(sort.getDir()) && !StringUtils.isEmpty(sort.getField())) {
+                    if (StringUtils.hasLength(sort.getDir()) && StringUtils.hasLength(sort.getField())) {
                         if (sort.getField().contains(".")) {
                             List<String> fields = Arrays.asList(sort.getField().split("\\."));
                             switch (fields.size()) {
@@ -931,14 +931,14 @@ public abstract class AbstractApiSpecification<T extends Object> {
         return order;
     }
 
-    protected List<Expression> getGroupByFromCriteria(Root<?> root, SearchCriteria searchCriteria) {
+    protected List<Expression<T>> getGroupByFromCriteria(Root<?> root, SearchCriteria searchCriteria) {
         // Set the ordering
-        List<Expression> groupBy = new ArrayList<>();
+        List<Expression<T>> groupBy = new ArrayList<>();
         if (searchCriteria.getSort() != null) {
             searchCriteria
                 .getSort()
                 .forEach(sort -> {
-                    if (!StringUtils.isEmpty(sort.getDir()) && !StringUtils.isEmpty(sort.getField())) {
+                    if (StringUtils.hasLength(sort.getDir()) && StringUtils.hasLength(sort.getField())) {
                         if (sort.getField().contains(".")) {
                             List<String> fields = Arrays.asList(sort.getField().split("\\."));
                             switch (fields.size()) {

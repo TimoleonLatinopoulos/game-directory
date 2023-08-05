@@ -8,7 +8,15 @@ import { SnackBarAlertComponent } from '../components/snack-bar-alert/snack-bar-
 export class UtilService {
   constructor(private snackBar: MatSnackBar) {}
 
-  public toTop(): void {
+  public isNil(value: any): boolean {
+    return value == null || value === undefined;
+  }
+
+  public isNotNil(value: any): boolean {
+    return value != null && value !== undefined;
+  }
+
+  public scrollToTop(): void {
     window.scrollTo(0, 0);
   }
 
@@ -16,7 +24,7 @@ export class UtilService {
     this.snackBar.openFromComponent(SnackBarAlertComponent, {
       duration: time,
       data: message,
-      panelClass: ['snackbar', type === 'error' ? 'error-snackbar' : 'success-snackbar'],
+      panelClass: ['snackbar', type === 'error' ? 'error-snackbar' : 'success-snackbar', 'snackbar'],
     });
   }
 }
