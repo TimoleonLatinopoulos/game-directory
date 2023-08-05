@@ -1,8 +1,19 @@
 <div class="row d-flex justify-content-center">
   <form [formGroup]="filterForm" class="col-lg-10 col-sm-12">
     <mat-card>
-      <mat-card-header style="position: relative">
-        <h3 style="position: absolute; top: 50%; transform: translate(0, -50%)">{{ userGames ? 'My Games' : 'Game List' }}</h3>
+      <mat-card-header class="mat-header" style="position: relative">
+        <h3 class="header-text">{{ userGames ? 'My Games' : 'Game List' }}</h3>
+
+        <div class="header-text auto-margin">
+          <button type="button" (click)="gameListView = true" class="btn btn-primary" [disabled]="gameListView">
+            <fa-icon icon="list"></fa-icon>
+            LIST VIEW
+          </button>
+          <button type="button" (click)="gameListView = false" class="btn btn-primary" [disabled]="!gameListView">
+            <fa-icon icon="table-cells"></fa-icon>
+            GRID VIEW
+          </button>
+        </div>
 
         <mat-form-field class="search-field">
           <span matPrefix style="height: 0"> </span>
@@ -13,12 +24,13 @@
         </mat-form-field>
       </mat-card-header>
 
-      <mat-accordion>
-        <mat-expansion-panel class="filter-card">
+      <mat-accordion [@.disabled]="true">
+        <mat-expansion-panel (afterExpand)="utilService.toTop()">
           <mat-expansion-panel-header>
-            <mat-panel-title>
-              <fa-icon class="p-2" icon="filter"></fa-icon>
-              <h4>Filters</h4>
+            <mat-panel-title class="position: relative;">
+              <fa-icon class="position: absolute !important;" icon="filter"></fa-icon>
+              <span *ngIf="isGridFiltered" class="red-text">!</span>
+              <h4 class="p-4">Filters</h4>
             </mat-panel-title>
           </mat-expansion-panel-header>
 
@@ -69,16 +81,10 @@
               </div>
 
               <div class="row pt-2">
-                <div class="col-2">
-                  <button type="button" (click)="clearFormFields()" class="btn btn-danger" style="padding-left: 50px; padding-right: 50px">
-                    CLEAR
-                  </button>
-                </div>
-                <div class="col-2">
-                  <button type="button" (click)="filterSearch()" class="btn btn-info" style="padding-left: 50px; padding-right: 50px">
-                    SEARCH
-                  </button>
-                </div>
+                <button type="button" (click)="clearFormFields()" class="btn btn-danger btn-filter">CLEAR</button>
+                <button type="button" (click)="filterSearch()" class="btn btn-info btn-filter">SEARCH</button>
+                <div class="col-4"></div>
+                <div class="col-8"></div>
               </div>
             </div>
           </mat-panel-description>
@@ -87,11 +93,13 @@
 
       <hr />
 
-      <mat-card-content *ngIf="gameListDataResult !== undefined">
+      <mat-card-content *ngIf="gameListDataResult !== undefined && gameListView" class="row">
         <div *ngFor="let game of gameListDataResult.data">
           <div class="pt-3 d-flex align-items-start flex-grow-1">
             <div style="position: relative">
-              <img style="display: block" class="thumbnail" [src]="game.gameDetails?.thumbnailUrl" alt="Not Found!" />
+              <a [attr.href]="'/game-preview/' + game.id">
+                <img style="display: block" class="thumbnail" [src]="game.gameDetails?.thumbnailUrl" alt="Not Found!" />
+              </a>
               <div *ngIf="game.favourite">
                 <fa-icon class="floating-icon" [icon]="['fas', 'star']"></fa-icon>
               </div>
@@ -104,15 +112,35 @@
               <div>{{ game?.gameDetails?.snippet }}</div>
             </div>
           </div>
+
           <hr />
         </div>
       </mat-card-content>
+
+      <div *ngIf="gameListDataResult !== undefined && !gameListView" class="row center">
+        <div *ngFor="let game of gameListDataResult.data" class="mb-3 flex-fit">
+          <div class="block">
+            <a [attr.href]="'/game-preview/' + game.id">
+              <img class="block-thumbnail" [src]="game.gameDetails?.thumbnailUrl" alt="Not Found!" />
+            </a>
+            <div class="block-text">
+              <a class="reference-text highlight" [attr.href]="'/game-preview/' + game.id">{{ game.title }}</a>
+              <mat-card-subtitle class="initial">
+                {{ game.gameDetails?.publishers | separateCategories }}, {{ game?.gameDetails?.developers | separateCategories }}
+              </mat-card-subtitle>
+              <div class="initial">{{ game?.gameDetails?.snippet }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <mat-paginator
         #paginator
         class="demo-paginator"
         (page)="handlePageEvent($event)"
         [pageSize]="state.take"
         [pageIndex]="state.skip"
+        [pageSizeOptions]="takeOptions"
         [showFirstLastButtons]="true"
         [length]="gameListDataResult !== undefined && gameListDataResult.total != null ? gameListDataResult.total : 0"
         aria-label="Select page"

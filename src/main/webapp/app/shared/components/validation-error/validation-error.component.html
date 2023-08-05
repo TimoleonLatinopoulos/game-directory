@@ -3,8 +3,8 @@
     *ngFor="let key of getErrors()"
     [ngStyle]="
       absolutePosition
-        ? { 'word-break': 'break-word', 'white-space': 'normal', position: 'absolute' }
-        : { 'word-break': 'break-word', 'white-space': 'normal' }
+        ? { 'word-break': 'break-word', 'white-space': 'normal', position: 'absolute', 'margin-top': '-10px', 'font-weight': 'bold' }
+        : { 'word-break': 'break-word', 'white-space': 'normal', 'font-weight': 'bold' }
     "
   >
     <ng-container *ngIf="checkForError(key) && (!showOnlyOnTouched || (showOnlyOnTouched && this.abstractControl?.touched))">

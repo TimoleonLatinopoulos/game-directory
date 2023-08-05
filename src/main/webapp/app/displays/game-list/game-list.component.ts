@@ -1,3 +1,4 @@
+import { UtilService } from '../../shared/util/utils.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { PageEvent } from '@angular/material/paginator';
@@ -11,7 +12,6 @@ import { EntityArrayResponseType, PlatformService } from 'app/entities/platform/
 import { PublisherService } from 'app/entities/publisher/service/publisher.service';
 import { UserGameService } from 'app/entities/user-game/service/user-game.service';
 import { Observable, map, startWith } from 'rxjs';
-
 @Component({
   selector: 'jhi-game-list',
   templateUrl: './game-list.component.html',
@@ -21,7 +21,11 @@ export class GameListComponent implements OnInit {
   public isLoading = false;
   public gameListDataResult: ISearchType;
 
+  public takeOptions = [6, 12, 24];
+  public gameListView = true;
+
   public userGames = false;
+  public isGridFiltered = false;
   filterForm: FormGroup;
 
   public platformList: ICategory[] = [];
@@ -36,7 +40,7 @@ export class GameListComponent implements OnInit {
 
   public state = {
     skip: 0,
-    take: 10,
+    take: 12,
     filter: { logic: 'and', filters: [] as any[] },
     sort: [{ field: 'title', dir: 'asc' }],
   };
@@ -49,7 +53,8 @@ export class GameListComponent implements OnInit {
     public publisherService: PublisherService,
     public categoryService: CategoryService,
     public route: ActivatedRoute,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    public utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -139,6 +144,7 @@ export class GameListComponent implements OnInit {
       this.state.skip = 0;
       this.fetchGameData();
       this.clearFormFields();
+      this.isGridFiltered = false;
     } else {
       if (this.state.filter.filters.length !== 0) {
         this.state.filter.filters = [];
@@ -194,6 +200,9 @@ export class GameListComponent implements OnInit {
 
     if (this.state.filter.filters.length === 0) {
       this.clearFormFields();
+      this.isGridFiltered = false;
+    } else {
+      this.isGridFiltered = true;
     }
 
     this.state.skip = 0;
@@ -211,7 +220,7 @@ export class GameListComponent implements OnInit {
             total: res.data.totalEntries,
           };
           this.isLoading = false;
-          window.scrollTo(0, 0);
+          this.utilService.toTop();
         },
         () => {
           this.isLoading = false;
@@ -225,7 +234,7 @@ export class GameListComponent implements OnInit {
             total: res.data.totalEntries,
           };
           this.isLoading = false;
-          window.scrollTo(0, 0);
+          this.utilService.toTop();
         },
         () => {
           this.isLoading = false;

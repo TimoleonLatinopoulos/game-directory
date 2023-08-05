@@ -1,3 +1,4 @@
+import { UtilService } from './../../shared/util/utils.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IGame } from 'app/entities/game/game.model';
@@ -6,7 +7,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
 import { GameService } from 'app/entities/game/service/game.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackBarAlertComponent } from 'app/shared/components/snack-bar-alert/snack-bar-alert.component';
 import { IUserGame } from 'app/entities/user-game/user-game.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { UserGameService } from 'app/entities/user-game/service/user-game.service';
@@ -39,8 +39,8 @@ export class GamePreviewComponent implements OnInit {
     private accountService: AccountService,
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -106,11 +106,11 @@ export class GamePreviewComponent implements OnInit {
       if (this.delete) {
         this.gameService.delete(this.game.id).subscribe(
           () => {
-            this.openSnackBar('The game has been deleted!');
+            this.utilService.openSnackBar('The game has been deleted!', 'success');
             this.router.navigate(['../']);
           },
           (error: any) => {
-            this.openErrorSnackBar(error.error.detail);
+            this.utilService.openSnackBar(error.error.detail, 'error');
           }
         );
       }
@@ -120,13 +120,42 @@ export class GamePreviewComponent implements OnInit {
   addToUserGames(): void {
     this.userGameService.create(this.game.id).subscribe(
       () => {
-        this.openSnackBar('The game has been added to your games list!');
+        this.utilService.openSnackBar('The game has been added to your games list!', 'success');
         this.router.navigate(['../my-games']);
       },
       (error: any) => {
-        this.openErrorSnackBar(error.error.detail);
+        this.utilService.openSnackBar(error.error.detail, 'error');
       }
     );
+  }
+
+  removeUserGame(): void {
+    const dialogRef = this.dialog.open(DialogComponent, {
+      data: {
+        dialogTitle: 'Remove Game',
+        dialogMessage: 'Are you sure you want to remove this game from your games?',
+        dialogYesButton: 'Yes',
+        dialogNoButton: 'No',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.delete = result;
+      }
+      if (this.delete) {
+        this.userGameService.delete(this.userGame.id).subscribe(
+          () => {
+            this.utilService.openSnackBar('The game has been removed from your games list!', 'success');
+            this.router.navigate(['../my-games']);
+          },
+          (error: any) => {
+            this.utilService.openSnackBar(error.error.detail, 'error');
+            this.favouriteToggle = false;
+          }
+        );
+      }
+    });
   }
 
   favourite(): void {
@@ -136,46 +165,17 @@ export class GamePreviewComponent implements OnInit {
         (response: any) => {
           this.userGame = response.body;
           if (this.userGame.favourite) {
-            this.openSnackBar('The game has been set as favourite!');
+            this.utilService.openSnackBar('The game has been set as favourite!', 'success');
           } else {
-            this.openSnackBar('The game has been reset!');
+            this.utilService.openSnackBar('The game has been reset!', 'success');
           }
           this.favouriteToggle = false;
         },
         (error: any) => {
-          this.openErrorSnackBar(error.error.detail);
+          this.utilService.openSnackBar(error.error.detail, 'error');
           this.favouriteToggle = false;
         }
       );
     }
-  }
-
-  openSnackBar(errorMessage: string): void {
-    this.snackBar.openFromComponent(SnackBarAlertComponent, {
-      duration: 5000,
-      data: errorMessage,
-      panelClass: ['snackbar', 'success-snackbar'],
-    });
-  }
-
-  openErrorSnackBar(errorMessage: string): void {
-    this.snackBar.openFromComponent(SnackBarAlertComponent, {
-      duration: 5000,
-      data: errorMessage,
-      panelClass: ['snackbar', 'error-snackbar'],
-    });
-  }
-
-  removeUserGame(): void {
-    this.userGameService.delete(this.userGame.id).subscribe(
-      () => {
-        this.openSnackBar('The game has been removed from your games list!');
-        this.router.navigate(['../my-games']);
-      },
-      (error: any) => {
-        this.openErrorSnackBar(error.error.detail);
-        this.favouriteToggle = false;
-      }
-    );
   }
 }

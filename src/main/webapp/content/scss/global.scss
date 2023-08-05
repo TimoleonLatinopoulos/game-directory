@@ -26,12 +26,40 @@ a:hover {
 }
 
 .thumbnail {
-  min-width: 300px;
-  max-width: 300px;
+  width: 300px;
   border-radius: 10px;
   border: 1px solid #222;
   margin-right: 30px;
   box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+.block-thumbnail {
+  width: 330px;
+  height: 125px;
+  border-radius: 10px;
+  border: 1px solid #222;
+  object-fit: cover;
+  margin: auto;
+}
+
+.block {
+  width: 330px;
+  height: 250px;
+  border-radius: 10px;
+  box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
+  background-color: #223 !important;
+  font-size: small;
+  display: inline-block;
+}
+
+.block-text {
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  overflow: hidden;
+  white-space: nowrap; /* Don't forget this one */
+  text-overflow: ellipsis;
+  display: block;
 }
 
 .edit-thumbnail {
@@ -40,6 +68,11 @@ a:hover {
   border: 1px solid #222;
   margin-right: 30px;
   box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
+}
+
+.flex-fit {
+  flex-basis: fit-content !important;
+  justify-content: center;
 }
 
 .reference-text {
@@ -154,8 +187,21 @@ Generic styles
   background-color: red;
 }
 
+.red-text {
+  color: red;
+  font-weight: bold;
+  font-size: x-large;
+  right: 0;
+  margin-right: 15px;
+  position: absolute;
+}
+
 .text-error {
   color: red;
+}
+
+.initial {
+  display: initial;
 }
 
 .pad {
@@ -173,6 +219,10 @@ Generic styles
 .break {
   white-space: normal;
   word-break: break-all;
+}
+
+.center {
+  justify-content: center;
 }
 
 .form-control {

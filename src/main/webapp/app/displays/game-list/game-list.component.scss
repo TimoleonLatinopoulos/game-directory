@@ -12,12 +12,90 @@
   min-width: 300px;
 }
 
-.filter-card {
-  background-color: #343445 !important;
-  border-radius: 5px;
+.header-text {
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
+// margin-left: 0px;
+//     /* top: 100%; */
+//     transform: translate(0, 50%);
+
+@media only screen and (max-width: 830px) {
+  .auto-margin {
+    margin-left: 0px;
+    transform: translate(0, 50%);
+  }
+  .mat-header {
+    height: 7em;
+  }
+}
+
+@media only screen and (min-width: 830px) {
+  .auto-margin {
+    margin-left: 10em;
+  }
+  .mat-header {
+    height: 6em;
+  }
 }
 
 .filter-field {
   // margin-right: auto;
   min-width: 300px;
+}
+
+.btn-filter {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 20%;
+}
+
+/* ==========================================================================
+Mat-Accordion Style
+========================================================================== */
+mat-accordion {
+  margin: auto;
+  width: 90%;
+}
+
+.mat-expanded {
+  width: 100% !important;
+  max-width: inherit !important;
+  margin-right: 0px !important;
+  border-radius: 0px !important;
+  background-color: #343445 !important;
+
+  position: relative !important;
+  right: 0 !important;
+  top: 0 !important;
+}
+
+::ng-deep .mat-expansion-panel-body {
+  background-color: #343445 !important;
+}
+
+.mat-expansion-panel {
+  max-width: 62px;
+  border-radius: 32px !important;
+  background-color: #445 !important;
+
+  position: fixed;
+  right: 5%;
+  top: 8rem;
+}
+
+::ng-deep .mat-expansion-indicator {
+  display: none;
+}
+
+.mat-expanded .red-text {
+  color: red;
+  font-weight: bold;
+  font-size: x-large;
+  position: relative;
+  margin-right: 0px !important;
 }

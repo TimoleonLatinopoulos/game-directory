@@ -3,7 +3,7 @@
 
 @include mat.core();
 
-$my-primary: mat-palette($mat-blue, 700);
+$my-primary: mat-palette($mat-blue, 900);
 $my-accent: mat-palette($mat-light-green, 800);
 
 $angular-dark-theme: mat.define-dark-theme(

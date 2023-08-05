@@ -1,4 +1,3 @@
-import { SnackBarAlertComponent } from './../../shared/components/snack-bar-alert/snack-bar-alert.component';
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { EntityArrayResponseType, PlatformService } from 'app/entities/platform/service/platform.service';
@@ -15,33 +14,14 @@ import { MatAutocomplete } from '@angular/material/autocomplete';
 import { GameService } from 'app/entities/game/service/game.service';
 import { getPegiRating, pegiRatingList } from 'app/entities/game-details/game-details.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MAT_DATE_FORMATS } from '@angular/material/core';
-
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'LL',
-  },
-  display: {
-    dateInput: 'DD/MM/YYYY',
-    monthYearLabel: 'YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'YYYY',
-  },
-};
+import { UtilService } from 'app/shared/util/utils.service';
 
 @Component({
   selector: 'jhi-create-game-entry',
   templateUrl: './create-game-entry.component.html',
   styleUrls: ['./create-game-entry.component.scss'],
-  providers: [{ provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }],
 })
 export class CreateGameEntryComponent implements OnInit {
-  platformPlaceholder = 'New Platform...';
-  developerPlaceholder = 'New Developer...';
-  publisherPlaceholder = 'New Publisher...';
-  categoryPlaceholder = 'New Category...';
-
   gameDetailsForm: FormGroup;
 
   public update = false;
@@ -75,15 +55,15 @@ export class CreateGameEntryComponent implements OnInit {
     private steamApiService: SteamApiService,
     private gameService: GameService,
     private router: Router,
-    private snackBar: MatSnackBar,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private utilService: UtilService
   ) {
     this.gameDetailsForm = this.fb.group({
       id: [null],
       title: ['', Validators.required],
       gameDetails: this.fb.group({
         id: [null],
-        releaseDate: [null, [Validators.required]], // Validators.pattern(DATE_FORMAT)
+        releaseDate: [null, [Validators.required]],
         pegiRating: [null, Validators.required],
         metacriticScore: [null, [Validators.min(0), Validators.max(100)]],
         imageUrl: ['', Validators.required],
@@ -154,7 +134,7 @@ export class CreateGameEntryComponent implements OnInit {
           this.router.navigate(['/game-preview/' + (response.body.id as string)]);
         },
         (error: any) => {
-          this.openSnackBar(error.error.detail);
+          this.utilService.openSnackBar(error.error.detail, 'error');
         }
       );
     } else {
@@ -163,7 +143,7 @@ export class CreateGameEntryComponent implements OnInit {
           this.router.navigate(['/game-preview/' + (response.body.id as string)]);
         },
         (error: any) => {
-          this.openSnackBar(error.error.detail);
+          this.utilService.openSnackBar(error.error.detail, 'error');
         }
       );
     }
@@ -229,13 +209,13 @@ export class CreateGameEntryComponent implements OnInit {
             this.steamCategoryList = this.filterCategory(this.categoryList, stringCategories);
             this.gameDetailsForm.get('gameDetails')?.get('categories')?.setValue(this.steamCategoryList);
           } else {
-            this.openSnackBar('There is not a game with the given Steam appid!');
+            this.utilService.openSnackBar('There is not a game with the given Steam appid!', 'error');
           }
           this.showSpinner = false;
           this.gameDetailsForm.updateValueAndValidity();
         },
         () => {
-          this.openSnackBar('The game was not found through Steam API!');
+          this.utilService.openSnackBar('The game was not found through Steam API!', 'error');
           this.showSpinner = false;
         }
       );
@@ -278,13 +258,5 @@ export class CreateGameEntryComponent implements OnInit {
 
   handleCategoryValue(value: ICategory[]): void {
     this.gameDetailsForm.get('gameDetails')?.get('categories')?.setValue(value);
-  }
-
-  openSnackBar(errorMessage: string): void {
-    this.snackBar.openFromComponent(SnackBarAlertComponent, {
-      duration: 5000,
-      data: errorMessage,
-      panelClass: ['snackbar', 'error-snackbar'],
-    });
   }
 }

@@ -1,8 +1,8 @@
 <div class="row d-flex justify-content-center">
   <div class="col-lg-10 col-sm-12">
     <form [formGroup]="gameDetailsForm" (ngSubmit)="save()">
-      <div class="row">
-        <div class="col-lg-8 mb-4">
+      <div class="row flex-container">
+        <div class="col-lg-8 mb-4 A">
           <mat-card>
             <mat-card-header>
               <h2 *ngIf="!update; else create">Create a new Game Entry</h2>
@@ -88,9 +88,9 @@
                 <mat-form-field class="mb-4 mt-4 mat-field">
                   <mat-label for="field_pegiRating">Pegi Rating</mat-label>
                   <mat-select id="field_pegiRating" name="pegiRating" formControlName="pegiRating">
-                    <mat-option [value]="pegiRatingOption" *ngFor="let pegiRatingOption of pegiRatingList">{{
-                      pegiRatingOption
-                    }}</mat-option>
+                    <mat-option [value]="pegiRatingOption" *ngFor="let pegiRatingOption of pegiRatingList">
+                      {{ pegiRatingOption }}</mat-option
+                    >
                   </mat-select>
                 </mat-form-field>
                 <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('pegiRating')" [absolutePosition]="true" />
@@ -139,13 +139,12 @@
                 <jhi-validation-error [abstractControl]="gameDetailsForm.get('gameDetails')?.get('steamAppid')" [absolutePosition]="true" />
 
                 <div class="mb-4 mt-4">
-                  <label class="form-label" for="field_developer">Developers</label>
+                  <label class="form-label">Developers</label>
 
                   <jhi-chip-grid-input
                     name="developers"
-                    id="field_developer"
                     [categoryList]="developerList"
-                    [placeholder]="developerPlaceholder"
+                    [placeholder]="'Developers...'"
                     [canAdd]="true"
                     [recievedCategoryList]="this.steamDeveloperList"
                     (valueEmitted)="handleDeveloperValue($event)"
@@ -154,13 +153,12 @@
                 </div>
 
                 <div class="mb-4 mt-4">
-                  <label class="form-label" for="field_publisher">Publishers</label>
+                  <label class="form-label">Publishers</label>
 
                   <jhi-chip-grid-input
                     name="publishers"
-                    id="field_publisher"
                     [categoryList]="publisherList"
-                    [placeholder]="publisherPlaceholder"
+                    [placeholder]="'Publishers...'"
                     [canAdd]="true"
                     [recievedCategoryList]="this.steamPublisherList"
                     (valueEmitted)="handlePublisherValue($event)"
@@ -169,13 +167,12 @@
                 </div>
 
                 <div class="mb-4 mt-4">
-                  <label class="form-label" for="field_platform">Platforms</label>
+                  <label class="form-label">Platforms</label>
 
                   <jhi-chip-grid-input
                     name="platforms"
-                    id="field_platform"
                     [categoryList]="platformList"
-                    [placeholder]="platformPlaceholder"
+                    [placeholder]="'Platforms...'"
                     [canAdd]="false"
                     [recievedCategoryList]="this.steamPlatformList"
                     (valueEmitted)="handlePlatformValue($event)"
@@ -184,13 +181,12 @@
                 </div>
 
                 <div class="mb-4 mt-4">
-                  <label class="form-label" for="field_category">Categories</label>
+                  <label class="form-label">Genres</label>
 
                   <jhi-chip-grid-input
                     name="categories"
-                    id="field_category"
                     [categoryList]="categoryList"
-                    [placeholder]="categoryPlaceholder"
+                    [placeholder]="'Genres...'"
                     [canAdd]="false"
                     [recievedCategoryList]="this.steamCategoryList"
                     (valueEmitted)="handleCategoryValue($event)"
@@ -208,7 +204,7 @@
           </mat-card>
         </div>
 
-        <div *ngIf="!update" class="col-lg-4">
+        <div *ngIf="!update" class="col-lg-4 mb-4 B">
           <mat-card>
             <mat-card-header>
               <h2>Search through Steam</h2>

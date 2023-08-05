@@ -12,6 +12,7 @@ import { GamePreviewComponent } from './game-preview/game-preview.component';
 import { SeparateCategoriesPipe } from 'app/shared/pipes/separate-categories.pipe';
 import { GameListComponent } from './game-list/game-list.component';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 @NgModule({
   declarations: [CreateGameEntryComponent, GamePreviewComponent, GameListComponent],
@@ -25,6 +26,6 @@ import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directiv
     CommonModule,
     HasAnyAuthorityDirective,
   ],
-  providers: [SeparateCategoriesPipe],
+  providers: [SeparateCategoriesPipe, { provide: MAT_DATE_LOCALE, useValue: 'en-GB' }],
 })
 export class DisplaysModule {}
