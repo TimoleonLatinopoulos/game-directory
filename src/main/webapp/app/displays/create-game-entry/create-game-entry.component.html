@@ -197,7 +197,7 @@
 
               <div class="row">
                 <div class="col-lg-4">
-                  <button type="submit" [disabled]="gameDetailsForm.invalid" class="btn btn-primary">Submit</button>
+                  <button type="submit" id="submitButton" [disabled]="gameDetailsForm.invalid" class="btn btn-primary">Submit</button>
                 </div>
               </div>
             </mat-card-content>
@@ -219,7 +219,7 @@
                 </mat-form-field>
 
                 <div class="col-lg-10">
-                  <button type="button" (click)="fillFormFromSteam()" class="btn btn-primary">
+                  <button id="steamApiSearch" type="button" (click)="fillFormFromSteam()" class="btn btn-primary">
                     <fa-icon icon="download"></fa-icon>
                     Steam API Search
                   </button>

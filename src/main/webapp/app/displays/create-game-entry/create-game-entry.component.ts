@@ -73,10 +73,10 @@ export class CreateGameEntryComponent implements OnInit {
         snippet: ['', Validators.required],
         notes: [''],
         steamAppid: [null],
-        platforms: [[], Validators.required],
-        developers: [[], Validators.required],
-        publishers: [[], Validators.required],
-        categories: [[], Validators.required],
+        platforms: [[]],
+        developers: [[]],
+        publishers: [[]],
+        categories: [[]],
       }),
     });
   }

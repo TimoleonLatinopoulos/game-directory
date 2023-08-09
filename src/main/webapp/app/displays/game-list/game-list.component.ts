@@ -85,6 +85,7 @@ export class GameListComponent implements OnInit {
       category: [null],
       price: [null],
       favourite: [null],
+      sensitive: [null],
       sortBy: [this.sortByFilters[0]],
     });
     this.userGames = this.route.snapshot.data['userGames'];
@@ -202,6 +203,7 @@ export class GameListComponent implements OnInit {
     const publisher = this.filterForm.get('publisher')?.value;
     const category = this.filterForm.get('category')?.value;
     const favourite = this.filterForm.get('favourite')?.value;
+    const sensitive = this.filterForm.get('sensitive')?.value;
     const sortBy = this.filterForm.get('sortBy')?.value;
 
     this.state.filter.filters = [];
@@ -240,6 +242,10 @@ export class GameListComponent implements OnInit {
     }
     if (this.userGames && favourite) {
       const newFilter = { field: 'favourite', operator: 'eqbool', value: favourite };
+      this.state.filter.filters.push(newFilter);
+    }
+    if (sensitive) {
+      const newFilter = { field: 'gameDetails.notes', operator: 'isnotnull' };
       this.state.filter.filters.push(newFilter);
     }
     if (this.utilService.isNotNil(sortBy)) {
@@ -306,6 +312,7 @@ export class GameListComponent implements OnInit {
     this.filterForm.get('publisher')?.setValue('');
     this.filterForm.get('category')?.setValue('');
     this.filterForm.get('favourite')?.setValue('');
+    this.filterForm.get('sensitive')?.setValue('');
   }
 
   public setGameView(type: string): void {
