@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { IPublisher, NewPublisher } from '../publisher.model';
+import { IPublisher } from '../publisher.model';
 import { ICategory } from 'app/entities/category/category.model';
 
 export type PartialUpdatePublisher = Partial<IPublisher> & Pick<IPublisher, 'id'>;
@@ -25,6 +25,10 @@ export class PublisherService {
 
   getAll(): Observable<EntityArrayResponseType> {
     return this.http.get<ICategory[]>(this.resourceUrl, { observe: 'response' });
+  }
+
+  getResults(input: string): Observable<EntityArrayResponseType> {
+    return this.http.get<ICategory[]>(`${this.resourceUrl}/search?input=${input}`, { observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

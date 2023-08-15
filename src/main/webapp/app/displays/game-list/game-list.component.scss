@@ -1,14 +1,8 @@
-.floating-icon {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin-top: 10px;
-}
-
 .float-right-icon {
   position: absolute;
   right: 0;
   padding: 10px;
+  background-color: #223 !important;
 }
 
 .search-field {
@@ -22,33 +16,43 @@
   background: transparent;
 }
 
+.add-button {
+  position: absolute;
+  float: right;
+  right: 0;
+  margin-top: 60px;
+  margin-right: 15px;
+}
+
+.mat-header {
+  height: 7em;
+}
+
 .header-text {
   position: absolute;
   top: 50%;
   transform: translate(0, -50%);
 }
 
+// small
 @media only screen and (max-width: 991px) {
   .auto-margin {
     margin-left: 0px;
     transform: translate(0, 50%);
     padding-top: 5px;
   }
-  .mat-header {
-    height: 7em;
-  }
-  .mat-expanded {
-    margin-top: 20px !important;
-  }
   .mat-expansion-panel {
     background-color: #343445 !important;
     right: 5%;
-    top: 8rem;
+    top: 7rem;
   }
   #search-field {
     display: block;
   }
   #top-search {
+    display: none;
+  }
+  #add-description {
     display: none;
   }
   .list-snippet {
@@ -76,15 +80,10 @@
   }
 }
 
+// large
 @media only screen and (min-width: 992px) {
   .auto-margin {
     margin-left: 10em;
-  }
-  .mat-header {
-    height: 6em;
-  }
-  .mat-expanded {
-    margin-top: 0 !important;
   }
   .mat-expansion-panel {
     background-color: #445 !important;
@@ -96,6 +95,9 @@
   }
   #top-search {
     display: block;
+  }
+  #add-description {
+    display: initial;
   }
   .list-snippet {
     font-size: initial;
@@ -128,14 +130,6 @@
   min-width: 300px;
   padding-bottom: 10px;
 }
-
-.btn-filter {
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-left: 10px;
-  margin-right: 10px;
-}
-
 /* ==========================================================================
 Mat-Accordion Style
 ========================================================================== */
@@ -151,6 +145,7 @@ mat-accordion {
   margin-right: 0px !important;
   border-radius: 0px !important;
   background-color: #343445 !important;
+  margin-top: 20px !important;
 
   position: relative !important;
   right: 0 !important;
@@ -182,16 +177,4 @@ mat-accordion {
   font-size: x-large;
   position: relative;
   margin-right: 0px !important;
-}
-
-.not-found-text-container {
-  height: 100px;
-}
-
-.not-found-text {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  font-size: large;
-  padding-top: 20px;
 }

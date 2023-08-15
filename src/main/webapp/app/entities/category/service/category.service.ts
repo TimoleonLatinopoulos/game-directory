@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { ICategory, NewCategory } from '../category.model';
+import { ICategory } from '../category.model';
 
 export type PartialUpdateCategory = Partial<ICategory> & Pick<ICategory, 'id'>;
 
@@ -28,6 +28,10 @@ export class CategoryService {
 
   getAllUsed(): Observable<EntityArrayResponseType> {
     return this.http.get<ICategory[]>(this.resourceUrl + '/used', { observe: 'response' });
+  }
+
+  getResults(input: string): Observable<EntityArrayResponseType> {
+    return this.http.get<ICategory[]>(`${this.resourceUrl}/search?input=${input}`, { observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {

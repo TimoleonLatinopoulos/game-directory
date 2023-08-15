@@ -22,6 +22,11 @@
             <fa-icon icon="search"></fa-icon>
           </button>
         </mat-form-field>
+
+        <button *ngIf="userGames" type="button" (click)="openAddGameDialog()" class="btn btn-info add-button">
+          <fa-icon icon="add"></fa-icon>
+          <span id="add-description"> Add a game </span>
+        </button>
       </mat-card-header>
 
       <mat-accordion [@.disabled]="true">
@@ -46,7 +51,7 @@
                   <mat-label>Developer</mat-label>
                   <input matInput id="field_developer" formControlName="developer" [matAutocomplete]="developerAuto" />
                   <mat-autocomplete #developerAuto="matAutocomplete" [displayWith]="displayFn">
-                    <mat-option [value]="developer" *ngFor="let developer of filteredDevelopers | async">
+                    <mat-option [value]="developer" *ngFor="let developer of developerList">
                       {{ developer.description }}
                     </mat-option>
                   </mat-autocomplete>
@@ -56,7 +61,7 @@
                   <mat-label>Publisher</mat-label>
                   <input matInput formControlName="publisher" [matAutocomplete]="publisherAuto" />
                   <mat-autocomplete #publisherAuto="matAutocomplete" [displayWith]="displayFn">
-                    <mat-option [value]="publisher" *ngFor="let publisher of filteredPublishers | async">
+                    <mat-option [value]="publisher" *ngFor="let publisher of publisherList">
                       {{ publisher.description }}
                     </mat-option>
                   </mat-autocomplete>
@@ -66,7 +71,7 @@
                   <mat-label>Genre</mat-label>
                   <input matInput formControlName="category" [matAutocomplete]="categoryAuto" />
                   <mat-autocomplete type="text" #categoryAuto="matAutocomplete" [displayWith]="displayFn">
-                    <mat-option [value]="category" *ngFor="let category of filteredCategories | async">
+                    <mat-option [value]="category" *ngFor="let category of categoryList">
                       {{ category.description }}
                     </mat-option>
                   </mat-autocomplete>
@@ -76,14 +81,14 @@
                   <mat-label>Platform</mat-label>
                   <input matInput type="text" formControlName="platform" [matAutocomplete]="platformAuto" />
                   <mat-autocomplete #platformAuto="matAutocomplete" [displayWith]="displayFn">
-                    <mat-option [value]="platform" *ngFor="let platform of filteredPlatforms | async">
+                    <mat-option [value]="platform" *ngFor="let platform of platformList">
                       {{ platform.description }}
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
 
                 <mat-checkbox *ngIf="userGames" class="col-2 pb-4" formControlName="favourite" color="primary">Favourite</mat-checkbox>
-                <mat-checkbox class="col-2 pb-4" formControlName="sensitive" color="primary">Sensitive content</mat-checkbox>
+                <!-- <mat-checkbox class="col-2 pb-4" formControlName="sensitive" color="primary">Sensitive content</mat-checkbox> -->
               </div>
 
               <div class="row">
@@ -119,6 +124,9 @@
               <a id="image-item" [attr.href]="'/game-preview/' + game.id">
                 <img class="thumbnail" [src]="game.gameDetails?.thumbnailUrl" [alt]="game.title" />
               </a>
+              <div *ngIf="game.favourite">
+                <fa-icon class="floating-icon-shadow" [icon]="['fas', 'star']"></fa-icon>
+              </div>
               <div *ngIf="game.favourite">
                 <fa-icon id="rainbow" class="floating-icon" [icon]="['fas', 'star']"></fa-icon>
               </div>
@@ -160,7 +168,7 @@
         (page)="handlePageEvent($event)"
         [pageSize]="state.take"
         [pageIndex]="state.skip"
-        [pageSizeOptions]="takeOptions"
+        [pageSizeOptions]="this.utilService.takeOptions"
         [showFirstLastButtons]="true"
         [length]="gameListDataResult !== undefined && gameListDataResult.total != null ? gameListDataResult.total : 0"
         aria-label="Select page"

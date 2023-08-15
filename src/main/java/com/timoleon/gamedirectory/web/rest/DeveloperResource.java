@@ -37,6 +37,18 @@ public class DeveloperResource {
     }
 
     /**
+     * {@code GET  /developers/search} : search for developers.
+     *
+     * @param input the input for the search.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of developers in body.
+     */
+    @GetMapping("/developers/search")
+    public List<Developer> searchDevelopers(@RequestParam String input) {
+        log.debug("REST request to search for Developers");
+        return developerService.findLike(input);
+    }
+
+    /**
      * {@code GET  /developers/:id} : get the "id" developer.
      *
      * @param id the id of the developer to retrieve.

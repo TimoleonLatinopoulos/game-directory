@@ -48,6 +48,18 @@ public class CategoryResource {
     }
 
     /**
+     * {@code GET  /categories/search} : search for categories.
+     *
+     * @param input the input for the search.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of categories in body.
+     */
+    @GetMapping("/categories/search")
+    public List<Category> searchCategories(@RequestParam String input) {
+        log.debug("REST request to search for Category");
+        return categoryService.findLike(input);
+    }
+
+    /**
      * {@code GET  /categories/:id} : get the "id" category.
      *
      * @param id the id of the category to retrieve.

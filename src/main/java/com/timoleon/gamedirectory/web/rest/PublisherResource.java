@@ -37,6 +37,18 @@ public class PublisherResource {
     }
 
     /**
+     * {@code GET  /publishers/search} : search for publishers.
+     *
+     * @param input the input for the search.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of publishers in body.
+     */
+    @GetMapping("/publishers/search")
+    public List<Publisher> searchPublishers(@RequestParam String input) {
+        log.debug("REST request to search for Publishers");
+        return publisherService.findLike(input);
+    }
+
+    /**
      * {@code GET  /publishers/:id} : get the "id" publisher.
      *
      * @param id the id of the publisher to retrieve.

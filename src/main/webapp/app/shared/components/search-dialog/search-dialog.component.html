@@ -1,0 +1,137 @@
+<div>
+  <h1 mat-dialog-title>Search Game</h1>
+  <mat-dialog-content>
+    <form [formGroup]="filterForm">
+      <div id="search-field" class="row pt-2">
+        <mat-form-field class="mat-field filter-field">
+          <input matInput placeholder="Game Title" formControlName="title" />
+        </mat-form-field>
+      </div>
+
+      <details>
+        <summary style="padding: 10px">
+          <fa-icon icon="chevron-down" style="margin-right: 10px"></fa-icon>
+          More Filter Options
+        </summary>
+        <div>
+          <div class="row pt-2">
+            <mat-form-field class="mat-field filter-field col-lg-3 col-md-6">
+              <mat-label>Developer</mat-label>
+              <input matInput id="field_developer" formControlName="developer" [matAutocomplete]="developerAuto" />
+              <mat-autocomplete #developerAuto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option [value]="developer" *ngFor="let developer of developerList">
+                  {{ developer.description }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-form-field class="mat-field filter-field col-lg-3 col-md-6">
+              <mat-label>Publisher</mat-label>
+              <input matInput formControlName="publisher" [matAutocomplete]="publisherAuto" />
+              <mat-autocomplete #publisherAuto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option [value]="publisher" *ngFor="let publisher of publisherList">
+                  {{ publisher.description }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-form-field class="mat-field filter-field col-lg-3 col-md-6">
+              <mat-label>Genre</mat-label>
+              <input matInput formControlName="category" [matAutocomplete]="categoryAuto" />
+              <mat-autocomplete type="text" #categoryAuto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option [value]="category" *ngFor="let category of categoryList">
+                  {{ category.description }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-form-field class="mat-field filter-field col-lg-3 col-md-6">
+              <mat-label>Platform</mat-label>
+              <input matInput type="text" formControlName="platform" [matAutocomplete]="platformAuto" />
+              <mat-autocomplete #platformAuto="matAutocomplete" [displayWith]="displayFn">
+                <mat-option [value]="platform" *ngFor="let platform of platformList">
+                  {{ platform.description }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+
+          <div class="row pt-2">
+            <mat-form-field class="mat-field filter-field col-12 col-md-4">
+              <mat-label>Sort By</mat-label>
+              <mat-select formControlName="sortBy">
+                <mat-option [value]="filter" *ngFor="let filter of sortByFilters">
+                  {{ filter.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </details>
+
+      <div class="row pt-2 pb-2">
+        <button type="button" (click)="clearData()" class="btn btn-danger btn-filter col-4 col-sm-3">CLEAR</button>
+        <button type="button" (click)="filterSearch()" class="btn btn-info btn-filter col-4 col-sm-3">SEARCH</button>
+      </div>
+    </form>
+
+    <div id="list" *ngIf="gameListDataResult !== undefined" class="scroll">
+      <div *ngFor="let game of gameListDataResult.data">
+        <div id="list-item" class="d-flex align-items-start flex-grow-1">
+          <div style="position: relative">
+            <a id="image-item" [attr.href]="'/game-preview/' + game.id">
+              <img class="thumbnail" [src]="game.gameDetails?.thumbnailUrl" [alt]="game.title" />
+            </a>
+            <div *ngIf="game.favourite">
+              <fa-icon id="rainbow" class="floating-icon" [icon]="['fas', 'star']"></fa-icon>
+            </div>
+          </div>
+          <div class="d-flex flex-column list-text">
+            <a class="reference-text highlight" [attr.href]="'/game-preview/' + game.id">{{ game.title }}</a>
+            <mat-card-subtitle> {{ game.gameDetails?.publishers }}, {{ game?.gameDetails?.developers }} </mat-card-subtitle>
+            <div class="list-snippet">{{ game?.gameDetails?.snippet }}</div>
+          </div>
+        </div>
+
+        <hr />
+      </div>
+    </div>
+
+    <div id="grid" *ngIf="gameListDataResult !== undefined" class="scroll row center">
+      <div *ngFor="let game of gameListDataResult.data" class="mb-3 flex-fit">
+        <div class="block" style="position: relative">
+          <a [attr.href]="'/game-preview/' + game.id">
+            <img class="block-thumbnail" [src]="game.gameDetails?.thumbnailUrl" [alt]="game.title" />
+          </a>
+          <div *ngIf="game.favourite" class="float-right-icon">
+            <fa-icon id="rainbow" [icon]="['fas', 'star']"></fa-icon>
+          </div>
+          <div class="block-text">
+            <a class="reference-text highlight" [attr.href]="'/game-preview/' + game.id">{{ game.title }}</a>
+            <mat-card-subtitle class="initial"> {{ game.gameDetails?.publishers }}, {{ game?.gameDetails?.developers }} </mat-card-subtitle>
+            <div class="initial">{{ game?.gameDetails?.snippet }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="gameListDataResult !== undefined">
+      <mat-paginator
+        #paginator
+        class="demo-paginator pb-2"
+        (page)="handlePageEvent($event)"
+        [pageSize]="state.take"
+        [pageIndex]="state.skip"
+        [pageSizeOptions]="this.utilService.takeOptions"
+        [showFirstLastButtons]="true"
+        [length]="gameListDataResult !== undefined && gameListDataResult.total != null ? gameListDataResult.total : 0"
+        aria-label="Select page"
+      />
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions class="top-button">
+    <button mat-button [mat-dialog-close]="true" class="btn btn-danger" style="margin-right: 15px">
+      <fa-icon icon="xmark"></fa-icon>
+    </button>
+  </mat-dialog-actions>
+</div>

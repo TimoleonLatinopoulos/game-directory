@@ -20,10 +20,14 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
-import { DialogComponent } from './components/dialog/dialog.component';
+import { ChoiceDialogComponent } from './components/choice-dialog/choice-dialog.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { SearchDialogComponent } from './components/search-dialog/search-dialog.component';
+import { MatInputModule } from '@angular/material/input';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 /**
  * Application wide Module
@@ -35,7 +39,8 @@ import { MatExpansionModule } from '@angular/material/expansion';
     ChipGridInputComponent,
     SeparateCategoriesPipe,
     SnackBarAlertComponent,
-    DialogComponent,
+    ChoiceDialogComponent,
+    SearchDialogComponent,
   ],
   imports: [
     CommonModule,
@@ -57,6 +62,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatAutocompleteModule,
     MatCheckboxModule,
     MatExpansionModule,
+    MatInputModule,
+    ScrollingModule,
+    MatPaginatorModule,
   ],
   exports: [
     CommonModule,
@@ -82,6 +90,9 @@ import { MatExpansionModule } from '@angular/material/expansion';
     MatAutocompleteModule,
     MatCheckboxModule,
     MatExpansionModule,
+    MatInputModule,
+    ScrollingModule,
+    MatPaginatorModule,
   ],
 })
 export default class SharedModule {}

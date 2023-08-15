@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IGame } from 'app/entities/game/game.model';
 import { getPegiNumber } from 'app/entities/game-details/game-details.model';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogComponent } from 'app/shared/components/dialog/dialog.component';
+import { ChoiceDialogComponent } from 'app/shared/components/choice-dialog/choice-dialog.component';
 import { GameService } from 'app/entities/game/service/game.service';
 import { IUserGame } from 'app/entities/user-game/user-game.model';
 import { AccountService } from 'app/core/auth/account.service';
@@ -89,7 +89,7 @@ export class GamePreviewComponent implements OnInit {
   }
 
   deleteGame(): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
+    const dialogRef = this.dialog.open(ChoiceDialogComponent, {
       data: {
         dialogTitle: 'Delete Game',
         dialogMessage: 'Are you sure you want to delete this game?',
@@ -129,7 +129,7 @@ export class GamePreviewComponent implements OnInit {
   }
 
   removeUserGame(): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
+    const dialogRef = this.dialog.open(ChoiceDialogComponent, {
       data: {
         dialogTitle: 'Remove Game',
         dialogMessage: 'Are you sure you want to remove this game from your games?',

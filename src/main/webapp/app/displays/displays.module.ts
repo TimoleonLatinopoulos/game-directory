@@ -5,14 +5,13 @@ import { RouterModule } from '@angular/router';
 import { displaysRoute } from './displays.route';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
-import SharedModule from 'app/shared/shared.module';
 import { GamePreviewComponent } from './game-preview/game-preview.component';
 import { SeparateCategoriesPipe } from 'app/shared/pipes/separate-categories.pipe';
 import { GameListComponent } from './game-list/game-list.component';
 import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
 import { MAT_DATE_LOCALE } from '@angular/material/core';
+import SharedModule from 'app/shared/shared.module';
 
 @NgModule({
   declarations: [CreateGameEntryComponent, GamePreviewComponent, GameListComponent],
@@ -21,7 +20,6 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
-    MatPaginatorModule,
     SharedModule,
     CommonModule,
     HasAnyAuthorityDirective,

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -76,6 +77,21 @@ public class DeveloperService {
     public List<Developer> findAll() {
         log.debug("Request to get all Developers");
         return developerRepository.findAll();
+    }
+
+    /**
+     * Search for developers.
+     *
+     * @param input the input for the search.
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<Developer> findLike(String input) {
+        log.debug("Request to search for Developers");
+        if (input != null) {
+            input = "%" + input + "%";
+        }
+        return developerRepository.findLike(input, PageRequest.of(0, 20));
     }
 
     /**

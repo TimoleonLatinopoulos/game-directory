@@ -42,6 +42,8 @@ import {
   faStar,
   faFilter,
   faTableCells,
+  faXmark,
+  faChevronDown,
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -99,5 +101,7 @@ export const fontAwesomeIcons = [
   faStarRegular,
   faFilter,
   faTableCells,
+  faXmark,
+  faChevronDown,
   // jhipster-needle-add-icon-import
 ];

@@ -1,6 +1,7 @@
 import { UtilService } from '../../shared/util/utils.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
 import { ICategory } from 'app/entities/category/category.model';
@@ -11,7 +12,8 @@ import { GameService } from 'app/entities/game/service/game.service';
 import { EntityArrayResponseType, PlatformService } from 'app/entities/platform/service/platform.service';
 import { PublisherService } from 'app/entities/publisher/service/publisher.service';
 import { UserGameService } from 'app/entities/user-game/service/user-game.service';
-import { Observable, map, startWith } from 'rxjs';
+import { SearchDialogComponent } from 'app/shared/components/search-dialog/search-dialog.component';
+import { switchMap } from 'rxjs';
 @Component({
   selector: 'jhi-game-list',
   templateUrl: './game-list.component.html',
@@ -35,16 +37,10 @@ export class GameListComponent implements OnInit {
   public publisherList: ICategory[] = [];
   public categoryList: ICategory[] = [];
 
-  public filteredPlatforms: Observable<ICategory[]> | undefined;
-  public filteredDevelopers: Observable<ICategory[]> | undefined;
-  public filteredPublishers: Observable<ICategory[]> | undefined;
-  public filteredCategories: Observable<ICategory[]> | undefined;
-
-  public takeOptions = [5, 10, 20];
   public takeKey = 'take';
   public state = {
     skip: 0,
-    take: this.takeOptions[1],
+    take: this.utilService.takeOptions[1],
     filter: { logic: 'and', filters: [] as any[] },
     sort: [{ field: 'title', dir: 'asc' }],
   };
@@ -52,16 +48,7 @@ export class GameListComponent implements OnInit {
   public sortKey = 'sort';
   public sortKeyValue = 'sortValue';
   public sortBy: {};
-  public sortByFilters: any[] = [
-    { name: 'Title (A to Z)', field: 'title', dir: 'asc' },
-    { name: 'Title (Z to A)', field: 'title', dir: 'desc' },
-    { name: 'Price (cheapest first)', field: 'gameDetails.price', dir: 'asc' },
-    { name: 'Price (most expensive first)', field: 'gameDetails.price', dir: 'desc' },
-    { name: 'Score (high to low)', field: 'gameDetails.metacriticScore', dir: 'desc' },
-    { name: 'Score (low to high)', field: 'gameDetails.metacriticScore', dir: 'asc' },
-    { name: 'Date Released (older to newer)', field: 'gameDetails.releaseDate', dir: 'asc' },
-    { name: 'Date Released (newer to older)', field: 'gameDetails.releaseDate', dir: 'desc' },
-  ];
+  public sortByFilters: any[] = this.utilService.sortByFilters;
 
   constructor(
     public gameService: GameService,
@@ -72,6 +59,7 @@ export class GameListComponent implements OnInit {
     public categoryService: CategoryService,
     public route: ActivatedRoute,
     private fb: FormBuilder,
+    private dialog: MatDialog,
     public utilService: UtilService
   ) {}
 
@@ -121,43 +109,67 @@ export class GameListComponent implements OnInit {
   }
 
   public fetchFilterData(): void {
-    this.platformService.getAllUsed().subscribe((result: EntityArrayResponseType) => {
-      if (result.body != null) {
-        this.platformList = result.body;
-        this.filteredPlatforms = this.filterForm.get('platform')?.valueChanges.pipe(
-          startWith(''),
-          map(value => this._filter(value || '', this.platformList))
-        );
-      }
-    });
-    this.developerService.getAll().subscribe((result: EntityArrayResponseType) => {
-      if (result.body != null) {
-        this.developerList = result.body;
-        this.filteredDevelopers = this.filterForm.get('developer')?.valueChanges.pipe(
-          startWith(''),
-          map(value => this._filter(value || '', this.developerList))
-        );
-      }
-    });
-    this.publisherService.getAll().subscribe((result: EntityArrayResponseType) => {
-      if (result.body != null) {
-        this.publisherList = result.body;
-        this.filteredPublishers = this.filterForm.get('publisher')?.valueChanges.pipe(
-          startWith(''),
-          map(value => this._filter(value || '', this.publisherList))
-        );
-      }
-    });
-    this.categoryService.getAllUsed().subscribe((result: EntityArrayResponseType) => {
-      if (result.body != null) {
-        this.categoryList = result.body;
-        this.filteredCategories = this.filterForm.get('category')?.valueChanges.pipe(
-          startWith(''),
-          map(value => this._filter(value || '', this.categoryList))
-        );
-        this.filterForm.updateValueAndValidity();
-      }
-    });
+    this.filterForm
+      .get('platform')
+      ?.valueChanges.pipe(switchMap((value: string) => this.platformService.getResults(value)))
+      .subscribe((result: EntityArrayResponseType) => {
+        if (result.body != null) {
+          this.platformList = result.body;
+        }
+      });
+
+    this.filterForm
+      .get('developer')
+      ?.valueChanges.pipe(switchMap((value: string) => this.developerService.getResults(value)))
+      .subscribe((result: EntityArrayResponseType) => {
+        if (result.body != null) {
+          this.developerList = result.body;
+        }
+      });
+
+    this.filterForm
+      .get('publisher')
+      ?.valueChanges.pipe(switchMap((value: string) => this.publisherService.getResults(value)))
+      .subscribe((result: EntityArrayResponseType) => {
+        if (result.body != null) {
+          this.publisherList = result.body;
+        }
+      });
+
+    this.filterForm
+      .get('category')
+      ?.valueChanges.pipe(switchMap((value: string) => this.categoryService.getResults(value)))
+      .subscribe((result: EntityArrayResponseType) => {
+        if (result.body != null) {
+          this.categoryList = result.body;
+        }
+      });
+
+    this.filterForm.get('platform')?.setValue('');
+    this.filterForm.get('developer')?.setValue('');
+    this.filterForm.get('publisher')?.setValue('');
+    this.filterForm.get('category')?.setValue('');
+  }
+
+  public openAddGameDialog(): void {
+    const dialogRef = this.dialog.open(SearchDialogComponent);
+
+    // dialogRef.afterClosed().subscribe(result => {
+    //   if (result !== undefined) {
+    //     this.delete = result;
+    //   }
+    //   if (this.delete) {
+    //     this.gameService.delete(this.game.id).subscribe(
+    //       () => {
+    //         this.utilService.openSnackBar('The game has been deleted!', 'success');
+    //         this.router.navigate(['../']);
+    //       },
+    //       (error: any) => {
+    //         this.utilService.openSnackBar(error.error.detail, 'error');
+    //       }
+    //     );
+    //   }
+    // });
   }
 
   public _filter(name: string | ICategory, list: ICategory[]): ICategory[] {
@@ -245,7 +257,7 @@ export class GameListComponent implements OnInit {
       this.state.filter.filters.push(newFilter);
     }
     if (sensitive) {
-      const newFilter = { field: 'gameDetails.notes', operator: 'isnotnull' };
+      const newFilter = { field: this.fieldPrefix + '.notes', operator: 'isnotnull' };
       this.state.filter.filters.push(newFilter);
     }
     if (this.utilService.isNotNil(sortBy)) {

@@ -4,10 +4,10 @@ import { DialogData } from 'app/shared/dto/dialogData.dto';
 
 @Component({
   selector: 'jhi-dialog',
-  templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.scss'],
+  templateUrl: './choice-dialog.component.html',
+  styleUrls: ['./choice-dialog.component.scss'],
 })
-export class DialogComponent {
+export class ChoiceDialogComponent {
   public result: boolean;
 
   constructor(public dialogRef: MatDialogRef<any>, @Inject(MAT_DIALOG_DATA) public data: DialogData) {}

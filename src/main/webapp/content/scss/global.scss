@@ -61,6 +61,13 @@ a:hover {
   display: block;
 }
 
+.btn-filter {
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
 .edit-thumbnail {
   max-width: 100%;
   border-radius: 10px;
@@ -86,6 +93,18 @@ a:hover {
   }
 }
 
+.not-found-text-container {
+  height: 100px;
+}
+
+.not-found-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  font-size: large;
+  padding-top: 20px;
+}
+
 .inner-img {
   img {
     max-width: 100%;
@@ -108,6 +127,22 @@ a:hover {
   position: absolute;
   right: 0;
   padding-right: 10px;
+}
+
+.floating-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 10px;
+}
+
+.floating-icon-shadow {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: black;
+  margin-top: 12px;
+  margin-right: 37px;
 }
 
 .bold {

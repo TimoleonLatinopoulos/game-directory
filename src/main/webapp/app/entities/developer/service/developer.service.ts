@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { isPresent } from 'app/core/util/operators';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { createRequestOption } from 'app/core/request/request-util';
-import { IDeveloper, NewDeveloper } from '../developer.model';
+import { IDeveloper } from '../developer.model';
 import { ICategory } from 'app/entities/category/category.model';
 
 export type PartialUpdateDeveloper = Partial<IDeveloper> & Pick<IDeveloper, 'id'>;
@@ -25,6 +25,10 @@ export class DeveloperService {
 
   getAll(): Observable<EntityArrayResponseType> {
     return this.http.get<ICategory[]>(this.resourceUrl, { observe: 'response' });
+  }
+
+  getResults(input: string): Observable<EntityArrayResponseType> {
+    return this.http.get<ICategory[]>(`${this.resourceUrl}/search?input=${input}`, { observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
