@@ -11,6 +11,7 @@ import { switchMap } from 'rxjs';
 import { GameService } from 'app/entities/game/service/game.service';
 import { ISearchType } from 'app/entities/game/game.model';
 import { PageEvent } from '@angular/material/paginator';
+import { UserGameService } from 'app/entities/user-game/service/user-game.service';
 
 @Component({
   selector: 'jhi-search-dialog',
@@ -45,7 +46,8 @@ export class SearchDialogComponent implements OnInit {
     public developerService: DeveloperService,
     public publisherService: PublisherService,
     public categoryService: CategoryService,
-    public gameService: GameService
+    public gameService: GameService,
+    public userGameService: UserGameService
   ) {}
 
   ngOnInit(): void {
@@ -122,7 +124,7 @@ export class SearchDialogComponent implements OnInit {
 
   public fetchGameData(): void {
     this.isLoading = true;
-    this.gameService.search(this.state).subscribe(
+    this.gameService.searchUser(this.state).subscribe(
       (res: any) => {
         this.gameListDataResult = {
           data: res.data.content,
@@ -203,5 +205,17 @@ export class SearchDialogComponent implements OnInit {
     this.filterForm.get('developer')?.setValue('');
     this.filterForm.get('publisher')?.setValue('');
     this.filterForm.get('category')?.setValue('');
+  }
+
+  public addToUserGames(game: any): void {
+    this.userGameService.create(game.id).subscribe(
+      () => {
+        this.utilService.openSnackBar('The game has been added to your games list!', 'success');
+        this.fetchGameData();
+      },
+      (error: any) => {
+        this.utilService.openSnackBar(error.error.detail, 'error');
+      }
+    );
   }
 }

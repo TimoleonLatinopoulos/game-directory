@@ -190,6 +190,16 @@ public class GameResource extends AbstractApiResource {
         return new PageResponse<>(gameService.search(searchCriteria, pageRequest));
     }
 
+    @GetMapping("/games/search-user")
+    @Timed
+    public PageResponse<GameGridDTO> searchUser(HttpServletRequest request, Authentication authentication) {
+        log.debug("REST request to search a page of Games");
+
+        PageRequest pageRequest = this.extractPageRequestFromRequest(request);
+        SearchCriteria searchCriteria = this.extractSearchCriteriaFromRequest(request);
+        return new PageResponse<>(gameService.searchUser(searchCriteria, pageRequest));
+    }
+
     /**
      * {@code DELETE  /games/:id} : delete the "id" game.
      *

@@ -5,6 +5,27 @@
   padding-top: 10px;
 }
 
+.floating-add-icon {
+  padding: 5px !important;
+  border-radius: 6px;
+}
+
+.floating-add {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: #424242;
+  border: 12px solid #424242;
+  border-radius: 12px;
+}
+
+.floating-add-left {
+  position: absolute;
+  left: 0;
+  top: 0;
+  margin: 10px;
+}
+
 div.scroll {
   height: 250px;
   overflow-x: hidden;
@@ -17,7 +38,7 @@ div.scroll {
 }
 
 .thumbnail {
-  width: 150px;
+  width: 160px;
   margin-right: 10px;
   border-radius: 10px;
   border: 1px solid #222;
@@ -45,9 +66,17 @@ mat-paginator {
   position: absolute;
   top: 0;
   right: 0;
-  margin-right: 5px;
-  margin-top: 0px;
-  margin-right: 15px;
+  margin-right: 40px;
+  margin-top: 10px;
+}
+.floating-icon {
+  margin-right: 40px;
+  margin-top: 10px;
+}
+.floating-icon-shadow {
+  color: black;
+  margin-right: 37px;
+  margin-top: 12px;
 }
 
 // small

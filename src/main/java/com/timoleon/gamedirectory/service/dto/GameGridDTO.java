@@ -6,6 +6,7 @@ public class GameGridDTO {
     private String title;
     private GameDetailsGridDTO gameDetails;
     private Boolean favourite;
+    private Boolean isAddedByCurrentUser;
 
     public Long getId() {
         return id;
@@ -37,5 +38,13 @@ public class GameGridDTO {
 
     public void setFavourite(Boolean favourite) {
         this.favourite = favourite;
+    }
+
+    public Boolean getAddedByCurrentUser() {
+        return isAddedByCurrentUser;
+    }
+
+    public void setAddedByCurrentUser(Boolean addedByCurrentUser) {
+        isAddedByCurrentUser = addedByCurrentUser;
     }
 }

@@ -30,14 +30,17 @@ public class UserGameRepositoryImpl extends AbstractApiSpecification<UserGame> i
     }
 
     @Override
-    public Page<Long> searchForSFWGamesIds(SearchCriteria criteria, Pageable pageable) {
+    public Page<Long> searchForGameIds(SearchCriteria criteria, Pageable pageable, Boolean isEnabledNSFW) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
         // Query for List of rows
         CriteriaQuery<Long> query = builder.createQuery(Long.class);
         Root<UserGame> root = query.from(UserGame.class);
 
-        List<Predicate> predicates = produceSFWPredicates(root, builder, query, criteria);
+        List<Predicate> predicates = getPredicatesFromCriteria(root, builder, query, criteria);
+        if (!isEnabledNSFW) {
+            predicates.add(produceSFWPredicate(root, builder, query));
+        }
         List<Order> orderList = getOrderFromCriteria(root, builder, criteria);
 
         query.multiselect(root.get("id")).where(builder.and(predicates.toArray(new Predicate[0]))).orderBy(orderList);
@@ -53,7 +56,10 @@ public class UserGameRepositoryImpl extends AbstractApiSpecification<UserGame> i
         CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
         Root<UserGame> countRoot = countQuery.from(UserGame.class);
 
-        List<Predicate> countPredicates = produceSFWPredicates(countRoot, builder, countQuery, criteria);
+        List<Predicate> countPredicates = getPredicatesFromCriteria(countRoot, builder, countQuery, criteria);
+        if (!isEnabledNSFW) {
+            countPredicates.add(produceSFWPredicate(countRoot, builder, countQuery));
+        }
 
         countQuery.select(builder.countDistinct(countRoot)).where(builder.and(countPredicates.toArray(new Predicate[0])));
 
@@ -62,25 +68,8 @@ public class UserGameRepositoryImpl extends AbstractApiSpecification<UserGame> i
         return new PageImpl<>(list, pageable, count);
     }
 
-    private List<Predicate> produceSFWPredicates(Root root, CriteriaBuilder builder, CriteriaQuery<Long> query, SearchCriteria criteria) {
-        List<Predicate> predicates = getPredicatesFromCriteria(root, builder, query, criteria);
-
-        Subquery<String> excludedGamesSubquery = query.subquery(String.class);
-        Root<UserGame> excludedRoot = excludedGamesSubquery.from(UserGame.class);
-        Join<UserGame, Game> excludedGameJoin = excludedRoot.join("game");
-        Join<Game, GameDetails> excludedGameDetailsJoin = excludedGameJoin.join("gameDetails");
-        Join<GameDetails, Category> excludedCategoriesJoin = excludedGameDetailsJoin.join("categories");
-
-        excludedGamesSubquery
-            .select(excludedRoot.get("title"))
-            .distinct(true)
-            .where(builder.equal(excludedCategoriesJoin.get("description"), "Adult Content"));
-
-        predicates.add(builder.not(root.get("title").in(excludedGamesSubquery)));
-        return predicates;
-    }
-
-    public List<UserGame> searchForSFWGames(SearchCriteria criteria, List<Long> ids) {
+    @Override
+    public List<UserGame> searchForGames(SearchCriteria criteria, List<Long> ids) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<UserGame> query = builder.createQuery(UserGame.class);
@@ -93,5 +82,20 @@ public class UserGameRepositoryImpl extends AbstractApiSpecification<UserGame> i
         TypedQuery<UserGame> tp = entityManager.createQuery(query);
 
         return tp.getResultList();
+    }
+
+    private Predicate produceSFWPredicate(Root root, CriteriaBuilder builder, CriteriaQuery<Long> query) {
+        Subquery<String> excludedGamesSubquery = query.subquery(String.class);
+        Root<UserGame> excludedRoot = excludedGamesSubquery.from(UserGame.class);
+        Join<UserGame, Game> excludedGameJoin = excludedRoot.join("game");
+        Join<Game, GameDetails> excludedGameDetailsJoin = excludedGameJoin.join("gameDetails");
+        Join<GameDetails, Category> excludedCategoriesJoin = excludedGameDetailsJoin.join("categories");
+
+        excludedGamesSubquery
+            .select(excludedRoot.get("title"))
+            .distinct(true)
+            .where(builder.equal(excludedCategoriesJoin.get("description"), "Adult Content"));
+
+        return builder.not(root.get("title").in(excludedGamesSubquery));
     }
 }

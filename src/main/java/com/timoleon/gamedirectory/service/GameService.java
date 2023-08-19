@@ -230,18 +230,30 @@ public class GameService {
             .getUserWithAuthorities()
             .orElseThrow(() -> new BadRequestAlertException("User not found", "userGame", "userNotFound"));
 
-        if (criteria.getFilter() != null && !currentUser.getEnableNsfw()) {
-            Page<Long> ids = gameRepository.searchForSFWGamesIds(criteria, pageRequest);
-            List<Game> gameList = gameRepository.searchForSFWGames(criteria, ids.getContent());
-            List<GameGridDTO> list = gameList.stream().map(gameGridMapper::toDto).collect(Collectors.toList());
+        Page<Long> ids = gameRepository.searchForGameIds(criteria, pageRequest, currentUser.getEnableNsfw());
+        List<Game> gameList = gameRepository.searchForGames(criteria, ids.getContent());
+        List<GameGridDTO> list = gameList.stream().map(gameGridMapper::toDto).collect(Collectors.toList());
 
-            return new PageImpl<>(list, pageRequest, ids.getTotalElements());
-        } else {
-            Page<Game> page = gameRepository.search(criteria, pageRequest);
-            List<GameGridDTO> list = new ArrayList<>(page.getContent()).stream().map(gameGridMapper::toDto).collect(Collectors.toList());
+        return new PageImpl<>(list, pageRequest, ids.getTotalElements());
+    }
 
-            return new PageImpl<>(list, page.getPageable(), page.getTotalElements());
-        }
+    /**
+     * Search page.
+     *
+     * @param criteria    the criteria
+     * @param pageRequest the page request
+     * @return the page
+     */
+    @Transactional(readOnly = true, timeout = 60)
+    public Page<GameGridDTO> searchUser(SearchCriteria criteria, PageRequest pageRequest) {
+        User currentUser = userService
+            .getUserWithAuthorities()
+            .orElseThrow(() -> new BadRequestAlertException("User not found", "userGame", "userNotFound"));
+
+        Page<Long> ids = gameRepository.searchForGameIds(criteria, pageRequest, currentUser.getEnableNsfw());
+        List<GameGridDTO> list = gameRepository.searchForGamesUser(criteria, ids.getContent(), currentUser, gameGridMapper);
+
+        return new PageImpl<>(list, pageRequest, ids.getTotalElements());
     }
 
     /**

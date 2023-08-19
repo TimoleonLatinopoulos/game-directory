@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserGameRepositoryCustom {
     Page<UserGame> search(SearchCriteria criteria, Pageable pageable);
-    Page<Long> searchForSFWGamesIds(SearchCriteria criteria, Pageable pageable);
-    List<UserGame> searchForSFWGames(SearchCriteria criteria, List<Long> ids);
+    Page<Long> searchForGameIds(SearchCriteria criteria, Pageable pageable, Boolean isEnabledNSFW);
+    List<UserGame> searchForGames(SearchCriteria criteria, List<Long> ids);
 }

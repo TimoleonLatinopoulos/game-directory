@@ -161,6 +161,14 @@ export class CreateGameEntryComponent implements OnInit {
             this.gameDetailsForm.get('title')?.setValue(this.steamGame?.data.name);
 
             const dateString = greekDateToEng(this.steamGame?.data.release_date.date);
+            const pegiRating = getPegiRating(this.steamGame?.data.required_age);
+            const price = this.calculatePrice(
+              this.steamGame?.data.is_free,
+              this.steamGame?.data.price_overview,
+              this.steamGame?.data.price_overview.final
+            );
+            const notes = this.steamGame?.data.content_descriptors?.notes;
+
             if (dateString !== undefined && dateString !== 'To be announced') {
               this.gameDetailsForm
                 .get('gameDetails')
@@ -173,27 +181,17 @@ export class CreateGameEntryComponent implements OnInit {
               this.gameDetailsForm.get('gameDetails')?.get('releaseDate')?.updateValueAndValidity();
             }
 
-            const pegiRating = getPegiRating(this.steamGame?.data.required_age);
             this.gameDetailsForm.get('gameDetails')?.get('pegiRating')?.patchValue(pegiRating);
 
             this.gameDetailsForm.get('gameDetails')?.get('metacriticScore')?.setValue(this.steamGame?.data.metacritic?.score);
             this.gameDetailsForm.get('gameDetails')?.get('imageUrl')?.setValue(this.steamGame?.data.header_image);
             this.gameDetailsForm.get('gameDetails')?.get('thumbnailUrl')?.setValue(this.steamGame?.data.capsule_image);
 
-            let price: number;
-            if (!this.steamGame?.data.is_free && this.steamGame?.data.price_overview != null) {
-              price = this.steamGame?.data.price_overview.final;
-              if (price != null) {
-                price = price / 100;
-              }
-            } else {
-              price = 0;
-            }
             this.gameDetailsForm.get('gameDetails')?.get('price')?.setValue(price);
 
             this.gameDetailsForm.get('gameDetails')?.get('description')?.setValue(this.steamGame?.data.about_the_game);
             this.gameDetailsForm.get('gameDetails')?.get('snippet')?.setValue(this.steamGame?.data.short_description);
-            this.gameDetailsForm.get('gameDetails')?.get('notes')?.setValue(this.steamGame?.data.content_descriptors?.notes);
+            this.gameDetailsForm.get('gameDetails')?.get('notes')?.setValue(notes);
             this.gameDetailsForm.get('gameDetails')?.get('steamAppid')?.setValue(this.steamGame?.data.steam_appid);
 
             this.steamPlatformList = this.filterCategory(this.platformList, ['PC']);
@@ -207,6 +205,14 @@ export class CreateGameEntryComponent implements OnInit {
 
             const stringCategories = this.steamGame?.data.genres.map(a => a.description);
             this.steamCategoryList = this.filterCategory(this.categoryList, stringCategories);
+
+            // add Adult Category
+            if (notes != null && this.checkForAdultContent(notes)) {
+              const adultCategory = this.categoryList.find(element => element.description === 'Adult Content');
+              if (adultCategory !== undefined) {
+                this.steamCategoryList.push(adultCategory);
+              }
+            }
             this.gameDetailsForm.get('gameDetails')?.get('categories')?.setValue(this.steamCategoryList);
           } else {
             this.utilService.openSnackBar('There is not a game with the given Steam appid!', 'error');
@@ -258,5 +264,25 @@ export class CreateGameEntryComponent implements OnInit {
 
   handleCategoryValue(value: ICategory[]): void {
     this.gameDetailsForm.get('gameDetails')?.get('categories')?.setValue(value);
+  }
+
+  checkForAdultContent(notes: string): boolean {
+    const sensitiveWords = ['sex', 'mature', 'not safe for work', 'nsfw', 'naked', 'nudity', 'nude', 'adult', '18'];
+    return sensitiveWords.some(substring => notes.toLowerCase().includes(substring));
+  }
+
+  calculatePrice(isFree: boolean, priceOverview: any, final: number): number {
+    let price: number;
+
+    if (!isFree && priceOverview != null) {
+      price = final;
+      if (price != null) {
+        price = price / 100;
+      }
+    } else {
+      price = 0;
+    }
+
+    return price;
   }
 }

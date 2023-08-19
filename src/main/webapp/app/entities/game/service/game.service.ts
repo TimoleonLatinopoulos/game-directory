@@ -44,6 +44,13 @@ export class GameService {
     return this.http.get(this.resourceUrl + '/search', { params: options }).pipe(map((data: any) => ({ data, total: data.totalEntries })));
   }
 
+  searchUser(state: any): Observable<any> {
+    const options = createSearchRequestOption(state);
+    return this.http
+      .get(this.resourceUrl + '/search-user', { params: options })
+      .pipe(map((data: any) => ({ data, total: data.totalEntries })));
+  }
+
   delete(id: number): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }

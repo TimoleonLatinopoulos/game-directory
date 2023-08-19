@@ -77,12 +77,13 @@
 
     <div id="list" *ngIf="gameListDataResult !== undefined" class="scroll">
       <div *ngFor="let game of gameListDataResult.data">
-        <div id="list-item" class="d-flex align-items-start flex-grow-1">
+        <div id="list-item" class="d-flex align-items-start flex-grow-1" style="position: relative">
           <div style="position: relative">
             <a id="image-item" [attr.href]="'/game-preview/' + game.id">
               <img class="thumbnail" [src]="game.gameDetails?.thumbnailUrl" [alt]="game.title" />
             </a>
             <div *ngIf="game.favourite">
+              <fa-icon class="floating-icon-shadow" [icon]="['fas', 'star']"></fa-icon>
               <fa-icon id="rainbow" class="floating-icon" [icon]="['fas', 'star']"></fa-icon>
             </div>
           </div>
@@ -90,6 +91,11 @@
             <a class="reference-text highlight" [attr.href]="'/game-preview/' + game.id">{{ game.title }}</a>
             <mat-card-subtitle> {{ game.gameDetails?.publishers }}, {{ game?.gameDetails?.developers }} </mat-card-subtitle>
             <div class="list-snippet">{{ game?.gameDetails?.snippet }}</div>
+          </div>
+          <div *ngIf="!game.addedByCurrentUser" class="floating-add">
+            <button mat-button (click)="addToUserGames(game)" class="btn btn-info floating-add-icon">
+              <fa-icon icon="add"></fa-icon>
+            </button>
           </div>
         </div>
 
@@ -110,6 +116,11 @@
             <a class="reference-text highlight" [attr.href]="'/game-preview/' + game.id">{{ game.title }}</a>
             <mat-card-subtitle class="initial"> {{ game.gameDetails?.publishers }}, {{ game?.gameDetails?.developers }} </mat-card-subtitle>
             <div class="initial">{{ game?.gameDetails?.snippet }}</div>
+          </div>
+          <div *ngIf="!game.addedByCurrentUser" class="floating-add-left">
+            <button mat-button (click)="addToUserGames(game)" class="btn btn-info floating-add-icon">
+              <fa-icon icon="add"></fa-icon>
+            </button>
           </div>
         </div>
       </div>
