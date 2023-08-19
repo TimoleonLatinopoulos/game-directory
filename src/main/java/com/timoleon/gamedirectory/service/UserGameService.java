@@ -196,9 +196,21 @@ public class UserGameService {
             criteria.getFilter().getFilters().add(filterItem);
         }
 
-        Page<UserGame> page = userGameRepository.search(criteria, pageRequest);
-        List<GameGridDTO> list = new ArrayList<>(page.getContent()).stream().map(userGameGridMapper::toDto).collect(Collectors.toList());
-        return new PageImpl<>(list, page.getPageable(), page.getTotalElements());
+        if (criteria.getFilter() != null && !currentUser.getEnableNsfw()) {
+            Page<Long> ids = userGameRepository.searchForSFWGamesIds(criteria, pageRequest);
+            List<UserGame> gameList = userGameRepository.searchForSFWGames(criteria, ids.getContent());
+            List<GameGridDTO> list = gameList.stream().map(userGameGridMapper::toDto).collect(Collectors.toList());
+
+            return new PageImpl<>(list, pageRequest, ids.getTotalElements());
+        } else {
+            Page<UserGame> page = userGameRepository.search(criteria, pageRequest);
+            List<GameGridDTO> list = new ArrayList<>(page.getContent())
+                .stream()
+                .map(userGameGridMapper::toDto)
+                .collect(Collectors.toList());
+
+            return new PageImpl<>(list, page.getPageable(), page.getTotalElements());
+        }
     }
 
     /**

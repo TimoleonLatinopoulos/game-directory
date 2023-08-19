@@ -117,6 +117,7 @@
         <span class="not-found-text"> No games found! </span>
       </div>
 
+      <!-- List View  -->
       <mat-card-content *ngIf="gameListDataResult !== undefined && gameViewType === 'list'" class="row">
         <div *ngFor="let game of gameListDataResult.data">
           <div id="list-item" class="d-flex align-items-start flex-grow-1">
@@ -126,8 +127,6 @@
               </a>
               <div *ngIf="game.favourite">
                 <fa-icon class="floating-icon-shadow" [icon]="['fas', 'star']"></fa-icon>
-              </div>
-              <div *ngIf="game.favourite">
                 <fa-icon id="rainbow" class="floating-icon" [icon]="['fas', 'star']"></fa-icon>
               </div>
             </div>
@@ -142,6 +141,7 @@
         </div>
       </mat-card-content>
 
+      <!-- Grid View -->
       <div *ngIf="gameListDataResult !== undefined && gameViewType === 'grid'" class="row center">
         <div *ngFor="let game of gameListDataResult.data" class="mb-3 flex-fit">
           <div class="block" style="position: relative">

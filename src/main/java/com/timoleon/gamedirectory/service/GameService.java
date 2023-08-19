@@ -8,6 +8,7 @@ import com.timoleon.gamedirectory.service.dto.GameDTO;
 import com.timoleon.gamedirectory.service.dto.GameGridDTO;
 import com.timoleon.gamedirectory.service.mapper.GameGridMapper;
 import com.timoleon.gamedirectory.service.mapper.GameMapper;
+import com.timoleon.gamedirectory.web.rest.errors.BadRequestAlertException;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -33,11 +34,9 @@ public class GameService {
     private final DeveloperService developerService;
     private final PublisherService publisherService;
     private final CategoryService categoryService;
-
+    private final UserService userService;
     private final UserGameRepository userGameRepository;
-
     private final GameMapper gameMapper;
-
     private final GameGridMapper gameGridMapper;
 
     public GameService(
@@ -46,6 +45,7 @@ public class GameService {
         DeveloperService developerService,
         PublisherService publisherService,
         CategoryService categoryService,
+        UserService userService,
         UserGameRepository userGameRepository,
         GameMapper gameMapper,
         GameGridMapper gameGridMapper
@@ -55,6 +55,7 @@ public class GameService {
         this.developerService = developerService;
         this.publisherService = publisherService;
         this.categoryService = categoryService;
+        this.userService = userService;
         this.userGameRepository = userGameRepository;
         this.gameMapper = gameMapper;
         this.gameGridMapper = gameGridMapper;
@@ -225,9 +226,22 @@ public class GameService {
      */
     @Transactional(readOnly = true, timeout = 60)
     public Page<GameGridDTO> search(SearchCriteria criteria, PageRequest pageRequest) {
-        Page<Game> page = gameRepository.search(criteria, pageRequest);
-        List<GameGridDTO> list = new ArrayList<>(page.getContent()).stream().map(gameGridMapper::toDto).collect(Collectors.toList());
-        return new PageImpl<>(list, page.getPageable(), page.getTotalElements());
+        User currentUser = userService
+            .getUserWithAuthorities()
+            .orElseThrow(() -> new BadRequestAlertException("User not found", "userGame", "userNotFound"));
+
+        if (criteria.getFilter() != null && !currentUser.getEnableNsfw()) {
+            Page<Long> ids = gameRepository.searchForSFWGamesIds(criteria, pageRequest);
+            List<Game> gameList = gameRepository.searchForSFWGames(criteria, ids.getContent());
+            List<GameGridDTO> list = gameList.stream().map(gameGridMapper::toDto).collect(Collectors.toList());
+
+            return new PageImpl<>(list, pageRequest, ids.getTotalElements());
+        } else {
+            Page<Game> page = gameRepository.search(criteria, pageRequest);
+            List<GameGridDTO> list = new ArrayList<>(page.getContent()).stream().map(gameGridMapper::toDto).collect(Collectors.toList());
+
+            return new PageImpl<>(list, page.getPageable(), page.getTotalElements());
+        }
     }
 
     /**

@@ -9,6 +9,7 @@ import { GameService } from 'app/entities/game/service/game.service';
 import { IUserGame } from 'app/entities/user-game/user-game.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { UserGameService } from 'app/entities/user-game/service/user-game.service';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'jhi-game-preview',
@@ -39,13 +40,16 @@ export class GamePreviewComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
     private router: Router,
-    private utilService: UtilService
+    private utilService: UtilService,
+    private location: Location
   ) {}
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
     this.activatedRoute.data.subscribe(object => {
       this.game = object.game as IGame;
+
+      this.changeLocation();
 
       if (this.accountService.hasAnyAuthority('ROLE_USER')) {
         this.userGameService.findByGameId(this.game.id).subscribe(
@@ -82,6 +86,12 @@ export class GamePreviewComponent implements OnInit {
         }
       }
     });
+  }
+
+  changeLocation(): void {
+    if (this.game.title && this.game.title) {
+      this.location.replaceState('game-preview/' + this.game.id.toString() + '/' + this.game.title.replace(/\s+/g, '_'));
+    }
   }
 
   editGameDetails(): void {

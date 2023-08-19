@@ -41,10 +41,6 @@ public class SearchFilterItem implements Serializable {
     public static final String OPERATOR_ADDRESS_SEARCH = "addressSearch";
     public static final String OPERATOR_DATE_BETWEEN_FROM = "dateBetweenFrom";
     public static final String OPERATOR_DATE_BETWEEN_TO = "dateBetweenTo";
-    public static final String OPERATOR_DATE_IS_OPEN = "dateIsOpen";
-    public static final String OPERATOR_SUBQ_PATIENT = "subqPatient";
-    public static final String OPERATOR_PATIENT_IS_CONFIRMED = "patientIsConfirmed";
-    public static final String OPERATOR_PATIENT_IS_NOT_CONFIRMED = "patientIsNotConfirmed";
 
     private String field;
 

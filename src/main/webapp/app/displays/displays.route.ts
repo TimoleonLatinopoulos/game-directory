@@ -56,4 +56,10 @@ export const displaysRoute: Routes = [
     canActivate: [UserRouteAccessService],
     title: 'Game',
   },
+  {
+    path: 'game-preview/:id/:title',
+    redirectTo: 'game-preview/:id',
+    pathMatch: 'full',
+    title: 'Game',
+  },
 ];

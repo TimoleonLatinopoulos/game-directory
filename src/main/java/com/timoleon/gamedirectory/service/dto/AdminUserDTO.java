@@ -51,6 +51,8 @@ public class AdminUserDTO implements Serializable {
 
     private Set<String> authorities;
 
+    private boolean enableNsfw = false;
+
     public AdminUserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -62,6 +64,7 @@ public class AdminUserDTO implements Serializable {
         this.lastName = user.getLastName();
         this.email = user.getEmail();
         this.activated = user.isActivated();
+        this.enableNsfw = user.getEnableNsfw();
         this.imageUrl = user.getImageUrl();
         this.langKey = user.getLangKey();
         this.createdBy = user.getCreatedBy();
@@ -127,6 +130,14 @@ public class AdminUserDTO implements Serializable {
         this.activated = activated;
     }
 
+    public boolean isEnableNsfw() {
+        return enableNsfw;
+    }
+
+    public void setEnableNsfw(boolean enableNsfw) {
+        this.enableNsfw = enableNsfw;
+    }
+
     public String getLangKey() {
         return langKey;
     }
@@ -185,6 +196,7 @@ public class AdminUserDTO implements Serializable {
             ", email='" + email + '\'' +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
+            ", enableNsfw=" + enableNsfw +
             ", langKey='" + langKey + '\'' +
             ", createdBy=" + createdBy +
             ", createdDate=" + createdDate +

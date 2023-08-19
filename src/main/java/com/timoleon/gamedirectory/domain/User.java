@@ -87,6 +87,9 @@ public class User extends AbstractAuditingEntity<Long> {
     @BatchSize(size = 20)
     private Set<Authority> authorities = new HashSet<>();
 
+    @Column(name = "enable_nsfw")
+    private Boolean enableNsfw;
+
     public Long getId() {
         return id;
     }
@@ -192,6 +195,14 @@ public class User extends AbstractAuditingEntity<Long> {
         this.authorities = authorities;
     }
 
+    public Boolean getEnableNsfw() {
+        return enableNsfw;
+    }
+
+    public void setEnableNsfw(Boolean enableNsfw) {
+        this.enableNsfw = enableNsfw;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -221,6 +232,7 @@ public class User extends AbstractAuditingEntity<Long> {
             ", activated='" + activated + '\'' +
             ", langKey='" + langKey + '\'' +
             ", activationKey='" + activationKey + '\'' +
+            ", enableNsfw='" + enableNsfw + '\'' +
             "}";
     }
 }

@@ -790,17 +790,6 @@ public abstract class AbstractApiSpecification<T extends Object> {
                             case SearchFilterItem.OPERATOR_NOT_EQUAL_BOOL:
                                 predicates.add(criteriaBuilder.notEqual(root.get(filter.getField()), Boolean.valueOf(filter.getValue())));
                                 break;
-                            case SearchFilterItem.OPERATOR_DATE_IS_OPEN:
-                                predicates.add(
-                                    criteriaBuilder.or(
-                                        criteriaBuilder.isNull(root.get(filter.getField())),
-                                        criteriaBuilder.lessThanOrEqualTo(
-                                            root.get(filter.getField()),
-                                            LocalDate.parse(filter.getValue(), DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-                                        )
-                                    )
-                                );
-                                break;
                             case SearchFilterItem.OPERATOR_IS_NOT_NULL:
                                 predicates.add(criteriaBuilder.isNotNull(root.get(filter.getField())));
                                 break;
