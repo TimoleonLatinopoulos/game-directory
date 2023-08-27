@@ -6,17 +6,20 @@
 }
 
 .floating-add-icon {
-  padding: 5px !important;
+  padding: 2px !important;
   border-radius: 6px;
+  opacity: 80%;
 }
 
 .floating-add {
   position: absolute;
-  right: 0;
+  left: 0;
   top: 0;
-  background: #424242;
-  border: 12px solid #424242;
+  // background: #424242;
+  // border: 12px solid #424242;
   border-radius: 12px;
+  margin-left: 5px;
+  margin-top: 15px;
 }
 
 .floating-add-left {

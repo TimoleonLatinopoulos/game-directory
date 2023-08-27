@@ -35,7 +35,7 @@ a:hover {
 .block-thumbnail {
   width: 330px;
   height: 125px;
-  border-radius: 10px;
+  border-radius: 10px 10px 0px 0px;
   border: 1px solid #222;
   object-fit: cover;
   margin: auto;
@@ -43,7 +43,8 @@ a:hover {
 
 .block {
   width: 330px;
-  height: 250px;
+  // height: 250px;
+  height: 220px;
   border-radius: 10px;
   box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
   background-color: #223 !important;

@@ -10,6 +10,7 @@ import { IUserGame } from 'app/entities/user-game/user-game.model';
 import { AccountService } from 'app/core/auth/account.service';
 import { UserGameService } from 'app/entities/user-game/service/user-game.service';
 import { Location } from '@angular/common';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'jhi-game-preview',
@@ -41,7 +42,8 @@ export class GamePreviewComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private utilService: UtilService,
-    private location: Location
+    private location: Location,
+    private titleService: Title
   ) {}
 
   ngOnInit(): void {
@@ -91,6 +93,7 @@ export class GamePreviewComponent implements OnInit {
   changeLocation(): void {
     if (this.game.title && this.game.title) {
       this.location.replaceState('game-preview/' + this.game.id.toString() + '/' + this.game.title.replace(/\s+/g, '_'));
+      this.titleService.setTitle(this.game.title);
     }
   }
 

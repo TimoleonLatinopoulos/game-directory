@@ -71,10 +71,11 @@
 
       <div class="row pt-2 pb-2">
         <button type="button" (click)="clearData()" class="btn btn-danger btn-filter col-4 col-sm-3">CLEAR</button>
-        <button type="button" (click)="filterSearch()" class="btn btn-info btn-filter col-4 col-sm-3">SEARCH</button>
+        <button type="button" (click)="filterSearch()" class="btn btn-info btn-filter col-5 col-sm-3">SEARCH</button>
       </div>
     </form>
 
+    <!-- List View  -->
     <div id="list" *ngIf="gameListDataResult !== undefined" class="scroll">
       <div *ngFor="let game of gameListDataResult.data">
         <div id="list-item" class="d-flex align-items-start flex-grow-1" style="position: relative">
@@ -103,6 +104,7 @@
       </div>
     </div>
 
+    <!-- Grid View -->
     <div id="grid" *ngIf="gameListDataResult !== undefined" class="scroll row center">
       <div *ngFor="let game of gameListDataResult.data" class="mb-3 flex-fit">
         <div class="block" style="position: relative">

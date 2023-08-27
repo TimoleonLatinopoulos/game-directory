@@ -18,19 +18,6 @@
         "request": "attach",
         "type": "chrome",
         "webRoot": "${workspaceFolder}"
-      },
-      {
-          "type": "java",
-          "name": "Current File",
-          "request": "launch",
-          "mainClass": "${file}"
-      },
-      {
-          "type": "java",
-          "name": "GameDirectoryApp",
-          "request": "launch",
-          "mainClass": "com.timoleon.gamedirectory.GameDirectoryApp",
-          "projectName": "game-directory"
       }
     ]
 }

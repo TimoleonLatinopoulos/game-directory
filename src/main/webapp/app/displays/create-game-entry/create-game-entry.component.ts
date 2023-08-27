@@ -267,7 +267,7 @@ export class CreateGameEntryComponent implements OnInit {
   }
 
   checkForAdultContent(notes: string): boolean {
-    const sensitiveWords = ['sex', 'mature', 'not safe for work', 'nsfw', 'naked', 'nudity', 'nude', 'adult', '18'];
+    const sensitiveWords = ['sex', 'mature', 'not safe for work', 'nsfw', 'naked', 'nudity', 'nude', 'adult', '18', 'hentai'];
     return sensitiveWords.some(substring => notes.toLowerCase().includes(substring));
   }
 
