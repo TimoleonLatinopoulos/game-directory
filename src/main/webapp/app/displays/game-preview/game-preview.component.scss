@@ -16,6 +16,17 @@
   .comment-description {
     margin-left: -40px !important;
   }
+  .float-margin {
+    float: right;
+    position: inherit !important;
+    padding: 0px;
+  }
+  .float-margin-submit {
+    margin-left: 50px;
+    margin-top: 50px;
+    position: inherit !important;
+    padding: 0px;
+  }
 }
 
 .flex-container {

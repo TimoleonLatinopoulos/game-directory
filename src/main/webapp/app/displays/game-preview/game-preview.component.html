@@ -56,14 +56,14 @@
                       <fa-icon *ngIf="recommended === 2" icon="check"></fa-icon>
                     </button>
 
-                    <div *ngIf="isCommentEdited; else post" class="float-right" style="bottom: 0">
+                    <div *ngIf="isCommentEdited; else post" class="float-right float-margin-submit" style="bottom: 0">
                       <button type="button" (click)="showUpdateComment(false)" class="btn btn-danger">Cancel</button>
                       <button type="button" (click)="updateComment()" [disabled]="commentForm.invalid" class="btn btn-info">
                         Update Review
                       </button>
                     </div>
                     <ng-template #post>
-                      <div class="float-right" style="bottom: 0">
+                      <div class="float-right float-margin-submit" style="bottom: 0">
                         <button type="button" (click)="submitComment()" [disabled]="commentForm.invalid" class="btn btn-info">
                           Post Review
                         </button>
@@ -86,9 +86,9 @@
                   </ng-template>
                 </div>
 
-                <div class="col-10 col-md-11">
-                  <div *ngIf="userComment != null && comment.id === userComment.id" style="position: relative">
-                    <div class="float-right pt-2">
+                <div class="col-10 col-md-11" style="position: relative">
+                  <div *ngIf="userComment != null && comment.id === userComment.id">
+                    <div class="float-right float-margin pt-2">
                       <button type="button" (click)="showUpdateComment(true)" class="btn btn-primary">
                         <fa-icon icon="pencil"></fa-icon>
                       </button>
