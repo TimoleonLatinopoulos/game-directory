@@ -103,8 +103,17 @@
               </div>
 
               <div class="row pt-2">
-                <button type="button" (click)="clearData()" class="btn btn-danger btn-filter col-4 col-sm-3">CLEAR</button>
-                <button type="button" (click)="filterSearch()" class="btn btn-info btn-filter col-4 col-sm-3">SEARCH</button>
+                <button type="button" (click)="clearData()" [disabled]="isLoading" class="btn btn-danger btn-filter col-4 col-sm-3">
+                  CLEAR
+                </button>
+                <button type="button" (click)="filterSearch()" [disabled]="isLoading" class="btn btn-info btn-filter col-4 col-sm-3">
+                  SEARCH
+                </button>
+
+                <div class="mt-2 col-2 col-sm-1" style="position: relative">
+                  <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" class="spinner" color="accent" style="position: absolute">
+                  </mat-progress-spinner>
+                </div>
               </div>
             </div>
           </mat-panel-description>

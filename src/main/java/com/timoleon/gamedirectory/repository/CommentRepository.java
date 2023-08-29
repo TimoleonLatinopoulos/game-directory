@@ -41,6 +41,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("select comment from Comment comment left join fetch comment.user where comment.id =:id")
     Optional<Comment> findOneWithToOneRelationships(@Param("id") Long id);
 
+    @Query("select comment from Comment comment where comment.game.id = :id")
+    List<Comment> findByGame(@Param("id") Long id);
+
     @Query(
         "select comment from Comment comment " +
         "left join fetch comment.game " +
@@ -56,4 +59,12 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
         "where comment.game.id = :id and comment.user.id = :userId"
     )
     List<Comment> findByGameAndUser(@Param("id") Long id, @Param("userId") Long userId);
+
+    @Modifying
+    @Query("delete Comment comment where comment.game.id = :id and comment.user.id = :userId")
+    void deleteAllByGameAndUser(@Param("id") Long id, @Param("userId") Long userId);
+
+    @Modifying
+    @Query("delete Comment comment where comment.game.id = :id")
+    void deleteAllByGame(@Param("id") Long id);
 }

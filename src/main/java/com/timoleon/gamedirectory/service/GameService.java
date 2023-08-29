@@ -2,6 +2,7 @@ package com.timoleon.gamedirectory.service;
 
 import com.timoleon.gamedirectory.domain.*;
 import com.timoleon.gamedirectory.domain.search.SearchCriteria;
+import com.timoleon.gamedirectory.repository.CommentRepository;
 import com.timoleon.gamedirectory.repository.GameRepository;
 import com.timoleon.gamedirectory.repository.UserGameRepository;
 import com.timoleon.gamedirectory.service.dto.GameDTO;
@@ -36,6 +37,7 @@ public class GameService {
     private final CategoryService categoryService;
     private final UserService userService;
     private final UserGameRepository userGameRepository;
+    private final CommentRepository commentRepository;
     private final GameMapper gameMapper;
     private final GameGridMapper gameGridMapper;
 
@@ -47,6 +49,7 @@ public class GameService {
         CategoryService categoryService,
         UserService userService,
         UserGameRepository userGameRepository,
+        CommentRepository commentRepository,
         GameMapper gameMapper,
         GameGridMapper gameGridMapper
     ) {
@@ -57,6 +60,7 @@ public class GameService {
         this.categoryService = categoryService;
         this.userService = userService;
         this.userGameRepository = userGameRepository;
+        this.commentRepository = commentRepository;
         this.gameMapper = gameMapper;
         this.gameGridMapper = gameGridMapper;
     }
@@ -268,6 +272,11 @@ public class GameService {
         List<UserGame> userGames = userGameRepository.findAllByGameId(id);
         if (!userGames.isEmpty()) {
             userGameRepository.deleteAllByGameId(id);
+        }
+
+        List<Comment> comments = commentRepository.findByGame(id);
+        if (!comments.isEmpty()) {
+            commentRepository.deleteAllByGame(id);
         }
 
         gameRepository.deleteById(id);

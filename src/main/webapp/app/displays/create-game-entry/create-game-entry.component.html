@@ -5,14 +5,28 @@
         <div [ngClass]="update ? 'col-lg-12' : 'col-lg-8'" class="mb-4 A">
           <mat-card>
             <mat-card-header>
-              <h2 *ngIf="!update; else create">Create a new Game Entry</h2>
+              <div *ngIf="update; else create">
+                <h2>
+                  Update Game Entry
+                  <span class="mt-2 col-2 col-sm-1" style="position: relative">
+                    <mat-progress-spinner
+                      *ngIf="showSpinner"
+                      mode="indeterminate"
+                      class="spinner spinner-update"
+                      color="accent"
+                      style="position: absolute"
+                    >
+                    </mat-progress-spinner>
+                  </span>
+                </h2>
+              </div>
               <ng-template #create>
-                <h2>Update Game Entry</h2>
+                <h2>Create a new Game Entry</h2>
               </ng-template>
               <br />
               <br />
             </mat-card-header>
-            <mat-card-content>
+            <mat-card-content *ngIf="!showSpinner || !update">
               <mat-form-field class="mt-4 mb-4 mat-field">
                 <mat-label for="field_title">Game Title</mat-label>
                 <input matInput id="field_title" name="title" formControlName="title" type="text" />
@@ -233,7 +247,7 @@
                 </div>
 
                 <div class="mb-4 mt-3 col-lg-2" style="position: relative">
-                  <mat-progress-spinner *ngIf="showSpinner" mode="indeterminate" class="spinner" style="position: absolute">
+                  <mat-progress-spinner *ngIf="showSpinner" mode="indeterminate" color="accent" class="spinner" style="position: absolute">
                   </mat-progress-spinner>
                 </div>
               </div>

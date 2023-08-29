@@ -131,6 +131,12 @@ a:hover {
   color: rgb(255 255 255 / 70%);
 }
 
+.spinner {
+  width: 20px !important;
+  height: 20px !important;
+  margin-left: 10px;
+}
+
 .mat-field {
   display: flex !important;
   flex-direction: column !important;

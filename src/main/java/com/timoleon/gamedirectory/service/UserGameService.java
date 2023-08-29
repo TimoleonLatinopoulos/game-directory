@@ -12,7 +12,6 @@ import com.timoleon.gamedirectory.service.dto.GameGridDTO;
 import com.timoleon.gamedirectory.service.mapper.UserGameGridMapper;
 import com.timoleon.gamedirectory.web.rest.errors.BadRequestAlertException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;

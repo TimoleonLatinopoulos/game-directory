@@ -2,10 +2,11 @@
   width: 100%;
 }
 
-.spinner {
-  width: 20px !important;
-  height: 20px !important;
-  margin-left: 10px;
+.spinner-update {
+  top: 0;
+  right: 0;
+  margin-right: -50px;
+  margin-top: 20px;
 }
 
 @media only screen and (max-width: 991px) {
@@ -28,4 +29,8 @@
 }
 .B {
   // flex : 1;
+}
+
+:host ::ng-deep .spinner circle {
+  stroke: #78d3d6;
 }

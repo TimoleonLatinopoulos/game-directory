@@ -56,7 +56,7 @@
                       <fa-icon *ngIf="recommended === 2" icon="check"></fa-icon>
                     </button>
 
-                    <div *ngIf="isCommentEdited; else post" class="float-right float-margin-submit" style="bottom: 0">
+                    <div *ngIf="isCommentEdited; else post" class="float-right float-margin-update" style="bottom: 0">
                       <button type="button" (click)="showUpdateComment(false)" class="btn btn-danger">Cancel</button>
                       <button type="button" (click)="updateComment()" [disabled]="commentForm.invalid" class="btn btn-info">
                         Update Review

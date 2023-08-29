@@ -53,6 +53,10 @@ mat-paginator {
   background: transparent !important;
 }
 
+:host ::ng-deep .spinner circle {
+  stroke: #78d3d6;
+}
+
 .list-text {
   display: block !important;
   overflow: hidden;

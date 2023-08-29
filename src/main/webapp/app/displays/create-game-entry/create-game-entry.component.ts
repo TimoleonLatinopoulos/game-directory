@@ -115,6 +115,7 @@ export class CreateGameEntryComponent implements OnInit {
   }
 
   public fetchGame(): void {
+    this.showSpinner = true;
     this.gameService.find(this.gameId).subscribe((response: any) => {
       this.gameDetailsForm.patchValue(response.body);
 
@@ -124,6 +125,8 @@ export class CreateGameEntryComponent implements OnInit {
         this.steamDeveloperList = this.gameDetailsForm.get('gameDetails')?.get('developers')?.value;
         this.steamCategoryList = this.gameDetailsForm.get('gameDetails')?.get('categories')?.value;
       }
+
+      this.showSpinner = false;
     });
   }
 

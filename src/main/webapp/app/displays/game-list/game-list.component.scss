@@ -177,3 +177,7 @@ mat-accordion {
   position: relative;
   margin-right: 0px !important;
 }
+
+:host ::ng-deep .spinner circle {
+  stroke: #78d3d6;
+}
