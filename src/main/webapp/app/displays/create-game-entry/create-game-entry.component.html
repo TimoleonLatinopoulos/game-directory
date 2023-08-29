@@ -215,7 +215,14 @@
               <div class="row">
                 <mat-form-field class="col-lg-12" formGroupName="gameDetails">
                   <mat-label for="steamAppid">Steam Apiid</mat-label>
-                  <input matInput id="steamAppid" name="steamAppid" formControlName="steamAppid" type="text" />
+                  <input
+                    matInput
+                    id="steamAppid"
+                    name="steamAppid"
+                    formControlName="steamAppid"
+                    type="text"
+                    (keyup.enter)="fillFormFromSteam()"
+                  />
                 </mat-form-field>
 
                 <div class="col-lg-10">

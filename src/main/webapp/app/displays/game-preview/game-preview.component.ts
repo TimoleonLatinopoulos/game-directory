@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 import { UtilService } from './../../shared/util/utils.service';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,6 +12,9 @@ import { AccountService } from 'app/core/auth/account.service';
 import { UserGameService } from 'app/entities/user-game/service/user-game.service';
 import { Location } from '@angular/common';
 import { Title } from '@angular/platform-browser';
+import { CommentService } from 'app/entities/comment/service/comment.service';
+import { IComment } from 'app/entities/comment/comment.model';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'jhi-game-preview',
@@ -32,22 +36,43 @@ export class GamePreviewComponent implements OnInit {
   public releaseDate: string;
   public result: IGame;
 
+  public userComment: IComment;
+  public hasOwnComment = false;
+  public commentList: IComment[] = [];
+  public showComments = false;
+  public commentForm: FormGroup;
+  public recommended = 0;
+  public isCommentEdited = false;
+  public userDescription: string;
+
   public delete = false;
 
   constructor(
     private gameService: GameService,
     private userGameService: UserGameService,
+    private commentService: CommentService,
     private accountService: AccountService,
     private activatedRoute: ActivatedRoute,
     private dialog: MatDialog,
     private router: Router,
     private utilService: UtilService,
     private location: Location,
-    private titleService: Title
+    private titleService: Title,
+    private fb: FormBuilder
   ) {}
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
+
+    this.commentForm = this.fb.group({
+      id: [null],
+      description: ['', Validators.required],
+      recommended: [null, Validators.required],
+      datePosted: [null],
+      game: [null],
+      user: [null],
+    });
+
     this.activatedRoute.data.subscribe(object => {
       this.game = object.game as IGame;
 
@@ -87,6 +112,8 @@ export class GamePreviewComponent implements OnInit {
           this.hasSteamAppid = true;
         }
       }
+
+      this.fetchComments();
     });
   }
 
@@ -186,6 +213,111 @@ export class GamePreviewComponent implements OnInit {
         (error: any) => {
           this.utilService.openSnackBar(error.error.detail, 'error');
           this.favouriteToggle = false;
+        }
+      );
+    }
+  }
+
+  fetchComments(): void {
+    this.showComments = false;
+    this.commentList = [];
+
+    this.commentService.findUserCommentByGame(this.game.id).subscribe((response: any) => {
+      if (response.body != null && response.body.length !== 0) {
+        this.userComment = response.body[0];
+        this.commentList.push(this.userComment);
+        this.hasOwnComment = true;
+      } else {
+        this.hasOwnComment = false;
+      }
+
+      this.commentService.findAllByGame(this.game.id).subscribe((repsonseList: any) => {
+        this.commentList = [...this.commentList, ...repsonseList.body];
+        if (this.commentList.length !== 0) {
+          this.showComments = true;
+        }
+      });
+    });
+  }
+
+  setFormRecommended(value: boolean): void {
+    this.commentForm.get('recommended')?.setValue(value);
+    this.recommended = value ? 1 : 2;
+  }
+
+  submitComment(): void {
+    if (!this.commentForm.invalid) {
+      this.commentForm.get('game')?.setValue(this.game);
+      this.commentService.create(this.commentForm.value).subscribe(
+        () => {
+          this.utilService.openSnackBar('Your review has been submitted!', 'success');
+          this.fetchComments();
+        },
+        (error: any) => {
+          this.utilService.openSnackBar(error.error.detail, 'error');
+        }
+      );
+    }
+  }
+
+  deleteComment(): void {
+    const dialogRef = this.dialog.open(ChoiceDialogComponent, {
+      data: {
+        dialogTitle: 'Remove Review',
+        dialogMessage: 'Are you sure you want to delete your review?',
+        dialogYesButton: 'Yes',
+        dialogNoButton: 'No',
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result !== undefined) {
+        this.delete = result;
+      }
+      if (this.delete) {
+        this.commentService.delete(this.userComment.id).subscribe(
+          () => {
+            this.utilService.openSnackBar('The review has been deleted!', 'success');
+            this.fetchComments();
+          },
+          (error: any) => {
+            this.utilService.openSnackBar(error.error.detail, 'error');
+          }
+        );
+      }
+    });
+  }
+
+  showUpdateComment(show: boolean): void {
+    if (show) {
+      if (this.userComment.description != null) {
+        this.userDescription = this.userComment.description.replaceAll('<br>', '\n');
+        this.userComment.description = this.userDescription;
+      }
+      this.commentForm.patchValue(this.userComment);
+      this.recommended = this.commentForm.get('recommended')?.value ? 1 : 2;
+      this.isCommentEdited = true;
+    } else {
+      this.userComment.description = this.userDescription.replaceAll('\n', '<br>');
+      this.commentForm.reset();
+      this.recommended = 0;
+      this.isCommentEdited = false;
+    }
+  }
+
+  updateComment(): void {
+    if (!this.commentForm.invalid) {
+      const comment = this.commentForm.value;
+      comment.user = null;
+      comment.datePosted = null;
+      this.commentService.update(comment).subscribe(
+        () => {
+          this.utilService.openSnackBar('Your review has been updated!', 'success');
+          this.showUpdateComment(false);
+          this.fetchComments();
+        },
+        (error: any) => {
+          this.utilService.openSnackBar(error.error.detail, 'error');
         }
       );
     }

@@ -13,25 +13,88 @@
   .B {
     order: 1;
   }
+  .comment-description {
+    margin-left: -40px !important;
+  }
 }
 
 .flex-container {
   display: flex;
 }
-.A {
-  // flex : 2;
-}
-.B {
-  // flex : 1;
+.comment-description {
+  margin-left: 0px;
 }
 
-// .text-container {
-//   position: relative;
-// }
+.profile-image {
+  position: absolute;
+  right: 0;
+  margin-top: 10px;
+  height: 2.5em;
+  width: 2.5em;
+}
 
-// .bottom-text {
-//   position: absolute;
-//   bottom: 0;
-//   left: 0;
-//   padding: inherit;
-// }
+.center-text {
+  display: inline-flex;
+  align-items: center;
+}
+
+.profile-icon {
+  position: absolute;
+  right: 0;
+  margin-top: 10px;
+  background: gray;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.sub-name {
+  font-size: 0.8em;
+  font-weight: 100;
+  padding-left: 10px;
+}
+
+.comment-box {
+  width: fit-content;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 10px;
+}
+
+.not-recommended {
+  background: linear-gradient(45deg, #885555, transparent);
+}
+.thumbs-down {
+  color: #ff4400;
+}
+
+.recommended {
+  background: linear-gradient(45deg, #555588, transparent);
+}
+.thumbs-up {
+  color: #6677ff;
+}
+
+::ng-deep .thumbs {
+  svg {
+    transform: rotateY(3.142rad);
+  }
+}
+
+.btn-danger-highlight {
+  background: #ff6464;
+}
+.btn-danger-highlight:hover {
+  background: #b85757;
+}
+.btn-primary-highlight {
+  background: #609ddf;
+}
+.btn-primary-highlight:hover {
+  background: #667e97;
+}
+
+.not-found-text {
+  position: inherit !important;
+  display: block;
+  margin-bottom: 20px;
+}

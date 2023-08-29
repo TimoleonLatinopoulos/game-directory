@@ -1,0 +1,43 @@
+{
+  "changelogDate": "20230828140434",
+  "dto": "no",
+  "entityTableName": "comment",
+  "fields": [
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "recommended",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "datePosted",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": false,
+  "name": "Comment",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "game",
+      "relationshipName": "game",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "comment",
+      "ownerSide": true,
+      "relationshipName": "user",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

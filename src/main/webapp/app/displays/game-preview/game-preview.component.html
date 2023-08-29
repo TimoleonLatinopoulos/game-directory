@@ -2,6 +2,7 @@
   <div class="col-lg-10 col-sm-12">
     <div class="row flex-container">
       <div class="col-lg-8 A">
+        <!-- TITLE AND DESCRIPTION -->
         <mat-card>
           <mat-card-header>
             <mat-card-title style="position: relative">{{ game.title }}</mat-card-title>
@@ -11,8 +12,130 @@
             <div class="inner-highlight inner-img" [innerHTML]="game.gameDetails?.description"></div>
           </mat-card-content>
         </mat-card>
+
+        <!-- REVIEWS -->
+        <mat-card class="mt-4">
+          <mat-card-header>
+            <mat-card-title style="position: relative">Reviews</mat-card-title>
+          </mat-card-header>
+          <hr />
+
+          <mat-card-content>
+            <form *ngIf="!hasOwnComment || isCommentEdited" [formGroup]="commentForm">
+              <div class="comment-block" style="padding: 20px">
+                <mat-card-title style="position: relative">Write a review</mat-card-title>
+
+                <mat-form-field class="mb-4 mt-4 mat-field">
+                  <mat-label for="field_description">Description</mat-label>
+                  <textarea matNativeControl id="field_description" name="description" formControlName="description" type="text" rows="6">
+                  </textarea>
+                </mat-form-field>
+                <jhi-validation-error [abstractControl]="commentForm.get('description')" [absolutePosition]="true" />
+
+                <div>
+                  <div class="pt-2" style="position: relative">
+                    <div>Do you recommend this game?</div>
+                    <button
+                      type="button"
+                      (click)="setFormRecommended(true)"
+                      class="btn btn-primary"
+                      [ngClass]="recommended === 1 ? 'btn-primary-highlight' : ''"
+                      style="position: relative"
+                    >
+                      <fa-icon icon="thumbs-up" class="p-1 thumbs"></fa-icon> <span>Yes</span>
+                      <fa-icon *ngIf="recommended === 1" icon="check"></fa-icon>
+                    </button>
+
+                    <button
+                      type="button"
+                      (click)="setFormRecommended(false)"
+                      class="btn btn-danger"
+                      [ngClass]="recommended === 2 ? 'btn-danger-highlight' : ''"
+                    >
+                      <fa-icon icon="thumbs-down" class="p-1 thumbs"></fa-icon> <span>No</span>
+                      <fa-icon *ngIf="recommended === 2" icon="check"></fa-icon>
+                    </button>
+
+                    <div *ngIf="isCommentEdited; else post" class="float-right" style="bottom: 0">
+                      <button type="button" (click)="showUpdateComment(false)" class="btn btn-danger">Cancel</button>
+                      <button type="button" (click)="updateComment()" [disabled]="commentForm.invalid" class="btn btn-info">
+                        Update Review
+                      </button>
+                    </div>
+                    <ng-template #post>
+                      <div class="float-right" style="bottom: 0">
+                        <button type="button" (click)="submitComment()" [disabled]="commentForm.invalid" class="btn btn-info">
+                          Post Review
+                        </button>
+                      </div>
+                    </ng-template>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <div *ngFor="let comment of commentList">
+              <div *ngIf="!(comment?.id === userComment?.id && isCommentEdited)" class="comment-block row">
+                <!-- Profile Picture -->
+                <div class="col-2 col-md-1 pt-2" style="position: relative">
+                  <div *ngIf="comment?.user?.imageUrl; else noImage">
+                    <img [src]="comment.user!.imageUrl" class="profile-image rounded-circle" alt="Avatar" />
+                  </div>
+                  <ng-template #noImage class="profile-image rounded-circle">
+                    <fa-icon icon="user" class="fa-lg profile-icon"></fa-icon>
+                  </ng-template>
+                </div>
+
+                <div class="col-10 col-md-11">
+                  <div *ngIf="userComment != null && comment.id === userComment.id" style="position: relative">
+                    <div class="float-right pt-2">
+                      <button type="button" (click)="showUpdateComment(true)" class="btn btn-primary">
+                        <fa-icon icon="pencil"></fa-icon>
+                      </button>
+                      <button type="button" (click)="deleteComment()" class="btn btn-danger">
+                        <fa-icon icon="trash-alt"></fa-icon>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Username -->
+                  <div class="center-text reference-text pt-2">
+                    <span class="highlight">{{ comment?.user?.firstName }} {{ comment?.user?.lastName }}</span>
+                    <span class="sub-text sub-name">@{{ comment?.user?.login }}</span>
+                  </div>
+
+                  <!-- Recommend -->
+                  <div>
+                    <div *ngIf="comment?.recommended; else thumbsDown" class="recommended comment-box">
+                      <fa-icon icon="thumbs-up" class="fa-2x p-1 thumbs-up thumbs"></fa-icon> <span class="large-text">Recommended</span>
+                    </div>
+                    <ng-template #thumbsDown>
+                      <div class="not-recommended comment-box">
+                        <fa-icon icon="thumbs-down" class="fa-2x p-1 thumbs-down thumbs"></fa-icon>
+                        <span class="large-text">Not Recommended</span>
+                      </div>
+                    </ng-template>
+                  </div>
+
+                  <!-- Description -->
+                  <mat-card-subtitle class="initial pt-2">
+                    Posted: {{ comment?.datePosted?.toString() | date : 'dd MMMM, yyyy' }}
+                  </mat-card-subtitle>
+                  <div class="inner-html comment-description" [innerHTML]="comment?.description"></div>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+
+          <div *ngIf="!showComments">
+            <div style="position: relative">
+              <span class="not-found-text"> No reviews found! </span>
+            </div>
+          </div>
+        </mat-card>
       </div>
 
+      <!-- DETAILS -->
       <div class="col-lg-4 mb-4 B">
         <mat-card>
           <mat-card-header>

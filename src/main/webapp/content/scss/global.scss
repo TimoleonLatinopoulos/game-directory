@@ -52,6 +52,15 @@ a:hover {
   display: inline-block;
 }
 
+.comment-block {
+  margin: 10px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
+  background-color: #223 !important;
+}
+
 .block-text {
   padding-left: 10px;
   padding-right: 10px;
@@ -118,6 +127,10 @@ a:hover {
   color: #00aeb4 !important;
 }
 
+.sub-text {
+  color: rgb(255 255 255 / 70%);
+}
+
 .mat-field {
   display: flex !important;
   flex-direction: column !important;
@@ -155,6 +168,10 @@ a:hover {
 
 .bold {
   font-weight: bold;
+}
+
+.large-text {
+  font-size: large;
 }
 
 @media only screen and (max-width: 500px) {
