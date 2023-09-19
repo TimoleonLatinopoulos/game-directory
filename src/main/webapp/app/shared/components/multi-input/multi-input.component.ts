@@ -12,7 +12,7 @@ export class MultiInputComponent {
 
   selectedOptions: string[] = [];
 
-  emitSelectedOptions() {
+  emitSelectedOptions(): void {
     this.selectionChange.emit(this.selectedOptions);
   }
 }

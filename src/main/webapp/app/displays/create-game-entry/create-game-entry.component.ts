@@ -15,6 +15,7 @@ import { GameService } from 'app/entities/game/service/game.service';
 import { getPegiRating, pegiRatingList } from 'app/entities/game-details/game-details.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UtilService } from 'app/shared/util/utils.service';
+import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'jhi-create-game-entry',
@@ -92,26 +93,31 @@ export class CreateGameEntryComponent implements OnInit {
   }
 
   public fetchData(): void {
-    this.platformService.getAll().subscribe((result: EntityArrayResponseType) => {
-      if (result.body != null) {
-        this.platformList = result.body;
-      }
-    });
-    this.developerService.getAll().subscribe((result: EntityArrayResponseType) => {
-      if (result.body != null) {
-        this.developerList = result.body;
-      }
-    });
-    this.publisherService.getAll().subscribe((result: EntityArrayResponseType) => {
-      if (result.body != null) {
-        this.publisherList = result.body;
-      }
-    });
-    this.categoryService.getAll().subscribe((result: EntityArrayResponseType) => {
-      if (result.body != null) {
-        this.categoryList = result.body;
-      }
-    });
+    this.fetchPlatforms('');
+    this.fetchDevelopers('');
+    this.fetchPublishers('');
+    this.fetchCategories('');
+
+    // this.platformService.getResults('').subscribe((result: EntityArrayResponseType) => {
+    //   if (result.body != null) {
+    //     this.platformList = result.body;
+    //   }
+    // });
+    // this.developerService.getResults('').subscribe((result: EntityArrayResponseType) => {
+    //   if (result.body != null) {
+    //     this.developerList = result.body;
+    //   }
+    // });
+    // this.publisherService.getResults('').subscribe((result: EntityArrayResponseType) => {
+    //   if (result.body != null) {
+    //     this.publisherList = result.body;
+    //   }
+    // });
+    // this.categoryService.getResults('').subscribe((result: EntityArrayResponseType) => {
+    //   if (result.body != null) {
+    //     this.categoryList = result.body;
+    //   }
+    // });
   }
 
   public fetchGame(): void {
@@ -165,14 +171,10 @@ export class CreateGameEntryComponent implements OnInit {
 
             const dateString = greekDateToEng(this.steamGame?.data.release_date.date);
             const pegiRating = getPegiRating(this.steamGame?.data.required_age);
-            const price = this.calculatePrice(
-              this.steamGame?.data.is_free,
-              this.steamGame?.data.price_overview,
-              this.steamGame?.data.price_overview.final
-            );
+            const price = this.calculatePrice(this.steamGame?.data.is_free, this.steamGame?.data.price_overview);
             const notes = this.steamGame?.data.content_descriptors?.notes;
 
-            if (dateString !== undefined && dateString !== 'To be announced') {
+            if (dateString !== undefined && dateString.toLowerCase() !== 'to be announced' && dateString.toLowerCase() !== 'coming soon') {
               this.gameDetailsForm
                 .get('gameDetails')
                 ?.get('releaseDate')
@@ -269,16 +271,48 @@ export class CreateGameEntryComponent implements OnInit {
     this.gameDetailsForm.get('gameDetails')?.get('categories')?.setValue(value);
   }
 
+  fetchPlatforms(value: any): void {
+    this.platformService.getResults(value).subscribe((result: EntityArrayResponseType) => {
+      if (result.body != null) {
+        this.platformList = result.body;
+      }
+    });
+  }
+
+  fetchDevelopers(value: any): void {
+    this.developerService.getResults(value).subscribe((result: EntityArrayResponseType) => {
+      if (result.body != null) {
+        this.developerList = result.body;
+      }
+    });
+  }
+
+  fetchPublishers(value: any): void {
+    this.publisherService.getResults(value).subscribe((result: EntityArrayResponseType) => {
+      if (result.body != null) {
+        this.publisherList = result.body;
+      }
+    });
+  }
+
+  fetchCategories(value: any): void {
+    this.categoryService.getResults(value).subscribe((result: EntityArrayResponseType) => {
+      if (result.body != null) {
+        this.categoryList = result.body;
+      }
+    });
+  }
+
   checkForAdultContent(notes: string): boolean {
     const sensitiveWords = ['sex', 'mature', 'not safe for work', 'nsfw', 'naked', 'nudity', 'nude', 'adult', '18', 'hentai'];
     return sensitiveWords.some(substring => notes.toLowerCase().includes(substring));
   }
 
-  calculatePrice(isFree: boolean, priceOverview: any, final: number): number {
+  calculatePrice(isFree: boolean, priceOverview: any): number {
     let price: number;
 
-    if (!isFree && priceOverview != null) {
-      price = final;
+    if (!isFree && priceOverview != null && priceOverview !== undefined) {
+      price = priceOverview.final;
       if (price != null) {
         price = price / 100;
       }

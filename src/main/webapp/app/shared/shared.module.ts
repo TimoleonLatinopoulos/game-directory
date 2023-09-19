@@ -28,6 +28,7 @@ import { SearchDialogComponent } from './components/search-dialog/search-dialog.
 import { MatInputModule } from '@angular/material/input';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 /**
  * Application wide Module
@@ -65,6 +66,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatInputModule,
     ScrollingModule,
     MatPaginatorModule,
+    MatTooltipModule,
   ],
   exports: [
     CommonModule,
@@ -93,6 +95,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatInputModule,
     ScrollingModule,
     MatPaginatorModule,
+    MatTooltipModule,
   ],
 })
 export default class SharedModule {}

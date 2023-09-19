@@ -46,6 +46,7 @@ import {
   faChevronDown,
   faThumbsUp,
   faThumbsDown,
+  faCircleExclamation,
   // jhipster-needle-add-icon-import
 } from '@fortawesome/free-solid-svg-icons';
 
@@ -107,5 +108,6 @@ export const fontAwesomeIcons = [
   faChevronDown,
   faThumbsUp,
   faThumbsDown,
+  faCircleExclamation,
   // jhipster-needle-add-icon-import
 ];

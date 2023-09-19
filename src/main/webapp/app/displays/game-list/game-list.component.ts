@@ -154,22 +154,9 @@ export class GameListComponent implements OnInit {
   public openAddGameDialog(): void {
     const dialogRef = this.dialog.open(SearchDialogComponent);
 
-    // dialogRef.afterClosed().subscribe(result => {
-    //   if (result !== undefined) {
-    //     this.delete = result;
-    //   }
-    //   if (this.delete) {
-    //     this.gameService.delete(this.game.id).subscribe(
-    //       () => {
-    //         this.utilService.openSnackBar('The game has been deleted!', 'success');
-    //         this.router.navigate(['../']);
-    //       },
-    //       (error: any) => {
-    //         this.utilService.openSnackBar(error.error.detail, 'error');
-    //       }
-    //     );
-    //   }
-    // });
+    dialogRef.afterClosed().subscribe(result => {
+      this.fetchGameData();
+    });
   }
 
   public _filter(name: string | ICategory, list: ICategory[]): ICategory[] {

@@ -22,7 +22,7 @@ export class ChipGridInputComponent implements OnChanges {
     if (this._categoryList !== undefined) {
       this.filteredCategoryList = this.categoryForm.valueChanges.pipe(
         startWith(null),
-        map((category: ICategory | null) => (category ? this._filter(category) : this._categoryList.slice()))
+        map((category: ICategory | null) => this._filter(category))
       );
     }
   }
@@ -30,6 +30,7 @@ export class ChipGridInputComponent implements OnChanges {
   @Input() canAdd = false;
   @Input() recievedCategoryList: ICategory[];
   @Output() valueEmitted = new EventEmitter<ICategory[]>();
+  @Output() filterValueEmitted = new EventEmitter<string>();
 
   separatorKeysCodes: number[] = [ENTER, COMMA];
   public filteredCategoryList: Observable<ICategory[]>;
@@ -121,16 +122,22 @@ export class ChipGridInputComponent implements OnChanges {
   }
 
   private _filter(value: any): ICategory[] {
-    if (value !== undefined) {
-      let filterValue = '';
-      if (typeof value === 'string') {
-        filterValue = value.toLowerCase();
-      } else {
-        filterValue = value.description?.toLowerCase();
-      }
+    if (value || value === '') {
+      if (value !== undefined) {
+        let filterValue = '';
+        if (typeof value === 'string') {
+          filterValue = value.toLowerCase();
+          this.filterValueEmitted.emit(filterValue);
+        } else {
+          filterValue = value.description?.toLowerCase();
+          this.filterValueEmitted.emit('');
+        }
 
-      return this._categoryList.filter(category => category.description?.toLowerCase().includes(filterValue));
+        return this._categoryList.filter(category => category.description?.toLowerCase().includes(filterValue));
+      }
+      return [];
+    } else {
+      return this._categoryList.slice();
     }
-    return [];
   }
 }
