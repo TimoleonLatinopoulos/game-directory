@@ -15,7 +15,6 @@ import { GameService } from 'app/entities/game/service/game.service';
 import { getPegiRating, pegiRatingList } from 'app/entities/game-details/game-details.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UtilService } from 'app/shared/util/utils.service';
-import { switchMap } from 'rxjs';
 
 @Component({
   selector: 'jhi-create-game-entry',
@@ -97,27 +96,6 @@ export class CreateGameEntryComponent implements OnInit {
     this.fetchDevelopers('');
     this.fetchPublishers('');
     this.fetchCategories('');
-
-    // this.platformService.getResults('').subscribe((result: EntityArrayResponseType) => {
-    //   if (result.body != null) {
-    //     this.platformList = result.body;
-    //   }
-    // });
-    // this.developerService.getResults('').subscribe((result: EntityArrayResponseType) => {
-    //   if (result.body != null) {
-    //     this.developerList = result.body;
-    //   }
-    // });
-    // this.publisherService.getResults('').subscribe((result: EntityArrayResponseType) => {
-    //   if (result.body != null) {
-    //     this.publisherList = result.body;
-    //   }
-    // });
-    // this.categoryService.getResults('').subscribe((result: EntityArrayResponseType) => {
-    //   if (result.body != null) {
-    //     this.categoryList = result.body;
-    //   }
-    // });
   }
 
   public fetchGame(): void {
@@ -163,9 +141,9 @@ export class CreateGameEntryComponent implements OnInit {
 
     if (apiid != null) {
       this.showSpinner = true;
-      this.steamApiService.find(apiid).subscribe(
+      this.steamApiService.getFromExternalApi(apiid).subscribe(
         (result: any) => {
-          this.steamGame = result.body[Object.keys(result.body)[0]];
+          this.steamGame = result.body;
           if (this.steamGame?.success) {
             this.gameDetailsForm.get('title')?.setValue(this.steamGame?.data.name);
 

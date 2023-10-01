@@ -21,6 +21,12 @@
           <hr />
 
           <mat-card-content>
+            <div *ngIf="!showComments">
+              <div style="position: relative">
+                <span class="not-found-text"> No reviews found! </span>
+              </div>
+            </div>
+
             <form *ngIf="!hasOwnComment || isCommentEdited" [formGroup]="commentForm">
               <div class="comment-block" style="padding: 20px">
                 <mat-card-title style="position: relative">Write a review</mat-card-title>
@@ -126,12 +132,6 @@
               </div>
             </div>
           </mat-card-content>
-
-          <div *ngIf="!showComments">
-            <div style="position: relative">
-              <span class="not-found-text"> No reviews found! </span>
-            </div>
-          </div>
         </mat-card>
       </div>
 
@@ -139,7 +139,7 @@
       <div class="col-lg-4 mb-4 B">
         <mat-card>
           <mat-card-header>
-            <mat-card-title>Game Information</mat-card-title>
+            <mat-card-title>Game Info</mat-card-title>
 
             <div class="float-right" *jhiHasAnyAuthority="'ROLE_ADMIN'">
               <button type="button" (click)="editGameDetails()" class="btn btn-primary">
