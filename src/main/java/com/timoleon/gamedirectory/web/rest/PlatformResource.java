@@ -49,6 +49,18 @@ public class PlatformResource {
     }
 
     /**
+     * {@code GET  /platforms/search_used} : search for platforms used in GameDetails.
+     *
+     * @param input the input for the search.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of platforms in body.
+     */
+    @GetMapping("/platforms/search_used")
+    public List<Platform> searchPlatformsUsed(@RequestParam String input) {
+        log.debug("REST request to search for Platforms used in GameDetails");
+        return platformService.findLikeUsed(input);
+    }
+
+    /**
      * {@code GET  /platforms/used} : get all the platforms used in gameDetails.
      *
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of platforms in body.

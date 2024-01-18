@@ -60,6 +60,18 @@ public class CategoryResource {
     }
 
     /**
+     * {@code GET  /categories/search_used} : search for categories used in GameDetails.
+     *
+     * @param input the input for the search.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of categories in body.
+     */
+    @GetMapping("/categories/search_used")
+    public List<Category> searchCategoriesUsed(@RequestParam String input) {
+        log.debug("REST request to search for Category used in GameDetails");
+        return categoryService.findLikeUsed(input);
+    }
+
+    /**
      * {@code GET  /categories/:id} : get the "id" category.
      *
      * @param id the id of the category to retrieve.

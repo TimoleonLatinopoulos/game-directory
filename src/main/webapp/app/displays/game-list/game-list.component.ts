@@ -111,7 +111,7 @@ export class GameListComponent implements OnInit {
   public fetchFilterData(): void {
     this.filterForm
       .get('platform')
-      ?.valueChanges.pipe(switchMap((value: string) => this.platformService.getResults(value)))
+      ?.valueChanges.pipe(switchMap((value: string) => this.platformService.getUsedResults(value)))
       .subscribe((result: EntityArrayResponseType) => {
         if (result.body != null) {
           this.platformList = result.body;
@@ -138,7 +138,7 @@ export class GameListComponent implements OnInit {
 
     this.filterForm
       .get('category')
-      ?.valueChanges.pipe(switchMap((value: string) => this.categoryService.getResults(value)))
+      ?.valueChanges.pipe(switchMap((value: string) => this.categoryService.getUsedResults(value)))
       .subscribe((result: EntityArrayResponseType) => {
         if (result.body != null) {
           this.categoryList = result.body;

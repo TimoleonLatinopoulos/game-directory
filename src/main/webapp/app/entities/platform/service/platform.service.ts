@@ -31,6 +31,10 @@ export class PlatformService {
     return this.http.get<ICategory[]>(`${this.resourceUrl}/search?input=${input}`, { observe: 'response' });
   }
 
+  getUsedResults(input: string): Observable<EntityArrayResponseType> {
+    return this.http.get<ICategory[]>(`${this.resourceUrl}/search_used?input=${input}`, { observe: 'response' });
+  }
+
   getAllUsed(): Observable<EntityArrayResponseType> {
     return this.http.get<ICategory[]>(this.resourceUrl + '/used', { observe: 'response' });
   }

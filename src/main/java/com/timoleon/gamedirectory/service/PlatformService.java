@@ -102,6 +102,21 @@ public class PlatformService {
         if (input != null) {
             input = "%" + input + "%";
         }
+        return platformRepository.findAllLike(input);
+    }
+
+    /**
+     * Search for platforms.
+     *
+     * @param input the input for the search.
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<Platform> findLikeUsed(String input) {
+        log.debug("Request to search for Platforms used in gameDetails");
+        if (input != null) {
+            input = "%" + input + "%";
+        }
         return platformRepository.findLikeUsed(input, PageRequest.of(0, 20));
     }
 

@@ -26,12 +26,12 @@
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_user_email"/>
             </column>
             <column name="image_url" type="varchar(256)"/>
-            <column name="activated" type="boolean" valueBoolean="false">
+            <column name="activated" type="boolean" defaultValue="false" valueBoolean="false">
                 <constraints nullable="false" />
             </column>
             <column name="lang_key" type="varchar(10)"/>
             <column name="activation_key" type="varchar(20)"/>
-            <column name="enable_nsfw" type="boolean" valueBoolean="false">
+            <column name="enable_nsfw" type="boolean" defaultValue="false" valueBoolean="false">
                 <constraints nullable="false" />
             </column>
             <column name="reset_key" type="varchar(20)"/>

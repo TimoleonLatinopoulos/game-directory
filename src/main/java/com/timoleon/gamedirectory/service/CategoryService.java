@@ -102,6 +102,21 @@ public class CategoryService {
         if (input != null) {
             input = "%" + input + "%";
         }
+        return categoryRepository.findAllLike(input);
+    }
+
+    /**
+     * Search for categories.
+     *
+     * @param input the input for the search.
+     * @return the list of entities.
+     */
+    @Transactional(readOnly = true)
+    public List<Category> findLikeUsed(String input) {
+        log.debug("Request to search for Categories used in GameDetails");
+        if (input != null) {
+            input = "%" + input + "%";
+        }
         return categoryRepository.findLikeUsed(input, PageRequest.of(0, 20));
     }
 

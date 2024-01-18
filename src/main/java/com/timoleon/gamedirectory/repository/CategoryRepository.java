@@ -14,6 +14,9 @@ import org.springframework.stereotype.Repository;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Optional<Category> findByDescription(String description);
 
+    @Query("select distinct category from Category category " + "where category.description like ?1")
+    List<Category> findAllLike(String input);
+
     @Query(
         "select distinct category from Category category " +
         "where category in (select distinct c from GameDetails gameDetails join gameDetails.categories c)"
